@@ -118,6 +118,20 @@
         .dialog h1 {
             font-size: 24px;
         }
+        
+        button {
+            width: 80px;
+            background: #fff;
+            border: 1px solid #aaa;
+            padding: 5px;
+            margin: 5px;
+        }
+        
+        button.on,
+        button:active {
+            background: #555;
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -139,9 +153,12 @@
                 <button onclick="erp.redo()">Redo</button>
             </div>
             <div>
-                <h1>Entity</h1>
-                <input type="file" id="upload" accept="text/xml" style="display:none" />
-                <button onclick="newEntity()">New</button>
+                <h1>Add...</h1>
+                <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
+                <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
+            </div>
+            <div>
+                <h1>Object</h1>
             </div>
         </div>
     </div>
@@ -154,7 +171,7 @@
                 <form action="#" method="GET" onsubmit="entityDialogSubmit(this);return false">
                     <label for="entityDialogName">Name:</label>
                     <input type="text" id="entityDialogName"></input><br/><br/>
-                    <table id="entityAttrs">
+                    <!--<table id="entityAttrs">
                         <tr>
                             <th>Primary</th>
                             <th>Name</th>
@@ -163,7 +180,7 @@
                             <td><input type="checkbox" /></td>
                             <td><input type="text" /></td>
                         </tr>
-                    </table>
+                    </table>-->
                     <input type="submit" value="OK"></input>
                 </form>
             </div>
@@ -181,13 +198,14 @@
     <script type="text/javascript">
         var palette = document.getElementById("palette")
         var scroller = document.getElementById("scroller")
+        var dragging = []
         palette.addEventListener("mousedown", function(ev) {
             var target = ev.target || ev.srcElement
             if (target == palette) {
-                dragging = palette
-                dragging.x = true
-                dragging.y = false
-                dragging.startx = ev.clientX
+                dragging.push(palette)
+                palette.dragX = true
+                palette.dragY = false
+                palette.startX = ev.clientX
             }
         })
         palette.curWidth = 300

@@ -28,25 +28,31 @@ function ajaxGet(url, cb, isXML) {
 var dragging = null
 document.addEventListener("mousemove", function(ev) {
     if (dragging != null) {
-        if (dragging.x && dragging.y) {
-            dragging.moveRelXY(ev.clientX - dragging.startx, ev.clientY - dragging.starty)
-        } else if (dragging.x) {
-            dragging.moveRelX(ev.clientX - dragging.startx)
-        } else if (dragging.y) {
-            dragging.moveRelY(ev.clientY - dragging.starty)
+        for (var x in dragging) {
+            var d = dragging[x]
+            if (d.dragX && d.dragY) {
+                d.moveRelXY(ev.clientX - d.startX, ev.clientY - d.startY)
+            } else if (d.dragX) {
+                d.moveRelX(ev.clientX - d.startX)
+            } else if (d.dragY) {
+                d.moveRelY(ev.clientY - d.startY)
+            }
         }
     }
 })
 document.addEventListener("mouseup", function(ev) {
     if (dragging != null) {
-        if (dragging.x && dragging.y) {
-            dragging.endDragXY(ev.clientX - dragging.startx, ev.clientY - dragging.starty)
-        } else if (dragging.x) {
-            dragging.endDragX(ev.clientX - dragging.startx)
-        } else if (dragging.y) {
-            dragging.endDragY(ev.clientY - dragging.starty)
+        for (var x in dragging) {
+            var d = dragging[x]
+            if (d.dragX && d.dragY) {
+                d.endDragXY(ev.clientX - d.startX, ev.clientY - d.startY)
+            } else if (d.dragX) {
+                d.endDragX(ev.clientX - d.startX)
+            } else if (d.dragY) {
+                d.endDragY(ev.clientY - d.startX)
+            }
         }
-        dragging = null
+        dragging = []
     }
 })
 
@@ -102,4 +108,11 @@ function mkFirstChild(el) {
     if (el != p.firstChild) {
         p.insertBefore(el, p.firstChild)
     }
+}
+
+function preventBrowserDrag(el) {
+    el.addEventListener('dragstart', function(ev) {
+        ev.preventDefault()
+        return false
+    })
 }

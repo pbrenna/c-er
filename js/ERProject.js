@@ -8,6 +8,7 @@ function ERProject(svg) {
     this.erPrefix = ""
     this.viewPrefix = ""
     this.scheduled = {}
+    var that = this
     this.load = function(erdoc) {
         this.erPrefix = erdoc.lookupPrefix(this.ns)
         if (!this.erPrefix) {
@@ -174,17 +175,92 @@ function ERProject(svg) {
     this.styles = {
         selectedStroke: "#f00",
         normalStroke: "#000",
-        padding: 5
+        entity: {
+            padding: 5,
+            defaultH: 40,
+            defaultW: 100
+        }
     }
     this.selection = {}
+
     this.selection.s = [] //selected elements
-    this.selection.clicked = function(obj) {
-        this.s.push(obj)
-        obj.selectOn()
+    this.selection.clicked = function(obj, ev) {
+        var ind = -1;
+        if (!ev.shiftKey) {
+            this.deselectAll()
+        }
+        if (this.s.indexOf(obj.getId()) < 0) {
+            this.s.push(obj.getId())
+            obj.selectOn()
+        }
+    }
+    this.selection.set = function(list) {
+        this.deselectAll()
+        this.s = list
+        this.restore()
     }
     this.selection.restore = function() {
         for (var x in this.s) {
-            this.s[x].selectOn()
+            that.get(this.s[x]).selectOn()
+        }
+    }
+    this.selection.deselectAll = function() {
+        for (var x in this.s) {
+            that.get(this.s[x]).selectOff()
+        }
+        this.s = []
+    }
+    this.selection.selected = function(obj) {
+        return this.s.indexOf(obj.getId()) >= 0
+    }
+    this.svg.addEventListener("click", function(ev) {
+        var target = ev.target || ev.srcElement
+        if (target == svg) {
+            that.selection.deselectAll()
+        } else {
+            that.exitInsertMode()
+        }
+        if (that.curInsertMode) {
+            that.curInsertMode(ev)
+            that.exitInsertMode()
+        }
+    })
+    this.curInsertMode = null
+    this.exitInsertMode = function() {
+        var buttons = document.getElementsByClassName("insertMode")
+        for (var x in buttons) {
+            buttons[x].className = "insertMode"
+        }
+        this.curInsertMode = null
+    }
+    this.toggleInsertMode = function(button, func) {
+        var buttons = document.getElementsByClassName("insertMode")
+        for (var x in buttons) {
+            buttons[x].className = "insertMode"
+        }
+        if (func == this.curInsertMode) {
+            this.curInsertMode = null
+        } else {
+            this.curInsertMode = func
+            button.className = "insertMode on"
+            this.selection.deselectAll()
+        }
+    }
+    this.getMouseInDocument = function(ev) {
+        return { x: ev.layerX, y: ev.layerY }
+    }
+    this.dragStart = function(obj, ev) {
+        if (!this.selection.selected(obj)) {
+            this.selection.clicked(obj, ev)
+        }
+        dragging = []
+        for (var x in this.selection.s) {
+            var obj = this.get(this.selection.s[x])
+            obj.startX = ev.layerX
+            obj.startY = ev.layerY
+            obj.dragX = true
+            obj.dragY = true
+            dragging.push(obj)
         }
     }
 }

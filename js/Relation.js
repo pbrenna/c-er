@@ -13,3 +13,8 @@ function Relation(concept) {
         this.concept = null
     }
 }
+
+
+
+
+function newRelation() {}
