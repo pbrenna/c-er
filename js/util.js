@@ -74,13 +74,8 @@ function field(id) {
 }
 
 function clearElement(el) {
-    var ch = el.childNodes;
-    for (var x in ch) {
-        try {
-            el.removeChild(ch[x])
-        } catch (e) {
-            //usal thing with some x not being an element
-        }
+    while (el.firstChild) {
+        el.removeChild(el.firstChild)
     }
 }
 var svgNS = "http://www.w3.org/2000/svg"
@@ -115,4 +110,14 @@ function preventBrowserDrag(el) {
         ev.preventDefault()
         return false
     })
+}
+
+function mkEl(parent, name, attrDict, dontAppend) {
+    var el = document.createElement(name)
+    for (var attr in attrDict) {
+        el.setAttribute(attr, attrDict[attr])
+    }
+    if (!dontAppend)
+        parent.appendChild(el)
+    return el
 }

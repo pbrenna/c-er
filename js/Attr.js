@@ -19,4 +19,15 @@ function Attr(node, project) {
         killNode(this.node)
         this.node = null
     }
+    this.moveUp = function() {
+        if (this.node.previousSibling)
+            this.node.parentNode.insertBefore(this.node, this.node.previousSibling)
+    }
+    this.moveDown = function() {
+        if (this.node.nextSibling && this.node.nextSibling.nextSibling) {
+            this.node.parentNode.insertBefore(this.node, this.node.nextSibling.nextSibling)
+        } else {
+            this.node.parentNode.appendChild(this.node)
+        }
+    }
 }

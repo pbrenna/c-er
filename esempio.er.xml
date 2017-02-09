@@ -1,23 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<er:project xmlns:er="http://disco.unimib.it/c-er/er" xmlns:v="http://disco.unimib.it/c-er/view">
-	<er:schema>
-		<er:entity er:name="Nome" id="e1">
-			<er:attr er:name="ciao" />
-			<er:attr er:name="id" er:primary="true" />
+<?xml version="1.0" encoding="UTF-8"?>
+<er:project
+    xmlns:er="http://disco.unimib.it/c-er/er"
+    xmlns:v="http://disco.unimib.it/c-er/view">
+    <er:schema>
+        <er:entity id="er1" v:x="709" v:y="147" v:h="40" v:w="100" er:name="Entity">
+			<er:attr er:name="ciao" er:primary="true" />
 		</er:entity>
-		<er:entity er:name="Bla" id="e2">
-			<attr er:name="blah" />
-			<attr er:name="id" er:primary="true" />
-		</er:entity>
-		<er:relation er:name="Rel" id="r1">
-			<er:attr er:name="aadas" />
-			<er:participation er:ref="e1" er:mult-min="1" er:mult-max="n" id="r1-e1-p0" />
-			<er:participation er:ref="e2" er:mult-min="0" er:mult-max="1" id="r1-e2-p0" />
-		</er:relation>
-	</er:schema>
-	<er:view er:name="bla">
-		<er:use er:ref="e1" er:x="10" er:y="10" />
-		<er:use er:ref="r1" er:x="10" er:y="40" />
-		<er:use er:ref="r1e1p0" er:points="20,20 30,30" />
-	</er:view>
+    </er:schema>
+    <er:view></er:view>
 </er:project>

@@ -120,7 +120,7 @@
         }
         
         button {
-            width: 80px;
+            min-width: 75px;
             background: #fff;
             border: 1px solid #aaa;
             padding: 5px;
@@ -171,6 +171,33 @@
         .panel br {
             clear: both
         }
+        
+        .upAttr,
+        .deleteAttr,
+        .downAttr {
+            width: 19px;
+            height: 19px;
+            display: inline-block;
+            margin: 0px !important;
+            padding: 0px;
+        }
+        
+        td {
+            white-space: nowrap;
+            font-size: 0
+        }
+        
+        .deleteAttr {
+            background-image: url(img/delete.png);
+        }
+        
+        .upAttr {
+            background-image: url(img/up.png);
+        }
+        
+        .downAttr {
+            background-image: url(img/down.png);
+        }
     </style>
 </head>
 
@@ -191,16 +218,25 @@
                 <button onclick="erp.undo()">Undo</button>
                 <button onclick="erp.redo()">Redo</button>
             </div>
-            <div>
-                <h1>Add...</h1>
+            <div id="panelCreation" class="panel visible">
+                <h1>Add...</h1><br/>
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
             </div>
             <div id="panelEntity" class="panel">
-                <h1>Selection: Entity</h1>
+                <h1>Edit entity</h1>
                 <div class="delete" onclick="erp.deleteSelection()"></div><br/>
-                <label for="entityDialogName">Name:</label>
-                <input type="text" id="entityDialogName"></input>
+                <label for="entityNameInput">Name:</label>
+                <input type="text" id="entityNameInput"></input>
+                <br/>
+                <table>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Primary</th>
+                    </tr>
+                    <tbody id="entityAttrTable"></tbody>
+                </table>
+                <button id="entityAddAttr" onclick="entityAddAttribute()">Add attribute</button>
             </div>
             <div id="panelRelation" class="panel">
                 <h1>Selection: Relation</h1>

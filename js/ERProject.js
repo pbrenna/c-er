@@ -137,7 +137,7 @@ function ERProject(svg) {
         if (this.curState > 0) {
             this.curState -= 1
             this.erdoc = this.states[this.curState].cloneNode(true)
-            this.selection.s = []
+            this.selection.deselectAll()
             this.update()
         }
     }
@@ -145,7 +145,7 @@ function ERProject(svg) {
         if (this.curState < this.states.length - 1) {
             this.curState += 1
             this.erdoc = this.states[this.curState].cloneNode(true)
-            this.selection.s = []
+            this.selection.deselectAll()
             this.update()
         }
     }
@@ -284,16 +284,26 @@ function ERProject(svg) {
             var type = this.get(id).type
             this.selectPanel(type)
         } else if (this.selection.s.length == 0) {
-            this.selectPanel(null)
+            this.selectPanel("Creation")
         }
     }
     this.selectPanel = function(name) {
         var panels = document.getElementsByClassName("panel")
+        switch (name) {
+            case "Entity":
+                updateEntityPanel();
+                break;
+            case "Relation":
+                updateRelationPanel();
+                break;
+            case "Participation":
+                updateParticipationPanel();
+                break;
+        }
         for (var p in panels) {
             panels[p].className = "panel"
         }
-        if (name)
-            document.getElementById("panel" + name).className = "panel visible"
+        document.getElementById("panel" + name).className = "panel visible"
     }
     this.deleteSelection = function() {
         for (var x in this.selection.s) {

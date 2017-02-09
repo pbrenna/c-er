@@ -59,8 +59,6 @@ function Entity(concept) {
         g.addEventListener("click", function(ev) {
             p.selection.clicked(that, ev)
         })
-        rect.addEventListener("dblclick", function() { that.editName() })
-        text.addEventListener("dblclick", function() { that.editName() })
     }
     this.moveRelXY = function(x, y) {
         var curx = parseInt(p.getViewAttr(node, "x"))
@@ -82,15 +80,9 @@ function Entity(concept) {
     this.selectOff = function() {
         persist.g.style.stroke = p.styles.normalStroke
     }
-    this.editName = function() {
-        var newname = prompt("Nuovo nome:", this.concept.getName())
-        if (newname)
-            this.concept.setName(newname)
-        p.addState()
-    }
 }
 
-//editing operations
+//New entity
 function newEntity(ev) {
     var name = "Entity"
     var el = erp.mkErElement("entity", erp.schema)
@@ -107,7 +99,80 @@ function newEntity(ev) {
     erp.selection.set([el.getAttribute("id")])
 }
 
-function entityDialogSubmit(form) {
-    var dialogContent = document.getElementById("entityDialog");
+var entityNameInput = document.getElementById("entityNameInput")
+entityNameInput.addEventListener("change", function(ev) {
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    e.concept.setName(this.value)
+    erp.addState()
+})
 
+var entityAttrTable = document.getElementById("entityAttrTable")
+var entityAddAttr = document.getElementById("entityAddAttr")
+
+function updateEntityPanel() {
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    entityNameInput.value = e.concept.getName()
+    clearElement(entityAttrTable)
+    var attrs = e.concept.getAttrs()
+    for (var x in attrs) {
+        var attr = attrs[x]
+        mkAttrRow(attr)
+            //using function call to capture "attr" in closures
+    }
+}
+
+function mkAttrRow(attr) {
+    var name = attr.getName()
+    var primary = attr.getIsPrimary()
+    var tr = mkEl(entityAttrTable, "tr")
+    var td = mkEl(tr, "td")
+    var attrNameInput = mkEl(td, "input", {
+        type: "text",
+        value: name,
+        "style": "width: 100px"
+    })
+    attrNameInput.addEventListener("change", function() {
+        attr.setName(this.value)
+        erp.addState()
+    })
+    var td2 = mkEl(tr, "td")
+    var checkbox = mkEl(td2, "input", {
+        type: "checkbox",
+        autocomplete: "off"
+    })
+    if (primary) {
+        checkbox.setAttribute("checked", "true")
+    }
+    checkbox.addEventListener("change", function(ev) {
+        attr.setIsPrimary(this.checked)
+        erp.addState()
+    })
+    var up = mkEl(td2, "div", { "class": "upAttr" })
+    up.addEventListener("click", function() {
+        attr.moveUp()
+        erp.addState()
+        updateEntityPanel()
+    })
+    var del = mkEl(td2, "div", { "class": "deleteAttr" })
+    del.addEventListener("click", function() {
+        attr.destroy()
+        erp.addState()
+        updateEntityPanel()
+    })
+    var down = mkEl(td2, "div", { "class": "downAttr" })
+    down.addEventListener("click", function() {
+        attr.moveDown()
+        erp.addState()
+        updateEntityPanel()
+    })
+}
+
+function entityAddAttribute() {
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    e.concept.addAttribute("attribute", false)
+    erp.addState()
+    updateEntityPanel()
 }

@@ -13,7 +13,6 @@ function Concept(node, project) {
     this.getAttrs = function() {
         var l = []
         var attrs = this.node.getElementsByTagNameNS(this.project.ns, "attr")
-        console.log(attrs)
         for (var a in attrs) {
             var el = attrs[a]
             if (el instanceof Element) {
