@@ -4,6 +4,7 @@ function Entity(concept) {
         this.concept.destroy()
         this.concept = null
     }
+    this.type = "Entity"
     this.getId = function() {
         return this.concept.getId()
     }
@@ -72,7 +73,7 @@ function Entity(concept) {
         if (x != 0 || y != 0) {
             p.setViewAttr(node, "x", curx)
             p.setViewAttr(node, "y", cury)
-            p.addState()
+            p.patchState(this.addStateNumber)
         }
     }
     this.selectOn = function() {
@@ -103,6 +104,7 @@ function newEntity(ev) {
     var c = new Concept(el, erp)
     c.setName(name)
     erp.addState()
+    erp.selection.set([el.getAttribute("id")])
 }
 
 function entityDialogSubmit(form) {

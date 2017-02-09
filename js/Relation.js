@@ -1,5 +1,6 @@
 function Relation(concept) {
     this.concept = concept
+    this.type = "Eelation"
     this.addParticipation = function(entity, mult_min, mult_max) {
         var part = new Participation(
             this.project.mkErElement("participation", this.concept.node),

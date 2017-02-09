@@ -1,6 +1,7 @@
 function Participation(node, project) {
     this.node = node
     this.project = project
+    this.type = "Participation"
     this.setEntity = function(entity) {
         console.assert(entity instanceof Entity)
         this.node.setAttributeNS(this.project.ns, "entity", entity.concept.getId())

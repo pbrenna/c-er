@@ -132,6 +132,45 @@
             background: #555;
             color: #fff;
         }
+        
+        svg {
+            -webkit-touch-callout: none;
+            /* iOS Safari */
+            -webkit-user-select: none;
+            /* Safari */
+            -khtml-user-select: none;
+            /* Konqueror HTML */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            user-select: none;
+        }
+        
+        .panel {
+            display: none;
+        }
+        
+        .panel.visible {
+            display: block;
+        }
+        
+        .delete {
+            display: block;
+            height: 19px;
+            width: 19px;
+            float: right;
+            background-image: url(img/delete.png);
+            cursor: pointer;
+        }
+        
+        .panel h1 {
+            float: left;
+        }
+        
+        .panel br {
+            clear: both
+        }
     </style>
 </head>
 
@@ -157,8 +196,19 @@
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
             </div>
-            <div>
-                <h1>Object</h1>
+            <div id="panelEntity" class="panel">
+                <h1>Selection: Entity</h1>
+                <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+                <label for="entityDialogName">Name:</label>
+                <input type="text" id="entityDialogName"></input>
+            </div>
+            <div id="panelRelation" class="panel">
+                <h1>Selection: Relation</h1>
+                <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+            </div>
+            <div id="panelParticipation" class="panel">
+                <h1>Selection: Participation</h1>
+                <div class="delete" onclick="erp.deleteSelection()"></div><br/>
             </div>
         </div>
     </div>
@@ -199,6 +249,7 @@
         var palette = document.getElementById("palette")
         var scroller = document.getElementById("scroller")
         var dragging = []
+        var postDragging = null
         palette.addEventListener("mousedown", function(ev) {
             var target = ev.target || ev.srcElement
             if (target == palette) {

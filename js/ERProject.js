@@ -44,12 +44,21 @@ function ERProject(svg) {
         } catch (e) {}
         return null
     }
-    this.addState = function() {
+    this.addState = function(dontUpdate) {
         this.curState += 1
             //console.log("prima: ", this.states)
         this.states = this.states.slice(0, this.curState)
         this.states.push(this.erdoc.cloneNode(true))
             //console.log("dopo: ", this.states)
+        if (!dontUpdate)
+            this.update()
+    }
+    this.patchState = function(statenum) {
+        if (statenum == this.curState + 1) {
+            this.addState()
+        } else if (statenum == this.curState) {
+            this.states[statenum] = this.erdoc.cloneNode(true)
+        }
         this.update()
     }
     this.update = function() {
@@ -192,11 +201,13 @@ function ERProject(svg) {
         if (this.s.indexOf(obj.getId()) < 0) {
             this.s.push(obj.getId())
             obj.selectOn()
+            that.selectionChanged()
         }
     }
     this.selection.set = function(list) {
         this.deselectAll()
         this.s = list
+        that.selectionChanged()
         this.restore()
     }
     this.selection.restore = function() {
@@ -206,9 +217,12 @@ function ERProject(svg) {
     }
     this.selection.deselectAll = function() {
         for (var x in this.s) {
-            that.get(this.s[x]).selectOff()
+            try {
+                that.get(this.s[x]).selectOff()
+            } catch (e) {}
         }
         this.s = []
+        that.selectionChanged()
     }
     this.selection.selected = function(obj) {
         return this.s.indexOf(obj.getId()) >= 0
@@ -256,11 +270,37 @@ function ERProject(svg) {
         dragging = []
         for (var x in this.selection.s) {
             var obj = this.get(this.selection.s[x])
-            obj.startX = ev.layerX
-            obj.startY = ev.layerY
+            obj.addStateNumber = this.curState + 1
+            obj.startX = ev.clientX
+            obj.startY = ev.clientY
             obj.dragX = true
             obj.dragY = true
             dragging.push(obj)
         }
+    }
+    this.selectionChanged = function() {
+        if (this.selection.s.length == 1) {
+            var id = this.selection.s[0]
+            var type = this.get(id).type
+            this.selectPanel(type)
+        } else if (this.selection.s.length == 0) {
+            this.selectPanel(null)
+        }
+    }
+    this.selectPanel = function(name) {
+        var panels = document.getElementsByClassName("panel")
+        for (var p in panels) {
+            panels[p].className = "panel"
+        }
+        if (name)
+            document.getElementById("panel" + name).className = "panel visible"
+    }
+    this.deleteSelection = function() {
+        for (var x in this.selection.s) {
+            var obj = this.get(this.selection.s)
+            obj.destroy()
+        }
+        this.selection.deselectAll()
+        this.addState()
     }
 }
