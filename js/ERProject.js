@@ -8,6 +8,7 @@ function ERProject(svg) {
     this.erPrefix = ""
     this.viewPrefix = ""
     this.scheduled = {}
+    this.zoom = 1
     var that = this
     this.load = function(erdoc) {
         this.erPrefix = erdoc.lookupPrefix(this.ns)
@@ -81,6 +82,7 @@ function ERProject(svg) {
         this.schema = this.erdoc.getElementsByTagNameNS(this.ns, "schema")[0]
         console.assert(this.schema != null)
         this.draw()
+        this.resizeSvg()
     }
     this.mkErElement = function(name, parent, attrDict) {
         var el = this.erdoc.createElementNS(this.ns, name)
@@ -151,15 +153,17 @@ function ERProject(svg) {
     }
     this.draw = function() {
         this.svgAll = document.getElementById("svg-all")
-        this.svgAll.parentNode.removeChild(this.svgAll)
-        var nuovo = svgEl(this.svg, "g", { "id": "svg-all" }, false)
-        this.svgAll = nuovo
+        clearElement(this.svgAll)
+
+        //
+        //this.svgAll.parentNode.removeChild(this.svgAll)
+        //var nuovo = svgEl(this.svg, "g", { "id": "svg-all" }, false)
         var ch = this.schema.childNodes
         for (x in ch) {
             var wr = this.wrap(ch[x])
             if (wr) {
                 try {
-                    wr.draw(nuovo)
+                    wr.draw(this.svgAll)
                 } catch (e) {
                     alert("Could not draw object: " + e)
                     console.log(e)
@@ -195,7 +199,8 @@ function ERProject(svg) {
             primaryFill: "#000",
             attrOffset: 10,
             attrDist: 8,
-            attrFontSize: 12
+            attrFontSize: 12,
+            attrRotationDeg: -40
         }
     }
     this.selection = {}
@@ -320,5 +325,32 @@ function ERProject(svg) {
         }
         this.selection.deselectAll()
         this.addState()
+    }
+    this.applyZoom = function() {
+        this.svgAll.transform.baseVal.getItem(0).setScale(this.zoom, this.zoom)
+        this.resizeSvg()
+    }
+    this.zoomIn = function() {
+        this.zoom *= 1.25
+        this.applyZoom()
+    }
+    this.zoomOut = function() {
+        this.zoom /= 1.25
+        this.applyZoom()
+    }
+    this.resizeSvg = function() {
+        var bbox = this.svgAll.getBoundingClientRect()
+        var outf = document.getElementById('outerFixed')
+        var scroller = document.getElementById('scroller')
+        var minw = outf.clientWidth - 4
+        var minh = outf.clientHeight - 4
+        var w = max((bbox.width + bbox.x) * 1 + scroller.scrollLeft, minw)
+        var h = max((bbox.height + bbox.y) * 1 + scroller.scrollTop, minh)
+        this.svg.setAttribute("width", w)
+        this.svg.setAttribute("height", h)
+    }
+    this.saveFile = function() {
+        var xml = new XMLSerializer().serializeToString(this.erdoc)
+        download(xml, "project.er.xml", "text/xml")
     }
 }

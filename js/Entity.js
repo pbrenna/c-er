@@ -72,13 +72,13 @@ function Entity(concept) {
         })
     }
     this.moveRelXY = function(x, y) {
-        var curx = parseInt(p.getViewAttr(node, "x")) + x
-        var cury = parseInt(p.getViewAttr(node, "y")) + y
+        var curx = parseInt(p.getViewAttr(node, "x")) + x / p.zoom
+        var cury = parseInt(p.getViewAttr(node, "y")) + y / p.zoom
         persist.g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
     }
     this.endDragXY = function(x, y) {
-        var curx = parseInt(p.getViewAttr(node, "x")) + x
-        var cury = parseInt(p.getViewAttr(node, "y")) + y
+        var curx = parseInt(p.getViewAttr(node, "x")) + x / p.zoom
+        var cury = parseInt(p.getViewAttr(node, "y")) + y / p.zoom
         if (x != 0 || y != 0) {
             p.setViewAttr(node, "x", max(curx, 0))
             p.setViewAttr(node, "y", max(cury, 0))
@@ -123,7 +123,7 @@ function Entity(concept) {
                 "stroke": 'none',
                 "stroke-width": "0",
                 'text-anchor': 'end',
-                'transform': "rotate(-45," + posx + "," + texty + ")"
+                'transform': "rotate(" + p.styles.entity.attrRotationDeg + "," + posx + "," + texty + ")"
             })
             text.textContent = att.getName()
             posx += spacing
