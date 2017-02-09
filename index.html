@@ -65,6 +65,7 @@
             position: absolute;
             left: 0px;
             bottom: 0px;
+            display: none;
         }
         
         #palette div+div {
@@ -279,6 +280,7 @@
                 <button onclick="erp.saveFile()">Save</button><br/>
                 <button onclick="erp.undo()">Undo</button>
                 <button onclick="erp.redo()">Redo</button>
+                <button onclick="erp.saveSVG()">Save SVG</button>
             </div>
             <div id="panelCreation" class="panel visible">
                 <h1>Add...</h1><br/>
@@ -328,6 +330,7 @@
         var outerFixed = document.getElementById("outerFixed")
         var dragging = []
         var postDragging = null
+        var erp
         palette.addEventListener("mousedown", function(ev) {
             var target = ev.target || ev.srcElement
             if (target == palette) {
@@ -347,6 +350,7 @@
         }
         palette.endDragX = function(x) {
             this.curWidth = palette.clientWidth;
+            erp.resizeSvg()
         }
 
         var svg = document.getElementById('drawing-area')
@@ -367,7 +371,6 @@
             })
             r.readAsText(up.files[0])
         })
-        var erp;
 
         function newFile() {
             erp = new ERProject(svg)

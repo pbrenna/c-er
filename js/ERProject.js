@@ -353,4 +353,9 @@ function ERProject(svg) {
         var xml = new XMLSerializer().serializeToString(this.erdoc)
         download(xml, "project.er.xml", "text/xml")
     }
+    this.saveSVG = function() {
+        this.selection.deselectAll()
+        var xml = new XMLSerializer().serializeToString(this.svg)
+        download(xml, "project.er.svg", "image/svg+xml")
+    }
 }
