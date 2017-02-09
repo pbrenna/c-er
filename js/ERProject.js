@@ -23,6 +23,7 @@ function ERProject(svg) {
         this.nsMap[this.viewPrefix] = this.vns
         this.erdoc = erdoc
         this.addState()
+        this.applyZoom()
     }
     this.get = function(id) {
         var el = this.erdoc.getElementById(id)
