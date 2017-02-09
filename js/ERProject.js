@@ -123,7 +123,7 @@ function ERProject(svg) {
 
     this.genId = function() {
         this.idCount += 1
-        while (document.getElementById("er" + this.idCount)) {
+        while (this.erdoc.getElementById("er" + this.idCount)) {
             this.idCount += 1
         }
         return "er" + this.idCount
@@ -182,12 +182,20 @@ function ERProject(svg) {
         return el.setAttributeNS(this.ns, name, val)
     }
     this.styles = {
-        selectedStroke: "#f00",
+        selectedStroke: "#d00",
         normalStroke: "#000",
         entity: {
             padding: 5,
             defaultH: 40,
-            defaultW: 100
+            defaultW: 100,
+            corners: 25,
+            attrSpacing: 25,
+            attrLineH: 15,
+            attrCircRad: 4,
+            primaryFill: "#000",
+            attrOffset: 10,
+            attrDist: 8,
+            attrFontSize: 12
         }
     }
     this.selection = {}

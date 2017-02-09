@@ -26,16 +26,27 @@ function Entity(concept) {
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
+        var attrs = this.drawAttrs(g)
+            //attrs.g width is needed to compute final rectangle width
+        var oldw = w;
+        var rectx = 0
+        var reqw = attrs.reqWidth + p.styles.entity.corners * 2
+        if (oldw < reqw) {
+            w = reqw
+            rectx -= (w - oldw) / 2
+        }
+        var attrX = rectx + w / 2 - (reqw / 2) + p.styles.entity.corners
+        attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, h);
+
         var text = svgEl(g, "text", {
             'text-anchor': 'middle',
-            x: w / 2,
+            x: oldw / 2,
             y: h / 2 + 5,
             'stroke-width': 0
         })
         text.textContent = p.getErAttr(node, "name")
         var textW = text.getBoundingClientRect().width
         var oldw = w
-        var rectx = 0
         if (w < (textW + p.styles.entity.padding * 2)) {
             w = (textW + p.styles.entity.padding * 2)
             rectx -= (w - oldw) / 2
@@ -61,16 +72,16 @@ function Entity(concept) {
         })
     }
     this.moveRelXY = function(x, y) {
-        var curx = parseInt(p.getViewAttr(node, "x"))
-        var cury = parseInt(p.getViewAttr(node, "y"))
-        persist.g.transform.baseVal.getItem(0).setTranslate(curx + x, cury + y);
+        var curx = parseInt(p.getViewAttr(node, "x")) + x
+        var cury = parseInt(p.getViewAttr(node, "y")) + y
+        persist.g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
     }
     this.endDragXY = function(x, y) {
         var curx = parseInt(p.getViewAttr(node, "x")) + x
         var cury = parseInt(p.getViewAttr(node, "y")) + y
         if (x != 0 || y != 0) {
-            p.setViewAttr(node, "x", curx)
-            p.setViewAttr(node, "y", cury)
+            p.setViewAttr(node, "x", max(curx, 0))
+            p.setViewAttr(node, "y", max(cury, 0))
             p.patchState(this.addStateNumber)
         }
     }
@@ -79,6 +90,46 @@ function Entity(concept) {
     }
     this.selectOff = function() {
         persist.g.style.stroke = p.styles.normalStroke
+    }
+    this.drawAttrs = function(parent) {
+        var ret = {}
+        var g = ret.g = svgEl(parent, "g", {
+            "transform": "translate(0,0)"
+        })
+        var attrs = this.concept.getAttrs()
+        var n = attrs.length
+        var spacing = p.styles.entity.attrSpacing
+        var lineh = p.styles.entity.attrLineH
+        var rad = p.styles.entity.attrCircRad
+        var posx = 0
+        for (var i = 0; i < n; i++) {
+            var att = attrs[i]
+            var path = svgEl(g, "path", {
+                "d": "M" + posx + ",0 l0," + lineh
+            })
+            var circle = svgEl(g, "circle", {
+                cy: lineh + 2 + rad / 2,
+                cx: posx,
+                r: rad,
+                'stroke-width': '1',
+                fill: att.getIsPrimary() ? p.styles.entity.primaryFill : 'none'
+            })
+            var texty = lineh + p.styles.entity.attrOffset
+            var textx = posx - p.styles.entity.attrDist
+            var text = svgEl(g, "text", {
+                x: textx,
+                y: texty,
+                "font-size": p.styles.entity.attrFontSize,
+                "stroke": 'none',
+                "stroke-width": "0",
+                'text-anchor': 'end',
+                'transform': "rotate(-45," + posx + "," + texty + ")"
+            })
+            text.textContent = att.getName()
+            posx += spacing
+        }
+        ret.reqWidth = posx - spacing
+        return ret
     }
 }
 
