@@ -41,6 +41,8 @@
             cursor: auto;
             box-sizing: border-box;
             padding: 5px;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
         
         #palette h1 {
@@ -124,7 +126,7 @@
             background: #fff;
             border: 1px solid #aaa;
             padding: 5px;
-            margin: 5px;
+            margin: 0px 10px 10px 0px;
         }
         
         button.on,
@@ -145,6 +147,7 @@
             -ms-user-select: none;
             /* Internet Explorer/Edge */
             user-select: none;
+            cursor: default
         }
         
         .panel {
@@ -198,6 +201,41 @@
         .downAttr {
             background-image: url(img/down.png);
         }
+        
+        .tip {
+            font-size: 12px;
+            /*position: absolute;
+            bottom: 12px;*/
+            margin-bottom: 12px;
+        }
+        
+        .innerPanel {
+            padding: 3px;
+        }
+        
+        #attrTable {
+            margin-top: 10px;
+        }
+        
+        input[type=text] {
+            border: 1px solid #ccc;
+            background: #eee;
+            height: 24px;
+        }
+        
+        input[type=text]:focus {
+            background: #fff;
+        }
+        
+        label {
+            display: block;
+            float: left;
+            padding-top: 4px;
+        }
+        
+        td {
+            padding: 0px 0px 4px 0px;
+        }
     </style>
 </head>
 
@@ -220,23 +258,25 @@
             </div>
             <div id="panelCreation" class="panel visible">
                 <h1>Add...</h1><br/>
+                <div class="tip">Choose "entity" or "relation", then click on the drawing area.</div>
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
             </div>
             <div id="panelEntity" class="panel">
-                <h1>Edit entity</h1>
-                <div class="delete" onclick="erp.deleteSelection()"></div><br/>
-                <label for="entityNameInput">Name:</label>
-                <input type="text" id="entityNameInput"></input>
-                <br/>
-                <table>
-                    <tr>
-                        <th>Attribute</th>
-                        <th>Primary</th>
-                    </tr>
-                    <tbody id="entityAttrTable"></tbody>
-                </table>
-                <button id="entityAddAttr" onclick="entityAddAttribute()">Add attribute</button>
+                <div class="innerPanel">
+                    <h1>Edit entity</h1>
+                    <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+                    <div class="tip">Press ENTER after editing the name of the concept or the attributes; use the checkbox to set an attribute as primary.</div>
+                    <label for="entityNameInput">Name:</label>
+                    <input type="text" style="float:right" id="entityNameInput"></input>
+                    <div style="margin-bottom: 12px;margin-bottom: 4px;clear:both">
+                        Attributes
+                    </div>
+                    <table cellspacing="0" cellpadding="0" style="width:100%">
+                        <tbody id="entityAttrTable" class="attrTable"></tbody>
+                    </table>
+                    <button id="entityAddAttr" onclick="entityAddAttribute()" style="width:100%;margin-right: 0;">Add attribute</button>
+                </div>
             </div>
             <div id="panelRelation" class="panel">
                 <h1>Selection: Relation</h1>
@@ -249,29 +289,6 @@
         </div>
     </div>
     <textarea autocomplete="off" id="erXmlPre" readonly="true"></textarea>
-    <div id="dialogContainer">
-        <div class="dialog" id="dialog">
-            <img id="closeDialog" src="img/close.png" onclick="closeDialog()" />
-            <div id="entityDialog" class="dialogContent">
-                <h1>Editing Entity</h1>
-                <form action="#" method="GET" onsubmit="entityDialogSubmit(this);return false">
-                    <label for="entityDialogName">Name:</label>
-                    <input type="text" id="entityDialogName"></input><br/><br/>
-                    <!--<table id="entityAttrs">
-                        <tr>
-                            <th>Primary</th>
-                            <th>Name</th>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td><input type="text" /></td>
-                        </tr>
-                    </table>-->
-                    <input type="submit" value="OK"></input>
-                </form>
-            </div>
-        </div>
-        <div class="dialogBackground"></div>
     </div>
     <script type="text/javascript" src="js/Attr.js"></script>
     <script type="text/javascript" src="js/Concept.js"></script>
@@ -298,7 +315,7 @@
         palette.curWidth = 300
         palette.moveRelX = function(x) {
             var neww = this.curWidth - x
-            if (neww > 150) {
+            if (neww > 290) {
                 scroller.style.width = "calc(100% - " + neww + "px)"
                 this.style.width = neww + "px"
             }

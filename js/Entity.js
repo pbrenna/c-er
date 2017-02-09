@@ -128,19 +128,10 @@ function mkAttrRow(attr) {
     var primary = attr.getIsPrimary()
     var tr = mkEl(entityAttrTable, "tr")
     var td = mkEl(tr, "td")
-    var attrNameInput = mkEl(td, "input", {
-        type: "text",
-        value: name,
-        "style": "width: 100px"
-    })
-    attrNameInput.addEventListener("change", function() {
-        attr.setName(this.value)
-        erp.addState()
-    })
-    var td2 = mkEl(tr, "td")
-    var checkbox = mkEl(td2, "input", {
+    var checkbox = mkEl(td, "input", {
         type: "checkbox",
-        autocomplete: "off"
+        autocomplete: "off",
+        title: "Primary"
     })
     if (primary) {
         checkbox.setAttribute("checked", "true")
@@ -149,19 +140,30 @@ function mkAttrRow(attr) {
         attr.setIsPrimary(this.checked)
         erp.addState()
     })
-    var up = mkEl(td2, "div", { "class": "upAttr" })
+    var td2 = mkEl(tr, "td")
+    var attrNameInput = mkEl(td2, "input", {
+        type: "text",
+        value: name,
+        "style": "width: 150px; float:right"
+    })
+    attrNameInput.addEventListener("change", function() {
+        attr.setName(this.value)
+        erp.addState()
+    })
+
+    var up = mkEl(td, "div", { "class": "upAttr" })
     up.addEventListener("click", function() {
         attr.moveUp()
         erp.addState()
         updateEntityPanel()
     })
-    var del = mkEl(td2, "div", { "class": "deleteAttr" })
+    var del = mkEl(td, "div", { "class": "deleteAttr" })
     del.addEventListener("click", function() {
         attr.destroy()
         erp.addState()
         updateEntityPanel()
     })
-    var down = mkEl(td2, "div", { "class": "downAttr" })
+    var down = mkEl(td, "div", { "class": "downAttr" })
     down.addEventListener("click", function() {
         attr.moveDown()
         erp.addState()

@@ -3,9 +3,14 @@
     xmlns:er="http://disco.unimib.it/c-er/er"
     xmlns:v="http://disco.unimib.it/c-er/view">
     <er:schema>
-        <er:entity id="er1" v:x="709" v:y="147" v:h="40" v:w="100" er:name="Entity">
-			<er:attr er:name="ciao" er:primary="true" />
-		</er:entity>
+        <er:entity id="er1" v:x="579" v:y="143" v:h="40" v:w="100" er:name="Entity">
+            <er:attr id="er2" er:name="attribute" er:primary="false"/>
+            <er:attr id="er3" er:name="attribute" er:primary="false"/>
+            <er:attr id="er4" er:name="attribute" er:primary="false"/>
+            <er:attr id="er5" er:name="attribute" er:primary="false"/>
+            <er:attr id="er6" er:name="attribute" er:primary="false"/>
+            <er:attr id="er7" er:name="attribute" er:primary="false"/>
+        </er:entity>
     </er:schema>
     <er:view></er:view>
 </er:project>

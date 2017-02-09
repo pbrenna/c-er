@@ -13,12 +13,10 @@ function Concept(node, project) {
     this.getAttrs = function() {
         var l = []
         var attrs = this.node.getElementsByTagNameNS(this.project.ns, "attr")
-        for (var a in attrs) {
-            var el = attrs[a]
-            if (el instanceof Element) {
-                var wrapper = new Attr(el, this.project)
-                l.push(wrapper)
-            }
+        for (var i = 0; i < attrs.length; i++) {
+            var el = attrs[i]
+            var wrapper = new Attr(el, this.project)
+            l.push(wrapper)
         }
         return l
     }
