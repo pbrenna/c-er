@@ -369,11 +369,11 @@ function ERProject(svg) {
     this.resizeSvg = function() {
         var bbox = this.svgAll.getBoundingClientRect()
         var outf = document.getElementById('outerFixed')
-        var scroller = document.getElementById('scroller')
         var minw = outf.clientWidth - 4
         var minh = outf.clientHeight - 4
-        var w = max((bbox.width + bbox.x) * 1 + scroller.scrollLeft, minw)
-        var h = max((bbox.height + bbox.y) * 1 + scroller.scrollTop, minh)
+        var w = max((bbox.width + bbox.left) * 1 + scroller.scrollLeft, minw)
+        var h = max((bbox.height + bbox.top) * 1 + scroller.scrollTop, minh)
+        console.log(w, h)
         this.svg.setAttribute("width", w)
         this.svg.setAttribute("height", h)
     }
@@ -389,11 +389,18 @@ function ERProject(svg) {
     this.saveImg = function() {
         var canvas = document.getElementById("canvas")
         var img = new Image()
+        this.selection.deselectAll()
         img.crossOrigin = 'anonymous'
-        var xml = new XMLSerializer().serializeToString(this.svg)
-        var b = this.svg.getBoundingClientRect()
-        canvas.width = b.width
-        canvas.height = b.height
+        var svg2 = this.svg.cloneNode(true)
+        var svgallNew = svg2.getElementById('svg-all')
+        var bbox = this.svgAll.getBoundingClientRect()
+        svg2.setAttribute("height", bbox.height)
+        svg2.setAttribute("width", bbox.width)
+        console.log(bbox)
+        svgallNew.transform.baseVal.getItem(0).setTranslate(-bbox.left - scroller.scrollLeft, -bbox.top - scroller.scrollTop)
+        var xml = new XMLSerializer().serializeToString(svg2)
+        canvas.width = bbox.width
+        canvas.height = bbox.height
         img.src = "data:image/svg+xml;base64," + btoa(xml)
         var ctx = canvas.getContext('2d')
         img.onload = function() {

@@ -52,8 +52,8 @@ function Participation(node, project) {
         var box = txt.getBoundingClientRect()
         var bgrect = svgEl(g, "rect", {
             fill: "white",
-            x: box.left,
-            y: box.top,
+            x: box.left + scroller.scrollLeft,
+            y: box.top + scroller.scrollTop,
             width: box.width,
             height: box.height,
             "stroke-width": 0

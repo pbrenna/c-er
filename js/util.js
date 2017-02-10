@@ -133,3 +133,4 @@ function min(a, b) {
 function max(a, b) {
     return a > b ? a : b
 }
+var scroller = document.getElementById('scroller')
