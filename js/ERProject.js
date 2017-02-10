@@ -24,6 +24,7 @@ function ERProject(svg) {
         this.erdoc = erdoc
         this.addState()
         this.applyZoom()
+        this.selectPanel("Creation")
     }
     this.get = function(id) {
         var el = this.erdoc.getElementById(id)
@@ -98,7 +99,6 @@ function ERProject(svg) {
     }
     this.refClean = function() {
         var path = "//*[@" + this.erPrefix + ":ref]"
-        console.log(path)
         var that = this
         var xpathRes = this.erdoc.evaluate(
             path,
@@ -171,6 +171,11 @@ function ERProject(svg) {
                 }
             }
         }
+        var part = this.schema.getElementsByTagNameNS(this.ns, "participation")
+        for (var i = 0; i < part.length; i++) {
+            var p = this.wrap(part[i])
+            p.draw(this.svgAll)
+        }
         this.selection.restore()
 
     }
@@ -196,6 +201,20 @@ function ERProject(svg) {
             corners: 25,
             attrSpacing: 25,
             attrLineH: 15,
+            attrCircRad: 4,
+            primaryFill: "#000",
+            attrOffset: 10,
+            attrDist: 8,
+            attrFontSize: 12,
+            attrRotationDeg: -40
+        },
+        relation: {
+            defaultH: 40,
+            defaultW: 100,
+            corners: 40,
+            padding: 40,
+            attrSpacing: 25,
+            attrLineH: 30,
             attrCircRad: 4,
             primaryFill: "#000",
             attrOffset: 10,
@@ -299,6 +318,13 @@ function ERProject(svg) {
             this.selectPanel(type)
         } else if (this.selection.s.length == 0) {
             this.selectPanel("Creation")
+        } else {
+            this.selectPanel("MultipleSelection")
+            var b = document.getElementById("addParticipation")
+            b.setAttribute("disabled", "true")
+            if (this.canAddParticipation()) {
+                try { b.removeAttribute("disabled") } catch (e) {}
+            }
         }
     }
     this.selectPanel = function(name) {
@@ -321,7 +347,7 @@ function ERProject(svg) {
     }
     this.deleteSelection = function() {
         for (var x in this.selection.s) {
-            var obj = this.get(this.selection.s)
+            var obj = this.get(this.selection.s[x])
             obj.destroy()
         }
         this.selection.deselectAll()
@@ -358,5 +384,18 @@ function ERProject(svg) {
         this.selection.deselectAll()
         var xml = new XMLSerializer().serializeToString(this.svg)
         download(xml, "project.er.svg", "image/svg+xml")
+    }
+    this.canAddParticipation = function() {
+        if (this.selection.s.length != 2)
+            return false
+        var types = [this.get(this.selection.s[0]).type,
+            this.get(this.selection.s[1]).type
+        ]
+        return types.indexOf("Entity") >= 0 && types.indexOf("Relation") >= 0
+    }
+    this.addParticipation = function() {
+        if (this.canAddParticipation()) {
+            newParticipation(this.get(this.selection.s[0]), this.get(this.selection.s[1]))
+        }
     }
 }

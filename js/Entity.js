@@ -9,10 +9,11 @@ function Entity(concept) {
         return this.concept.getId()
     }
     var p = this.concept.project
-    this.concept.node.persist = this.concept.node.persist || {}
-    var persist = this.concept.node.persist
 
     var node = this.concept.node
+    this.getG = function() {
+        return p.svg.getElementById('svg-' + this.getId())
+    }
 
     //drawing things
     this.draw = function(parent) {
@@ -21,12 +22,13 @@ function Entity(concept) {
         var w = parseInt(p.getViewAttr(node, "w"))
         var h = parseInt(p.getViewAttr(node, "h"))
         if (x === null || y === null || !h || !w)
-            throw new DOMException("missing x,y coordinates of entity")
-        var g = persist.g = svgEl(parent, "g", {
+            throw new DOMException("missing x,y coordinates of entity" + this.getId())
+        var g = svgEl(parent, "g", {
+            id: 'svg-' + this.getId(),
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
-        var attrs = this.drawAttrs(g)
+        var attrs = drawAttrs(g, this.concept.getAttrs(), p.styles.entity)
             //attrs.g width is needed to compute final rectangle width
         var oldw = w;
         var rectx = 0
@@ -64,6 +66,8 @@ function Entity(concept) {
 
         var that = this
         g.addEventListener('mousedown', function(ev) {
+            mkLastChild(this)
+            that.concept.moveUp()
             erp.dragStart(that, ev)
         })
 
@@ -74,7 +78,8 @@ function Entity(concept) {
     this.moveRelXY = function(x, y) {
         var curx = parseInt(p.getViewAttr(node, "x")) + x / p.zoom
         var cury = parseInt(p.getViewAttr(node, "y")) + y / p.zoom
-        persist.g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
+        var g = this.getG()
+        g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
     }
     this.endDragXY = function(x, y) {
         var curx = parseInt(p.getViewAttr(node, "x")) + x / p.zoom
@@ -86,50 +91,19 @@ function Entity(concept) {
         }
     }
     this.selectOn = function() {
-        persist.g.style.stroke = p.styles.selectedStroke
+        var g = this.getG()
+        g.style.stroke = p.styles.selectedStroke
     }
     this.selectOff = function() {
-        persist.g.style.stroke = p.styles.normalStroke
+        var g = this.getG()
+        g.style.stroke = p.styles.normalStroke
     }
-    this.drawAttrs = function(parent) {
-        var ret = {}
-        var g = ret.g = svgEl(parent, "g", {
-            "transform": "translate(0,0)"
-        })
-        var attrs = this.concept.getAttrs()
-        var n = attrs.length
-        var spacing = p.styles.entity.attrSpacing
-        var lineh = p.styles.entity.attrLineH
-        var rad = p.styles.entity.attrCircRad
-        var posx = 0
-        for (var i = 0; i < n; i++) {
-            var att = attrs[i]
-            var path = svgEl(g, "path", {
-                "d": "M" + posx + ",0 l0," + lineh
-            })
-            var circle = svgEl(g, "circle", {
-                cy: lineh + 2 + rad / 2,
-                cx: posx,
-                r: rad,
-                'stroke-width': '1',
-                fill: att.getIsPrimary() ? p.styles.entity.primaryFill : 'none'
-            })
-            var texty = lineh + p.styles.entity.attrOffset
-            var textx = posx - p.styles.entity.attrDist
-            var text = svgEl(g, "text", {
-                x: textx,
-                y: texty,
-                "font-size": p.styles.entity.attrFontSize,
-                "stroke": 'none',
-                "stroke-width": "0",
-                'text-anchor': 'end',
-                'transform': "rotate(" + p.styles.entity.attrRotationDeg + "," + posx + "," + texty + ")"
-            })
-            text.textContent = att.getName()
-            posx += spacing
-        }
-        ret.reqWidth = posx - spacing
-        return ret
+    this.getCenter = function() {
+        var x = parseInt(p.getViewAttr(node, "x"))
+        var y = parseInt(p.getViewAttr(node, "y"))
+        var w = parseInt(p.getViewAttr(node, "w"))
+        var h = parseInt(p.getViewAttr(node, "h"))
+        return [x + w / 2, y + h / 2]
     }
 }
 
@@ -169,58 +143,11 @@ function updateEntityPanel() {
     var attrs = e.concept.getAttrs()
     for (var x in attrs) {
         var attr = attrs[x]
-        mkAttrRow(attr)
+        mkAttrRow(attr, entityAttrTable, updateEntityPanel)
             //using function call to capture "attr" in closures
     }
 }
 
-function mkAttrRow(attr) {
-    var name = attr.getName()
-    var primary = attr.getIsPrimary()
-    var tr = mkEl(entityAttrTable, "tr")
-    var td = mkEl(tr, "td")
-    var checkbox = mkEl(td, "input", {
-        type: "checkbox",
-        autocomplete: "off",
-        title: "Primary"
-    })
-    if (primary) {
-        checkbox.setAttribute("checked", "true")
-    }
-    checkbox.addEventListener("change", function(ev) {
-        attr.setIsPrimary(this.checked)
-        erp.addState()
-    })
-    var td2 = mkEl(tr, "td")
-    var attrNameInput = mkEl(td2, "input", {
-        type: "text",
-        value: name,
-        "style": "width: 150px; float:right"
-    })
-    attrNameInput.addEventListener("change", function() {
-        attr.setName(this.value)
-        erp.addState()
-    })
-
-    var up = mkEl(td, "div", { "class": "upAttr" })
-    up.addEventListener("click", function() {
-        attr.moveUp()
-        erp.addState()
-        updateEntityPanel()
-    })
-    var del = mkEl(td, "div", { "class": "deleteAttr" })
-    del.addEventListener("click", function() {
-        attr.destroy()
-        erp.addState()
-        updateEntityPanel()
-    })
-    var down = mkEl(td, "div", { "class": "downAttr" })
-    down.addEventListener("click", function() {
-        attr.moveDown()
-        erp.addState()
-        updateEntityPanel()
-    })
-}
 
 function entityAddAttribute() {
     var id = erp.selection.s[0]

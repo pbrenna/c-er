@@ -105,6 +105,10 @@ function mkFirstChild(el) {
     }
 }
 
+function mkLastChild(el) {
+    el.parentNode.appendChild(el)
+}
+
 function preventBrowserDrag(el) {
     el.addEventListener('dragstart', function(ev) {
         ev.preventDefault()

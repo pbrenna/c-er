@@ -216,6 +216,7 @@
             /*position: absolute;
             bottom: 12px;*/
             margin-bottom: 12px;
+            clear: both;
         }
         
         .innerPanel {
@@ -248,12 +249,16 @@
         
         #viewControls {
             position: absolute;
-            top: 0px;
+            top: 10px;
             right: 10px;
         }
         
         #viewControls button {
             min-width: 40px;
+        }
+        
+        .indent {
+            padding-left: 10px;
         }
     </style>
 </head>
@@ -287,6 +292,10 @@
                 <div class="tip">Choose "entity" or "relation", then click on the drawing area.</div>
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
                 <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
+                <h1>Participation</h1>
+                <div class="tip">To add a participation, select both an entity and a relation (holding SHIFT), then choose "Add participation".
+
+                </div>
             </div>
             <div id="panelEntity" class="panel">
                 <div class="innerPanel">
@@ -305,12 +314,36 @@
                 </div>
             </div>
             <div id="panelRelation" class="panel">
-                <h1>Selection: Relation</h1>
-                <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+                <div class="innerPanel">
+                    <h1>Edit relation</h1>
+                    <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+                    <div class="tip">Press ENTER after editing the name of the concept or the attributes; use the checkbox to set an attribute as primary.</div>
+                    <label for="relationNameInput">Name:</label>
+                    <input type="text" style="float:right" id="relationNameInput"></input>
+                    <div style="margin-bottom: 12px;margin-bottom: 4px;clear:both">
+                        Attributes
+                    </div>
+                    <table cellspacing="0" cellpadding="0" style="width:100%">
+                        <tbody id="relationAttrTable" class="attrTable"></tbody>
+                    </table>
+                    <button id="relationAddAttr" onclick="relationAddAttribute()" style="width:100%;margin-right: 0;">Add attribute</button>
+                </div>
             </div>
             <div id="panelParticipation" class="panel">
-                <h1>Selection: Participation</h1>
+                <h1>Edit participation</h1>
+                <div class="delete" onclick="erp.deleteSelection()"></div><br/> Multiplicity
+                <br style="clear:both" />
+                <label for="participationMultMin" class="indent">Min: </label>
+                <input type="text" style="float:right" id="participationMultMin"></input>
+                <br style="clear:both" />
+                <label for="participationMultMax" class="indent">Max: </label>
+                <input type="text" style="float:right" id="participationMultMax"></input>
+
+            </div>
+            <div id="panelMultipleSelection" class="panel">
+                <h1>Edit selction</h1>
                 <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+                <button id="addParticipation" onclick="erp.addParticipation()" disabled="true">Add participation</button>
             </div>
         </div>
     </div>
