@@ -4,7 +4,7 @@
         <er:entity id="er3" v:x="25" v:y="259" v:h="40" v:w="100" er:name="Pet">
             <er:attr id="er8" er:name="name" er:primary="false"/>
         </er:entity>
-        <er:relation id="er2" v:x="246" v:y="259" v:h="40" v:w="100" er:name="Owns">
+        <er:relation id="er2" v:x="246" v:y="259" v:h="40" v:w="100" er:name="ownership">
             <er:participation id="er4" er:entity="er1" er:mult-min="0" er:mult-max="n"/>
             <er:participation id="er10" er:entity="er3" er:mult-min="1" er:mult-max="1"/>
         </er:relation>
