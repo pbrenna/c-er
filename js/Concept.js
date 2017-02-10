@@ -116,6 +116,7 @@ function drawAttrs(parent, attrs, style, additionalSpace) {
         var text = svgEl(g, "text", {
             x: textx,
             y: texty,
+            'font-family': erp.styles.defaultFont,
             "font-size": style.attrFontSize,
             "stroke": 'none',
             "stroke-width": "0",

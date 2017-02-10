@@ -45,14 +45,15 @@ function Participation(node, project) {
         var txt = svgEl(g, "text", {
             x: (entc[0] + rel[0]) / 2 - 20,
             y: (entc[1] + rel[1]) / 2 + 20,
-            "stroke-width": 0
+            "stroke-width": 0,
+            'font-family': this.project.styles.defaultFont
         })
         txt.textContent = "(" + this.getMultMin() + ", " + this.getMultMax() + ")"
         var box = txt.getBoundingClientRect()
         var bgrect = svgEl(g, "rect", {
             fill: "white",
-            x: box.x,
-            y: box.y,
+            x: box.left,
+            y: box.top,
             width: box.width,
             height: box.height,
             "stroke-width": 0

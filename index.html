@@ -26,11 +26,12 @@
                 <h1>ER Project</h1>
                 <input type="file" id="upload" accept="text/xml" style="display:none" />
                 <button onclick="newFile()">New</button>
-                <button onclick="openFile()">Open</button>
-                <button onclick="erp.saveFile()">Save</button><br/>
+                <button onclick="openFile()">Open</button><br/>
+                <button onclick="erp.saveFile()">Save</button>
+                <button onclick="erp.saveSVG()">Save SVG</button>
+                <button onclick="erp.saveImg()">Save PNG</button><br/>
                 <button onclick="erp.undo()">Undo</button>
                 <button onclick="erp.redo()">Redo</button>
-                <button onclick="erp.saveSVG()">Save SVG</button>
             </div>
             <div id="panelCreation" class="panel visible">
                 <h1>Add...</h1><br/>
@@ -93,6 +94,7 @@
         </div>
     </div>
     <textarea autocomplete="off" id="erXmlPre" readonly="true"></textarea>
+    <canvas width="1920" height="1080" id="canvas" style="display:none"></canvas>
     </div>
     <script type="text/javascript" src="js/Attr.js"></script>
     <script type="text/javascript" src="js/Concept.js"></script>

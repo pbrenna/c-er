@@ -44,7 +44,8 @@ function Entity(concept) {
             'text-anchor': 'middle',
             x: oldw / 2,
             y: h / 2 + 5,
-            'stroke-width': 0
+            'stroke-width': 0,
+            'font-family': p.styles.defaultFont
         })
         text.textContent = p.getErAttr(node, "name")
         var textW = text.getBoundingClientRect().width

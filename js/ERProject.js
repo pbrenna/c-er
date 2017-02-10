@@ -194,6 +194,7 @@ function ERProject(svg) {
     this.styles = {
         selectedStroke: "#d00",
         normalStroke: "#000",
+        defaultFont: "Roboto",
         entity: {
             padding: 5,
             defaultH: 40,
@@ -384,6 +385,23 @@ function ERProject(svg) {
         this.selection.deselectAll()
         var xml = new XMLSerializer().serializeToString(this.svg)
         download(xml, "project.er.svg", "image/svg+xml")
+    }
+    this.saveImg = function() {
+        var canvas = document.getElementById("canvas")
+        var img = new Image()
+        img.crossOrigin = 'anonymous'
+        var xml = new XMLSerializer().serializeToString(this.svg)
+        var b = this.svg.getBoundingClientRect()
+        canvas.width = b.width
+        canvas.height = b.height
+        img.src = "data:image/svg+xml;base64," + btoa(xml)
+        var ctx = canvas.getContext('2d')
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function(blob) {
+                download(blob, "project.er.png", "image/png")
+            }, "image/png", 1)
+        }
     }
     this.canAddParticipation = function() {
         if (this.selection.s.length != 2)

@@ -121,11 +121,11 @@ body {
 }
 
 button {
-    min-width: 75px;
+    min-width: 85px;
     background: #fff;
     border: 1px solid #aaa;
     padding: 5px;
-    margin: 0px 10px 10px 0px;
+    margin: 0px 5px 10px 0px;
 }
 
 button.on,
