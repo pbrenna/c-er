@@ -37,7 +37,7 @@ function Relation(concept) {
         var attrs = drawAttrs(g, this.concept.getAttrs(), p.styles.relation)
         var oldw = w;
         var rectx = 0
-        var reqw = attrs.reqWidth + p.styles.relation.corners * 2
+        var reqw = attrs.reqWidth / p.zoom + p.styles.relation.corners * 2
         if (oldw < reqw) {
             w = reqw
             rectx -= (w - oldw) / 2
@@ -51,7 +51,7 @@ function Relation(concept) {
             'font-family': p.styles.defaultFont
         })
         text.textContent = p.getErAttr(node, "name")
-        var textW = text.getBoundingClientRect().width
+        var textW = text.getBoundingClientRect().width / p.zoom
         var oldw = w
         if (w < (textW + p.styles.relation.padding * 2)) {
             w = (textW + p.styles.relation.padding * 2)
