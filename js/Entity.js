@@ -32,7 +32,7 @@ function Entity(concept) {
             //attrs.g width is needed to compute final rectangle width
         var oldw = w;
         var rectx = 0
-        var reqw = attrs.reqWidth / p.zoom + p.styles.entity.corners * 2
+        var reqw = attrs.reqWidth + p.styles.entity.corners * 2
         if (oldw < reqw) {
             w = reqw
             rectx -= (w - oldw) / 2

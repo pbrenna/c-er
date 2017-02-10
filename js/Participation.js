@@ -29,6 +29,7 @@ function Participation(node, project) {
         return this.project.svg.getElementById('svg-' + this.getId())
 
     }
+    var p = this.project
     this.draw = function(parent) {
         var rel = this.project.wrap(this.node.parentNode).getCenter()
         var entId = this.project.getErAttr(this.node, "entity")
@@ -52,10 +53,10 @@ function Participation(node, project) {
         var box = txt.getBoundingClientRect()
         var bgrect = svgEl(g, "rect", {
             fill: "white",
-            x: box.left + scroller.scrollLeft,
-            y: box.top + scroller.scrollTop,
-            width: box.width,
-            height: box.height,
+            x: box.left / p.zoom + scroller.scrollLeft / p.zoom,
+            y: box.top / p.zoom + scroller.scrollTop / p.zoom,
+            width: box.width / p.zoom,
+            height: box.height / p.zoom,
             "stroke-width": 0
         })
         mkFirstChild(bgrect)
