@@ -34,12 +34,13 @@
                 <button onclick="erp.redo()">Redo</button>
             </div>
             <div id="panelCreation" class="panel visible">
-                <h1>Add...</h1><br/>
-                <div class="tip">Choose "entity" or "relation", then click on the drawing area.</div>
-                <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
-                <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
-                <div class="tip" style="position:absolute;bottom:12px">To add a participation, select both an entity and a relation (holding SHIFT), then choose "Add participation".
-
+                <div class="innerPanel">
+                    <h1>Add...</h1><br/>
+                    <div class="tip">Choose "entity" or "relation", then click on the drawing area.</div>
+                    <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
+                    <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
+                    <div class="tip" style="">To add a participation, select both an entity and a relation (holding SHIFT), then choose "Add participation".
+                    </div>
                 </div>
             </div>
             <div id="panelEntity" class="panel">
@@ -75,21 +76,24 @@
                 </div>
             </div>
             <div id="panelParticipation" class="panel">
-                <h1>Edit participation</h1>
-                <div class="delete" onclick="erp.deleteSelection()"></div>
-                <div class="tip">Press ENTER after editing the multiplicities</div> Multiplicity
-                <br style="clear:both" />
-                <label for="participationMultMin" class="indent">Min: </label>
-                <input type="text" style="float:right" id="participationMultMin"></input>
-                <br style="clear:both" />
-                <label for="participationMultMax" class="indent">Max: </label>
-                <input type="text" style="float:right" id="participationMultMax"></input>
-
+                <div class="innerPanel">
+                    <h1>Edit participation</h1>
+                    <div class="delete" onclick="erp.deleteSelection()"></div>
+                    <div class="tip">Press ENTER after editing the multiplicities</div> Multiplicity
+                    <br style="clear:both" />
+                    <label for="participationMultMin" class="indent">Min: </label>
+                    <input type="text" style="float:right" id="participationMultMin"></input>
+                    <br style="clear:both" />
+                    <label for="participationMultMax" class="indent">Max: </label>
+                    <input type="text" style="float:right" id="participationMultMax"></input>
+                </div>
             </div>
             <div id="panelMultipleSelection" class="panel">
-                <h1>Edit selction</h1>
-                <div class="delete" onclick="erp.deleteSelection()"></div><br/>
-                <button id="addParticipation" onclick="erp.addParticipation()" disabled="true">Add participation</button>
+                <div class="innerPanel">
+                    <h1>Edit selction</h1>
+                    <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+                    <button id="addParticipation" onclick="erp.addParticipation()" disabled="true">Add participation</button>
+                </div>
             </div>
         </div>
     </div>

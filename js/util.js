@@ -29,28 +29,32 @@ var dragging = null
 document.addEventListener("mousemove", function(ev) {
     if (dragging != null) {
         for (var x in dragging) {
-            var d = dragging[x]
-            if (d.dragX && d.dragY) {
-                d.moveRelXY(ev.clientX - d.startX, ev.clientY - d.startY)
-            } else if (d.dragX) {
-                d.moveRelX(ev.clientX - d.startX)
-            } else if (d.dragY) {
-                d.moveRelY(ev.clientY - d.startY)
-            }
+            try {
+                var d = dragging[x]
+                if (d.dragX && d.dragY) {
+                    d.moveRelXY(ev.clientX - d.startX, ev.clientY - d.startY)
+                } else if (d.dragX) {
+                    d.moveRelX(ev.clientX - d.startX)
+                } else if (d.dragY) {
+                    d.moveRelY(ev.clientY - d.startY)
+                }
+            } catch (e) {}
         }
     }
 })
 document.addEventListener("mouseup", function(ev) {
     if (dragging != null) {
         for (var x in dragging) {
-            var d = dragging[x]
-            if (d.dragX && d.dragY) {
-                d.endDragXY(ev.clientX - d.startX, ev.clientY - d.startY)
-            } else if (d.dragX) {
-                d.endDragX(ev.clientX - d.startX)
-            } else if (d.dragY) {
-                d.endDragY(ev.clientY - d.startX)
-            }
+            try {
+                var d = dragging[x]
+                if (d.dragX && d.dragY) {
+                    d.endDragXY(ev.clientX - d.startX, ev.clientY - d.startY)
+                } else if (d.dragX) {
+                    d.endDragX(ev.clientX - d.startX)
+                } else if (d.dragY) {
+                    d.endDragY(ev.clientY - d.startX)
+                }
+            } catch (e) {}
         }
         dragging = []
     }

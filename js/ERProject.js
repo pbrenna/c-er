@@ -356,6 +356,7 @@ function ERProject(svg) {
     }
     this.applyZoom = function() {
         this.svgAll.transform.baseVal.getItem(0).setScale(this.zoom, this.zoom)
+        scroller.style.fontSize = 20 * this.zoom + "px"
         this.resizeSvg()
     }
     this.zoomIn = function() {

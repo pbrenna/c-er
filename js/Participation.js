@@ -38,10 +38,15 @@ function Participation(node, project) {
             id: "svg-" + this.getId(),
             stroke: this.project.styles.normalStroke
         })
+        var d = "M " + entc[0] + "," + entc[1] + " L" + rel[0] + "," + rel[1]
         var path = svgEl(g, "path", {
-            d: "M " + entc[0] + "," + entc[1] +
-                " L" + rel[0] + "," + rel[1],
+            d: d,
             "stroke-width": 2
+        })
+        var transp = svgEl(g, "path", {
+            d: d,
+            "stroke": "transparent",
+            "stroke-width": 10
         })
         var txt = svgEl(g, "text", {
             x: (entc[0] + rel[0]) / 2 - 20,

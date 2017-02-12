@@ -17,10 +17,10 @@ function Entity(concept) {
 
     //drawing things
     this.draw = function(parent) {
-        var x = parseInt(p.getViewAttr(node, "x"))
-        var y = parseInt(p.getViewAttr(node, "y"))
-        var w = parseInt(p.getViewAttr(node, "w"))
-        var h = parseInt(p.getViewAttr(node, "h"))
+        var x = parseFloat(p.getViewAttr(node, "x"))
+        var y = parseFloat(p.getViewAttr(node, "y"))
+        var w = parseFloat(p.getViewAttr(node, "w"))
+        var h = parseFloat(p.getViewAttr(node, "h"))
         if (x === null || y === null || !h || !w)
             throw new DOMException("missing x,y coordinates of entity" + this.getId())
         var g = svgEl(parent, "g", {
@@ -77,14 +77,14 @@ function Entity(concept) {
         })
     }
     this.moveRelXY = function(x, y) {
-        var curx = parseInt(p.getViewAttr(node, "x")) + x / p.zoom
-        var cury = parseInt(p.getViewAttr(node, "y")) + y / p.zoom
+        var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
+        var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
         var g = this.getG()
         g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
     }
     this.endDragXY = function(x, y) {
-        var curx = parseInt(p.getViewAttr(node, "x")) + x / p.zoom
-        var cury = parseInt(p.getViewAttr(node, "y")) + y / p.zoom
+        var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
+        var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
         if (x != 0 || y != 0) {
             p.setViewAttr(node, "x", max(curx, 0))
             p.setViewAttr(node, "y", max(cury, 0))
@@ -100,10 +100,10 @@ function Entity(concept) {
         g.style.stroke = p.styles.normalStroke
     }
     this.getCenter = function() {
-        var x = parseInt(p.getViewAttr(node, "x"))
-        var y = parseInt(p.getViewAttr(node, "y"))
-        var w = parseInt(p.getViewAttr(node, "w"))
-        var h = parseInt(p.getViewAttr(node, "h"))
+        var x = parseFloat(p.getViewAttr(node, "x"))
+        var y = parseFloat(p.getViewAttr(node, "y"))
+        var w = parseFloat(p.getViewAttr(node, "w"))
+        var h = parseFloat(p.getViewAttr(node, "h"))
         return [x + w / 2, y + h / 2]
     }
 }
