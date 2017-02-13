@@ -156,16 +156,17 @@
             r.readAsText(up.files[0])
         })
 
-        function newFile() {
+        function newFile(name) {
+            name = name || "empty.er.xml"
             erp = new ERProject(svg)
             var cb = new Callback(erp.load, erp, [])
-            ajaxGet("empty.er.xml", cb, true)
+            ajaxGet(name, cb, true)
         }
 
         function openFile() {
             up.click()
         }
-        newFile()
+        newFile("example.er.xml")
 
         var dialogContainer = document.getElementById("dialogContainer")
     </script>
