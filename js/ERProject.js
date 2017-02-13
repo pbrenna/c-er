@@ -27,11 +27,16 @@ function ERProject(svg) {
         this.selectPanel("Creation")
         this.saved = true
     }
-    this.get = function(id) {
+    this.getById = function(id) {
         var el = this.erdoc.getElementById(id)
-        if (el.namespaceURI != this.ns)
+        if (!el)
+            el = this.erdoc.querySelector('[id="' + id + '"]')
+        if (!el || el.namespaceURI != this.ns)
             return null
-        return this.wrap(el)
+        return el
+    }
+    this.get = function(id) {
+        return this.wrap(this.getById(id))
     }
     this.wrap = function(el) {
         try {
@@ -113,7 +118,7 @@ function ERProject(svg) {
         for (var i = 0; i < xpathRes.snapshotLength; i++) {
             var el = xpathRes.snapshotItem(i)
             var ref = el.getAttributeNS(this.ns, "ref")
-            if (!this.erdoc.getElementById(ref)) {
+            if (!this.getById(ref)) {
                 try {
                     killNode(el)
                 } catch (e) {
