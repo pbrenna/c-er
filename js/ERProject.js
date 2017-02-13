@@ -11,16 +11,16 @@ function ERProject(svg) {
     this.zoom = 1
     var that = this
     this.load = function(erdoc) {
-        this.erPrefix = erdoc.lookupPrefix(this.ns)
+        this.erPrefix = erdoc.lookupPrefix(this.ns, "er")
         if (!this.erPrefix) {
-            throw new DOMException("missing ER namespace")
+            throw new Error("missing ER namespace")
         }
-        this.viewPrefix = erdoc.lookupPrefix(this.vns)
-        if (!this.viewPrefix) {
-            throw new DOMException("missing View namespace")
-        }
+        //this.viewPrefix = erdoc.lookupPrefix(this.vns)
+        //if (!this.viewPrefix) {
+        //    throw new Error("missing View namespace")
+        //}
         this.nsMap[this.erPrefix] = this.ns
-        this.nsMap[this.viewPrefix] = this.vns
+        //this.nsMap[this.viewPrefix] = this.vns
         this.erdoc = erdoc
         this.addState()
         this.applyZoom()
