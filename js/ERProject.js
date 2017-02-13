@@ -25,6 +25,7 @@ function ERProject(svg) {
         this.addState()
         this.applyZoom()
         this.selectPanel("Creation")
+        this.saved = true
     }
     this.get = function(id) {
         var el = this.erdoc.getElementById(id)
@@ -65,6 +66,7 @@ function ERProject(svg) {
         this.update()
     }
     this.update = function() {
+        this.saved = false
         this.scheduled = {}
         for (var x in this.scheduled) {
             switch (x) {
@@ -380,6 +382,7 @@ function ERProject(svg) {
     }
     this.saveFile = function() {
         var xml = new XMLSerializer().serializeToString(this.erdoc)
+        this.saved = true
         download(xml, "project.er.xml", "text/xml")
     }
     this.saveSVG = function() {

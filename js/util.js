@@ -138,3 +138,11 @@ function max(a, b) {
     return a > b ? a : b
 }
 var scroller = document.getElementById('scroller')
+
+window.addEventListener("beforeunload", function(ev) {
+    console.log("beforeunload")
+    if (!erp.saved) {
+        ev.returnValue = "Are you sure? The diagram wasn't saved!"
+        return ev.returnValue
+    }
+})
