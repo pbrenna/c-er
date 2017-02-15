@@ -107,9 +107,19 @@ function Relation(concept) {
     this.endDragXY = function(x, y) {
         var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
         var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
+
+        
         if (x != 0 || y != 0) {
             p.setViewAttr(node, "x", max(curx, 0))
             p.setViewAttr(node, "y", max(cury, 0))
+            var center = this.getCenter();
+            var rCenter = [Math.round(center[0]/20)*20,
+                           Math.round(center[1]/20)*20]
+            curx -= center[0] - rCenter[0]              
+            cury -= center[1] - rCenter[1]
+            p.setViewAttr(node, "x", max(curx, 0))
+            p.setViewAttr(node, "y", max(cury, 0))     
+            
             p.patchState(this.addStateNumber)
         }
     }
