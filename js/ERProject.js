@@ -11,6 +11,7 @@ function ERProject(svg) {
     this.viewPrefix = ""
     this.scheduled = {}
     this.zoom = 1
+    this.grid = 20
     var that = this
     this.load = function(erdoc) {
         this.erPrefix = erdoc.lookupPrefix(this.ns, "er")
@@ -189,7 +190,11 @@ function ERProject(svg) {
 
     }
     this.getViewAttr = function(el, name) {
-        return el.getAttributeNS(this.vns, name)
+        try {
+            return el.getAttributeNS(this.vns, name)
+        } catch (e) {
+            return null
+        }
     }
     this.setViewAttr = function(el, name, val) {
         return el.setAttributeNS(this.vns, name, val)
@@ -203,32 +208,33 @@ function ERProject(svg) {
     this.styles = {
         selectedStroke: "#d00",
         normalStroke: "#000",
-        defaultFont: "Roboto",
+        defaultFont: "Arial,sans-serif",
+        defaultFontSize: "14",
         entity: {
             padding: 5,
             defaultH: 40,
-            defaultW: 100,
+            defaultW: 140,
             corners: 25,
             attrSpacing: 25,
             attrLineH: 15,
             attrCircRad: 4,
             primaryFill: "#000",
-            attrOffset: 10,
-            attrDist: 8,
+            attrOffset: 4,
+            attrDist: 10,
             attrFontSize: 12,
             attrRotationDeg: -40
         },
         relation: {
-            defaultH: 40,
-            defaultW: 100,
+            defaultH: 60,
+            defaultW: 180,
             corners: 40,
-            padding: 40,
+            padding: 20,
             attrSpacing: 25,
             attrLineH: 30,
             attrCircRad: 4,
             primaryFill: "#000",
-            attrOffset: 10,
-            attrDist: 8,
+            attrOffset: 4,
+            attrDist: 10,
             attrFontSize: 12,
             attrRotationDeg: -40
         }
@@ -379,15 +385,15 @@ function ERProject(svg) {
     this.resizeSvg = function() {
         var bbox = this.svgAll.getBoundingClientRect()
         var outf = document.getElementById('outerFixed')
-        var minw = outf.clientWidth - 4
-        var minh = outf.clientHeight - 4
+        var minw = outf.clientWidth - 8
+        var minh = outf.clientHeight - 8
         var w = max((bbox.width + bbox.left) * 1 + scroller.scrollLeft, minw)
         var h = max((bbox.height + bbox.top) * 1 + scroller.scrollTop, minh)
         this.svg.setAttribute("width", w)
         this.svg.setAttribute("height", h)
     }
     this.saveFile = function() {
-        var xml = new XMLSerializer().serializeToString(this.erdoc)
+        var xml = vkbeautify.xml(new XMLSerializer().serializeToString(this.erdoc))
         this.saved = true
         download(xml, "project.er.xml", "text/xml")
     }

@@ -11,8 +11,8 @@ function Entity(node, project) {
         var xy = this.getXY()
         var x = xy[0],
             y = xy[1]
-        var w = parseFloat(p.getViewAttr(node, "w"))
-        var h = parseFloat(p.getViewAttr(node, "h"))
+        var w = p.styles.entity.defaultW
+        var h = p.styles.entity.defaultH
         if (x === null || y === null || !h || !w)
             throw new DOMException("missing x,y coordinates of entity" + this.getId())
         var g = svgEl(parent, "g", {
@@ -20,41 +20,33 @@ function Entity(node, project) {
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
-        var attrs = drawAttrs(g, this.getAttrs(), p.styles.entity)
-            //attrs.g width is needed to compute final rectangle width
-        var oldw = w;
-        var rectx = 0
-        var reqw = attrs.reqWidth + p.styles.entity.corners * 2
-        if (oldw < reqw) {
-            w = reqw
-            rectx -= (w - oldw) / 2
-        }
-        var attrX = rectx + w / 2 - (reqw / 2) + p.styles.entity.corners
-        attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, h);
+        var attrs = drawAttrs(g, this.getAttrs(), p.styles.entity, h / 2, false, this.getAttrPos())
 
+        var reqw = attrs.reqWidth + p.styles.entity.corners * 2
+        w = max(reqw, w)
+        var attrX = -(reqw / 2) + p.styles.entity.corners
+        attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, 0)
         var text = svgEl(g, "text", {
             'text-anchor': 'middle',
-            x: oldw / 2,
-            y: h / 2 + 5,
+            x: 0,
+            y: 5,
             'stroke-width': 0,
-            'font-family': p.styles.defaultFont
+            'font-family': p.styles.defaultFont,
+            'font-size': p.styles.defaultFontSize
         })
         text.textContent = p.getErAttr(node, "name")
         var textW = text.getBoundingClientRect().width / p.zoom
-        var oldw = w
-        if (w < (textW + p.styles.entity.padding * 2)) {
-            w = (textW + p.styles.entity.padding * 2)
-            rectx -= (w - oldw) / 2
-        }
+        w = max(w, textW + p.styles.entity.padding * 2)
         var rect = svgEl(g, "rect", {
             height: h,
             width: w,
             fill: "#ffffff",
             'stroke-width': 1,
-            x: rectx,
-            y: 0
+            x: -w / 2,
+            y: -h / 2
         })
         mkFirstChild(rect)
+        mkFirstChild(attrs.g)
         preventBrowserDrag(g)
 
         var that = this
@@ -69,41 +61,7 @@ function Entity(node, project) {
         })
     }
 
-    this.endDragXY = function(x, y) {
-        var xy = this.getXY()
-        var curx = xy[0] + x / p.zoom
-        var cury = xy[1] + y / p.zoom
-        if (x != 0 || y != 0) {
-            p.setViewAttr(node, "x", max(curx, 0))
-            p.setViewAttr(node, "y", max(cury, 0))
-            var center = this.getCenter();
-            var rCenter = [Math.round(center[0] / 20) * 20,
-                Math.round(center[1] / 20) * 20
-            ]
-            curx -= center[0] - rCenter[0]
-            cury -= center[1] - rCenter[1]
-            p.setViewAttr(node, "x", max(curx, 0))
-            p.setViewAttr(node, "y", max(cury, 0))
-            p.patchState(this.addStateNumber)
-        }
 
-
-    }
-    this.selectOn = function() {
-        var g = this.getG()
-        g.style.stroke = p.styles.selectedStroke
-    }
-    this.selectOff = function() {
-        var g = this.getG()
-        g.style.stroke = p.styles.normalStroke
-    }
-    this.getCenter = function() {
-        var x = parseFloat(p.getViewAttr(node, "x"))
-        var y = parseFloat(p.getViewAttr(node, "y"))
-        var w = parseFloat(p.getViewAttr(node, "w"))
-        var h = parseFloat(p.getViewAttr(node, "h"))
-        return [x + w / 2, y + h / 2]
-    }
 }
 
 //New entity
@@ -115,8 +73,6 @@ function newEntity(ev) {
     var w = erp.styles.entity.defaultW
     erp.setViewAttr(el, "x", pos.x - w / 2)
     erp.setViewAttr(el, "y", pos.y - h / 2)
-    erp.setViewAttr(el, "h", h)
-    erp.setViewAttr(el, "w", w)
     var c = new Concept(el, erp)
     c.setName(name)
     erp.addState()
@@ -133,11 +89,21 @@ entityNameInput.addEventListener("change", function(ev) {
 
 var entityAttrTable = document.getElementById("entityAttrTable")
 var entityAddAttr = document.getElementById("entityAddAttr")
+var entityAttrPos = document.getElementById("entityAttrPos")
+entityAttrPos.addEventListener("change", function(ev) {
+    var val = this.value
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    e.setAttrPos(val)
+    erp.addState()
+    updateEntityPanel()
+})
 
 function updateEntityPanel() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
     entityNameInput.value = e.getName()
+    entityAttrPos.value = e.getAttrPos()
     clearElement(entityAttrTable)
     var attrs = e.getAttrs()
     for (var x in attrs) {

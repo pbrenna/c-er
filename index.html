@@ -41,7 +41,7 @@
                     <div class="tip">Choose "entity" or "relation", then click on the drawing area.</div>
                     <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
                     <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
-                    <div class="tip" style="">To add a participation, select both an entity and a relation (holding SHIFT), then choose "Add participation".
+                    <div class="tip">To add a participation, select both an entity and a relation (holding SHIFT), then choose "Add participation".
                     </div>
                 </div>
             </div>
@@ -51,10 +51,12 @@
                     <div class="delete" onclick="erp.deleteSelection()"></div><br/>
                     <div class="tip">Press ENTER after editing the name of the concept or the attributes; use the checkbox to set an attribute as primary.</div>
                     <label for="entityNameInput">Name:</label>
-                    <input type="text" style="float:right" id="entityNameInput"></input>
-                    <div style="margin-bottom: 12px;margin-bottom: 4px;clear:both">
-                        Attributes
-                    </div>
+                    <input type="text" style="float:right" id="entityNameInput">
+                    <label style="margin: 10px 0px 4px 0px;" for="entityAttrPos">Attributes:</label>
+                    <select style="margin: 4px 0px;float: right" id="entityAttrPos">
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                    </select>
                     <table cellspacing="0" cellpadding="0" style="width:100%">
                         <tbody id="entityAttrTable" class="attrTable"></tbody>
                     </table>
@@ -68,9 +70,11 @@
                     <div class="tip">Press ENTER after editing the name of the concept or the attributes; use the checkbox to set an attribute as primary.</div>
                     <label for="relationNameInput">Name:</label>
                     <input type="text" style="float:right" id="relationNameInput"></input>
-                    <div style="margin-bottom: 12px;margin-bottom: 4px;clear:both">
-                        Attributes
-                    </div>
+                    <label style="margin: 10px 0px 4px 0px;" for="relationAttrPos">Attributes:</label>
+                    <select style="margin: 4px 0px;float: right" id="relationAttrPos">
+                        <option value="above">Above</option>
+                        <option value="below">Below</option>
+                    </select>
                     <table cellspacing="0" cellpadding="0" style="width:100%">
                         <tbody id="relationAttrTable" class="attrTable"></tbody>
                     </table>

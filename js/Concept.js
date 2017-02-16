@@ -44,12 +44,53 @@ function Concept(node, project) {
         var y = parseFloat(this.project.getViewAttr(this.node, "y"))
         return [x, y]
     }
+    this.selectOn = function() {
+        var g = this.getG()
+        g.style.stroke = this.project.styles.selectedStroke
+    }
+    this.selectOff = function() {
+        var g = this.getG()
+        g.style.stroke = this.project.styles.normalStroke
+    }
     this.moveRelXY = function(x, y) {
         var xy = this.getXY()
         var curx = xy[0] + x / this.project.zoom
         var cury = xy[1] + y / this.project.zoom
         var g = this.getG()
         g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
+    }
+    this.endDragXY = function(x, y) {
+        var xy = this.getXY()
+        var curx = xy[0] + x / this.project.zoom
+        var cury = xy[1] + y / this.project.zoom
+
+        if (x != 0 || y != 0) {
+            this.project.setViewAttr(node, "x", max(curx, 0))
+            this.project.setViewAttr(node, "y", max(cury, 0))
+            var center = this.getCenter();
+            var rCenter = [
+                Math.round(center[0] / this.project.grid) * this.project.grid,
+                Math.round(center[1] / this.project.grid) * this.project.grid
+            ]
+            curx -= center[0] - rCenter[0]
+            cury -= center[1] - rCenter[1]
+            this.project.setViewAttr(node, "x", max(curx, 0))
+            this.project.setViewAttr(node, "y", max(cury, 0))
+
+            this.project.patchState(this.addStateNumber)
+        }
+    }
+    this.getCenter = function() {
+        return this.getXY()
+    }
+    this.setAttrPos = function(pos) {
+        var allowed = ["above", "below"]
+        if (allowed.indexOf(pos) >= 0) {
+            this.project.setViewAttr(this.node, "attr-pos", pos)
+        }
+    }
+    this.getAttrPos = function() {
+        return this.project.getViewAttr(this.node, "attr-pos") || "below"
     }
 }
 
@@ -105,7 +146,7 @@ function mkAttrRow(attr, tbody, fnRefresh) {
 }
 
 
-function drawAttrs(parent, attrs, style, additionalSpace) {
+function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position) {
     additionalSpace = additionalSpace || 0
     var ret = {}
     var g = ret.g = svgEl(parent, "g", {
@@ -115,6 +156,18 @@ function drawAttrs(parent, attrs, style, additionalSpace) {
     var spacing = style.attrSpacing
     var lineh = style.attrLineH + additionalSpace
     var rad = style.attrCircRad
+    var texty = lineh + style.attrOffset
+    var circley = lineh + 2 + rad / 2
+    var textAnchor = "end"
+    var attrDist = style.attrDist
+    if (position == "above") {
+        lineh = -lineh
+        circley = -circley
+        texty = -texty
+        textAnchor = "start"
+        attrDist = -attrDist
+    }
+    mustBeEven = mustBeEven || 0
     var posx = 0
     for (var i = 0; i < n; i++) {
         var att = attrs[i]
@@ -122,25 +175,28 @@ function drawAttrs(parent, attrs, style, additionalSpace) {
             "d": "M" + posx + ",0 l0," + lineh
         })
         var circle = svgEl(g, "circle", {
-            cy: lineh + 2 + rad / 2,
+            cy: circley,
             cx: posx,
             r: rad,
             'stroke-width': '1',
             fill: att.getIsPrimary() ? style.primaryFill : 'none'
         })
-        var texty = lineh + style.attrOffset
-        var textx = posx - style.attrDist
+        var textx = posx - attrDist
         var text = svgEl(g, "text", {
             x: textx,
             y: texty,
             'font-family': erp.styles.defaultFont,
             "font-size": style.attrFontSize,
             "stroke": 'none',
+            "dominant-baseline": "middle",
             "stroke-width": "0",
-            'text-anchor': 'end',
+            'text-anchor': textAnchor,
             'transform': "rotate(" + style.attrRotationDeg + "," + posx + "," + texty + ")"
         })
         text.textContent = att.getName()
+        posx += spacing
+    }
+    if (mustBeEven && n % 2 != 0) {
         posx += spacing
     }
     ret.reqWidth = posx - spacing

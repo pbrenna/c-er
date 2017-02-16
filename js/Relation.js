@@ -18,8 +18,8 @@ function Relation(node, project) {
         var xy = this.getXY()
         var x = xy[0],
             y = xy[1]
-        var w = parseFloat(p.getViewAttr(node, "w"))
-        var h = parseFloat(p.getViewAttr(node, "h"))
+        var w = p.styles.relation.defaultW
+        var h = p.styles.relation.defaultH
         if (x === null || y === null || !h || !w)
             throw new DOMException("missing x,y coordinates of relation " + this.getId())
         var g = svgEl(parent, "g", {
@@ -27,47 +27,36 @@ function Relation(node, project) {
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
-        var attrs = drawAttrs(g, this.getAttrs(), p.styles.relation)
-        var oldw = w;
-        var rectx = 0
+        var attrs = drawAttrs(g, this.getAttrs(), p.styles.relation, 10, true, this.getAttrPos())
         var reqw = attrs.reqWidth + p.styles.relation.corners * 2
-        if (oldw < reqw) {
-            w = reqw
-            rectx -= (w - oldw) / 2
-        }
-        var attrX = rectx + w / 2 - (reqw / 2) + p.styles.relation.corners
+        w = max(w, reqw)
+        var attrX = (-reqw / 2) + p.styles.relation.corners - p.styles.relation.attrSpacing * 0
         var text = svgEl(g, "text", {
             'text-anchor': 'middle',
-            x: oldw / 2,
-            y: h / 2 + 5,
+            x: 0,
+            y: 5,
             'stroke-width': 0,
-            'font-family': p.styles.defaultFont
+            'font-family': p.styles.defaultFont,
+            'font-size': p.styles.defaultFontSize
         })
         text.textContent = p.getErAttr(node, "name")
         var textW = text.getBoundingClientRect().width / p.zoom
-        var oldw = w
-        if (w < (textW + p.styles.relation.padding * 2)) {
-            w = (textW + p.styles.relation.padding * 2)
-            rectx -= (w - oldw) / 2
+        var availableW = w - (p.styles.relation.padding * 2)
+        var textScale = availableW / textW
+        if (textScale < 1) {
+            text.setAttribute("font-size", p.styles.defaultFontSize * textScale)
+            text.setAttribute("y", 5 * textScale)
         }
-        var newh = w / ((1 + Math.sqrt(5)) / 2)
-        var recty = (h - newh) / 2
-        var oldh = h
-        h = newh
+
         var polygon = svgEl(g, "path", {
-            d: "M" + rectx + "," + (h / 2 + recty) +
+            d: "M" + (-w / 2) + ",0" +
                 " l" + (w / 2) + "," + (h / 2) +
                 " l" + (w / 2) + "," + (-h / 2) +
                 " l" + (-w / 2) + "," + (-h / 2) + " Z",
             fill: "#ffffff",
             'stroke-width': 1,
-            x: rectx,
-            y: 0
         })
-        attrs.g.parentNode.removeChild(attrs.g)
-        attrs = drawAttrs(g, this.getAttrs(), p.styles.relation, -recty)
-            //redraw attrs due to changed line height
-        attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, oldh / 2)
+        attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, 0)
         mkFirstChild(polygon)
         mkFirstChild(attrs.g)
         preventBrowserDrag(g)
@@ -83,40 +72,8 @@ function Relation(node, project) {
             p.selection.clicked(that, ev)
         })
     }
-    this.selectOn = function() {
-        var g = this.getG()
-        g.style.stroke = p.styles.selectedStroke
-    }
-    this.selectOff = function() {
-        var g = this.getG()
-        g.style.stroke = p.styles.normalStroke
-    }
-    this.endDragXY = function(x, y) {
-        var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
-        var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
+    this.calculateWidth = function(text, attrReqW) {
 
-
-        if (x != 0 || y != 0) {
-            p.setViewAttr(node, "x", max(curx, 0))
-            p.setViewAttr(node, "y", max(cury, 0))
-            var center = this.getCenter();
-            var rCenter = [Math.round(center[0] / 20) * 20,
-                Math.round(center[1] / 20) * 20
-            ]
-            curx -= center[0] - rCenter[0]
-            cury -= center[1] - rCenter[1]
-            p.setViewAttr(node, "x", max(curx, 0))
-            p.setViewAttr(node, "y", max(cury, 0))
-
-            p.patchState(this.addStateNumber)
-        }
-    }
-    this.getCenter = function() {
-        var x = parseFloat(p.getViewAttr(node, "x"))
-        var y = parseFloat(p.getViewAttr(node, "y"))
-        var w = parseFloat(p.getViewAttr(node, "w"))
-        var h = parseFloat(p.getViewAttr(node, "h"))
-        return [x + w / 2, y + h / 2]
     }
 }
 
@@ -129,11 +86,21 @@ relationNameInput.addEventListener("change", function(ev) {
 })
 var relationAttrTable = document.getElementById("relationAttrTable")
 var relationAddAttr = document.getElementById("relationAddAttr")
+var relationAttrPos = document.getElementById("relationAttrPos")
+relationAttrPos.addEventListener("change", function(ev) {
+    var val = this.value
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    e.setAttrPos(val)
+    erp.addState()
+    updateRelationPanel()
+})
 
 function updateRelationPanel() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
     relationNameInput.value = e.getName()
+    relationAttrPos.value = e.getAttrPos()
     clearElement(relationAttrTable)
     var attrs = e.getAttrs()
     for (var x in attrs) {
@@ -151,8 +118,6 @@ function newRelation(ev) {
     var w = erp.styles.relation.defaultW
     erp.setViewAttr(el, "x", pos.x - w / 2)
     erp.setViewAttr(el, "y", pos.y - h / 2)
-    erp.setViewAttr(el, "h", h)
-    erp.setViewAttr(el, "w", w)
     var c = new Concept(el, erp)
     c.setName(name)
     erp.addState()

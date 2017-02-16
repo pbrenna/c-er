@@ -59,7 +59,7 @@ body {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    display: none;
+    display: none
 }
 
 #palette div+div {
@@ -222,13 +222,19 @@ td {
     margin-top: 10px;
 }
 
-input[type=text] {
+input[type=text],
+select {
     border: 1px solid #ccc;
     background: #eee;
     height: 24px;
+    width: 180px;
+    box-sizing: content-box;
+    padding: 1px;
+    height: 24px;
 }
 
-input[type=text]:focus {
+input[type=text]:focus,
+select:focus {
     background: #fff;
 }
 

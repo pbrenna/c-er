@@ -47,7 +47,8 @@ function Participation(node, project) {
         })
         var transp = svgEl(g, "path", {
             d: d,
-            "stroke": "transparent",
+            "stroke": "#000",
+            "stroke-opacity": 0,
             "stroke-width": 10
         })
         var txt = svgEl(g, "text", {
