@@ -1,32 +1,23 @@
 "use strict";
 
-function Relation(concept) {
-    this.concept = concept
+function Relation(node, project) {
+    Concept.apply(this, [node, project])
     this.type = "Relation"
     this.addParticipation = function(entity, mult_min, mult_max) {
         var part = new Participation(
-            this.concept.project.mkErElement("participation", this.concept.node),
-            this.concept.project)
+            this.project.mkErElement("participation", this.node),
+            this.project)
         part.setEntity(entity)
         part.setMultMin(mult_min)
         part.setMultMax(mult_max)
         return part
     }
-    this.getId = function() {
-        return this.concept.getId()
-    }
-    this.destroy = function() {
-        this.concept.destroy()
-        this.concept = null
-    }
-    var p = this.concept.project
-    var node = this.concept.node
-    this.getG = function() {
-        return p.svg.getElementById('svg-' + this.getId())
-    }
+    var p = this.project
+    var node = this.node
     this.draw = function(parent) {
-        var x = parseFloat(p.getViewAttr(node, "x"))
-        var y = parseFloat(p.getViewAttr(node, "y"))
+        var xy = this.getXY()
+        var x = xy[0],
+            y = xy[1]
         var w = parseFloat(p.getViewAttr(node, "w"))
         var h = parseFloat(p.getViewAttr(node, "h"))
         if (x === null || y === null || !h || !w)
@@ -36,7 +27,7 @@ function Relation(concept) {
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
-        var attrs = drawAttrs(g, this.concept.getAttrs(), p.styles.relation)
+        var attrs = drawAttrs(g, this.getAttrs(), p.styles.relation)
         var oldw = w;
         var rectx = 0
         var reqw = attrs.reqWidth + p.styles.relation.corners * 2
@@ -74,7 +65,7 @@ function Relation(concept) {
             y: 0
         })
         attrs.g.parentNode.removeChild(attrs.g)
-        attrs = drawAttrs(g, this.concept.getAttrs(), p.styles.relation, -recty)
+        attrs = drawAttrs(g, this.getAttrs(), p.styles.relation, -recty)
             //redraw attrs due to changed line height
         attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, oldh / 2)
         mkFirstChild(polygon)
@@ -84,7 +75,7 @@ function Relation(concept) {
         var that = this
         g.addEventListener('mousedown', function(ev) {
             mkLastChild(this)
-            that.concept.moveUp()
+            that.moveUp()
             erp.dragStart(that, ev)
         })
 
@@ -100,28 +91,23 @@ function Relation(concept) {
         var g = this.getG()
         g.style.stroke = p.styles.normalStroke
     }
-    this.moveRelXY = function(x, y) {
-        var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
-        var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
-        var g = this.getG()
-        g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
-    }
     this.endDragXY = function(x, y) {
         var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
         var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
 
-        
+
         if (x != 0 || y != 0) {
             p.setViewAttr(node, "x", max(curx, 0))
             p.setViewAttr(node, "y", max(cury, 0))
             var center = this.getCenter();
-            var rCenter = [Math.round(center[0]/20)*20,
-                           Math.round(center[1]/20)*20]
-            curx -= center[0] - rCenter[0]              
+            var rCenter = [Math.round(center[0] / 20) * 20,
+                Math.round(center[1] / 20) * 20
+            ]
+            curx -= center[0] - rCenter[0]
             cury -= center[1] - rCenter[1]
             p.setViewAttr(node, "x", max(curx, 0))
-            p.setViewAttr(node, "y", max(cury, 0))     
-            
+            p.setViewAttr(node, "y", max(cury, 0))
+
             p.patchState(this.addStateNumber)
         }
     }
@@ -138,7 +124,7 @@ var relationNameInput = document.getElementById("relationNameInput")
 relationNameInput.addEventListener("change", function(ev) {
     var id = erp.selection.s[0]
     var e = erp.get(id)
-    e.concept.setName(this.value)
+    e.setName(this.value)
     erp.addState()
 })
 var relationAttrTable = document.getElementById("relationAttrTable")
@@ -147,9 +133,9 @@ var relationAddAttr = document.getElementById("relationAddAttr")
 function updateRelationPanel() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
-    relationNameInput.value = e.concept.getName()
+    relationNameInput.value = e.getName()
     clearElement(relationAttrTable)
-    var attrs = e.concept.getAttrs()
+    var attrs = e.getAttrs()
     for (var x in attrs) {
         var attr = attrs[x]
         mkAttrRow(attr, relationAttrTable, updateRelationPanel)
@@ -176,7 +162,7 @@ function newRelation(ev) {
 function relationAddAttribute() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
-    e.concept.addAttribute("attribute", false)
+    e.addAttribute("attribute", false)
     erp.addState()
     updateRelationPanel()
 }

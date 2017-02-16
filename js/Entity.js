@@ -1,26 +1,16 @@
 "use strict";
 
-function Entity(concept) {
-    this.concept = concept
-    this.destroy = function() {
-        this.concept.destroy()
-        this.concept = null
-    }
+function Entity(node, project) {
+    Concept.apply(this, [node, project])
     this.type = "Entity"
-    this.getId = function() {
-        return this.concept.getId()
-    }
-    var p = this.concept.project
-
-    var node = this.concept.node
-    this.getG = function() {
-        return p.svg.getElementById('svg-' + this.getId())
-    }
+    var p = this.project
+    var node = this.node
 
     //drawing things
     this.draw = function(parent) {
-        var x = parseFloat(p.getViewAttr(node, "x"))
-        var y = parseFloat(p.getViewAttr(node, "y"))
+        var xy = this.getXY()
+        var x = xy[0],
+            y = xy[1]
         var w = parseFloat(p.getViewAttr(node, "w"))
         var h = parseFloat(p.getViewAttr(node, "h"))
         if (x === null || y === null || !h || !w)
@@ -30,7 +20,7 @@ function Entity(concept) {
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
-        var attrs = drawAttrs(g, this.concept.getAttrs(), p.styles.entity)
+        var attrs = drawAttrs(g, this.getAttrs(), p.styles.entity)
             //attrs.g width is needed to compute final rectangle width
         var oldw = w;
         var rectx = 0
@@ -70,7 +60,7 @@ function Entity(concept) {
         var that = this
         g.addEventListener('mousedown', function(ev) {
             mkLastChild(this)
-            that.concept.moveUp()
+            that.moveUp()
             erp.dragStart(that, ev)
         })
 
@@ -78,32 +68,26 @@ function Entity(concept) {
             p.selection.clicked(that, ev)
         })
     }
-    this.moveRelXY = function(x, y) {
-        var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
-        var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
-        var g = this.getG()
-        g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
-    }
+
     this.endDragXY = function(x, y) {
-        var curx = parseFloat(p.getViewAttr(node, "x")) + x / p.zoom
-        var cury = parseFloat(p.getViewAttr(node, "y")) + y / p.zoom
-              
-        
+        var xy = this.getXY()
+        var curx = xy[0] + x / p.zoom
+        var cury = xy[1] + y / p.zoom
         if (x != 0 || y != 0) {
             p.setViewAttr(node, "x", max(curx, 0))
             p.setViewAttr(node, "y", max(cury, 0))
             var center = this.getCenter();
-            var rCenter = [Math.round(center[0]/20)*20,
-                           Math.round(center[1]/20)*20]
-            curx -= center[0] - rCenter[0]              
+            var rCenter = [Math.round(center[0] / 20) * 20,
+                Math.round(center[1] / 20) * 20
+            ]
+            curx -= center[0] - rCenter[0]
             cury -= center[1] - rCenter[1]
             p.setViewAttr(node, "x", max(curx, 0))
-            p.setViewAttr(node, "y", max(cury, 0))     
-            console.log(this.getCenter())
+            p.setViewAttr(node, "y", max(cury, 0))
             p.patchState(this.addStateNumber)
         }
 
-        
+
     }
     this.selectOn = function() {
         var g = this.getG()
@@ -143,7 +127,7 @@ var entityNameInput = document.getElementById("entityNameInput")
 entityNameInput.addEventListener("change", function(ev) {
     var id = erp.selection.s[0]
     var e = erp.get(id)
-    e.concept.setName(this.value)
+    e.setName(this.value)
     erp.addState()
 })
 
@@ -153,9 +137,9 @@ var entityAddAttr = document.getElementById("entityAddAttr")
 function updateEntityPanel() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
-    entityNameInput.value = e.concept.getName()
+    entityNameInput.value = e.getName()
     clearElement(entityAttrTable)
-    var attrs = e.concept.getAttrs()
+    var attrs = e.getAttrs()
     for (var x in attrs) {
         var attr = attrs[x]
         mkAttrRow(attr, entityAttrTable, updateEntityPanel)
@@ -167,7 +151,7 @@ function updateEntityPanel() {
 function entityAddAttribute() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
-    e.concept.addAttribute("attribute", false)
+    e.addAttribute("attribute", false)
     erp.addState()
     updateEntityPanel()
 }

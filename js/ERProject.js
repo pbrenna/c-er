@@ -44,9 +44,9 @@ function ERProject(svg) {
         try {
             switch (el.localName) {
                 case "entity":
-                    return new Entity(new Concept(el, this))
+                    return new Entity(el, this)
                 case "relation":
-                    return new Relation(new Concept(el, this))
+                    return new Relation(el, this)
                 case "attr":
                     return new Attr(el, this)
                 case "participation":
@@ -292,7 +292,7 @@ function ERProject(svg) {
     }
     this.toggleInsertMode = function(button, func) {
         var buttons = document.getElementsByClassName("insertMode")
-        for (var x in buttons) {
+        for (var x = 0; x < buttons.length; x++) {
             buttons[x].className = "insertMode"
         }
         if (func == this.curInsertMode) {
@@ -383,7 +383,6 @@ function ERProject(svg) {
         var minh = outf.clientHeight - 4
         var w = max((bbox.width + bbox.left) * 1 + scroller.scrollLeft, minw)
         var h = max((bbox.height + bbox.top) * 1 + scroller.scrollTop, minh)
-        console.log(w, h)
         this.svg.setAttribute("width", w)
         this.svg.setAttribute("height", h)
     }

@@ -6,7 +6,7 @@ function Participation(node, project) {
     this.type = "Participation"
     this.setEntity = function(entity) {
         console.assert(entity instanceof Entity)
-        this.node.setAttributeNS(this.project.ns, "entity", entity.concept.getId())
+        this.node.setAttributeNS(this.project.ns, "entity", entity.getId())
     }
     this.setMultMax = function(mult_max) {
         this.node.setAttributeNS(this.project.ns, "mult-max", mult_max)

@@ -40,7 +40,7 @@ document.addEventListener("mousemove", function(ev) {
                 } else if (d.dragY) {
                     d.moveRelY(ev.clientY - d.startY)
                 }
-            } catch (e) {}
+            } catch (e) { console.log(e) }
         }
     }
 })

@@ -6,6 +6,9 @@ function Concept(node, project) {
     this.setName = function(name) {
         this.node.setAttributeNS(this.project.ns, "name", name)
     }
+    this.getG = function() {
+        return this.project.svg.getElementById('svg-' + this.getId())
+    }
     this.getId = function() {
         return this.node.getAttribute("id")
     }
@@ -35,6 +38,18 @@ function Concept(node, project) {
     }
     this.moveUp = function() {
         mkLastChild(this.node)
+    }
+    this.getXY = function() {
+        var x = parseFloat(this.project.getViewAttr(this.node, "x"))
+        var y = parseFloat(this.project.getViewAttr(this.node, "y"))
+        return [x, y]
+    }
+    this.moveRelXY = function(x, y) {
+        var xy = this.getXY()
+        var curx = xy[0] + x / this.project.zoom
+        var cury = xy[1] + y / this.project.zoom
+        var g = this.getG()
+        g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
     }
 }
 
