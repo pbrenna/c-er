@@ -52,6 +52,8 @@ function ERProject(svg) {
                     return new Attr(el, this)
                 case "participation":
                     return new Participation(el, this)
+                case "generalization":
+                    return new Generalization(el, this)
             }
         } catch (e) {}
         return null
@@ -210,6 +212,11 @@ function ERProject(svg) {
         normalStroke: "#000",
         defaultFont: "Arial,sans-serif",
         defaultFontSize: "14",
+        generalization: {
+            height: 140,
+            margin: 20,
+            horizHeight: 100
+        },
         entity: {
             padding: 5,
             defaultH: 40,
@@ -336,10 +343,15 @@ function ERProject(svg) {
             this.selectPanel("Creation")
         } else {
             this.selectPanel("MultipleSelection")
-            var b = document.getElementById("addParticipation")
-            b.setAttribute("disabled", "true")
+            var b1 = document.getElementById("addParticipation")
+            var b2 = document.getElementById("addGeneralization")
+            b1.setAttribute("disabled", "true")
+            b2.setAttribute("disabled", "true")
             if (this.canAddParticipation()) {
-                try { b.removeAttribute("disabled") } catch (e) {}
+                try { b1.removeAttribute("disabled") } catch (e) {}
+            }
+            if (this.canAddGeneralization()) {
+                try { b2.removeAttribute("disabled") } catch (e) {}
             }
         }
     }
@@ -443,5 +455,28 @@ function ERProject(svg) {
         if (this.canAddParticipation()) {
             newParticipation(this.get(this.selection.s[0]), this.get(this.selection.s[1]))
         }
+    }
+    this.addGeneralization = function() {
+        if (this.canAddGeneralization()) {
+            var objs = []
+            for (var x in this.selection.s) {
+                objs.push(this.get(this.selection.s[x]))
+            }
+            newGeneralization(objs)
+        }
+    }
+
+    this.zoomedScroll = function() {
+        return [scroller.scrollLeft / this.zoom, scroller.scrollTop / this.zoom]
+    }
+    this.canAddGeneralization = function() {
+        for (var x in this.selection.s) {
+            var el = this.get(this.selection.s[x])
+            if (el.type != "Entity")
+                return false
+            if (x != 0 && el.node.parentNode.localName == "children-concepts")
+                return false
+        }
+        return true
     }
 }

@@ -6,6 +6,10 @@ function Concept(node, project) {
     this.setName = function(name) {
         this.node.setAttributeNS(this.project.ns, "name", name)
     }
+    this.setXY = function(x, y) {
+        this.project.setViewAttr(this.node, "x", x)
+        this.project.setViewAttr(this.node, "y", y)
+    }
     this.getG = function() {
         return this.project.svg.getElementById('svg-' + this.getId())
     }
@@ -32,12 +36,23 @@ function Concept(node, project) {
         attr.setIsPrimary(isPrimary)
     }
     this.destroy = function() {
+        if (this.node.parentNode != this.project.schema) {
+            var g = genTravelUp(this.node)
+            if (this.node.parentNode.localName == "parent-concept") {
+                //get outer Generalization
+                this.project.wrap(g).destroy()
+            } else if (this.node.parentNode.localName == "children-concepts") {
+                if (this.node.parentNode.childNodes.length == 1) {
+                    this.project.wrap(g).destroy()
+                }
+            }
+        }
         killNode(this.node)
         this.project.schedule("refClean")
         this.node = null
     }
     this.moveUp = function() {
-        mkLastChild(this.node)
+        //mkLastChild(this.node)
     }
     this.getXY = function() {
         var x = parseFloat(this.project.getViewAttr(this.node, "x"))
@@ -146,7 +161,7 @@ function mkAttrRow(attr, tbody, fnRefresh) {
 }
 
 
-function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position) {
+function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position, reserveSlotsLeft, reserveSlotsRight) {
     additionalSpace = additionalSpace || 0
     var ret = {}
     var g = ret.g = svgEl(parent, "g", {
@@ -168,7 +183,9 @@ function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position) 
         attrDist = -attrDist
     }
     mustBeEven = mustBeEven || 0
-    var posx = 0
+    reserveSlotsLeft = reserveSlotsLeft || 0
+    reserveSlotsRight = reserveSlotsRight || 0
+    var posx = spacing * reserveSlotsLeft
     for (var i = 0; i < n; i++) {
         var att = attrs[i]
         var path = svgEl(g, "path", {
@@ -196,7 +213,8 @@ function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position) 
         text.textContent = att.getName()
         posx += spacing
     }
-    if (mustBeEven && n % 2 != 0) {
+    posx += reserveSlotsRight * spacing
+    if (mustBeEven && (n + reserveSlotsLeft + reserveSlotsRight) % 2 != 0) {
         posx += spacing
     }
     ret.reqWidth = posx - spacing

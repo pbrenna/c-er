@@ -147,3 +147,47 @@ window.addEventListener("beforeunload", function(ev) {
         return ev.returnValue
     }
 })
+
+function intersectCalc(line, lines) {
+    var res = []
+    for (var l in lines) {
+        var int = intersect2lines(line, lines[l])
+        if (int != null)
+            res.push(int)
+    }
+    return res
+}
+
+function intersect2lines(l1, l2) {
+    var x1 = l1[0][0],
+        x2 = l1[1][0],
+        x3 = l2[0][0],
+        x4 = l2[1][0],
+        y1 = l1[0][1],
+        y2 = l1[1][1],
+        y3 = l2[0][1],
+        y4 = l2[1][1]
+    var den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+    if (den == 0)
+        return null
+    var numx = (x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)
+    var numy = (x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)
+
+    var posx = numx / den,
+        posy = numy / den
+    if ((posx <= x1 && posx >= x2 || posx <= x2 && posx >= x1) &&
+        (posy <= y1 && posy >= y2 || posy <= y2 && posy >= y1) &&
+        (posx <= x3 && posx >= x4 || posx <= x4 && posx >= x3) &&
+        (posy <= y3 && posy >= y4 || posy <= y4 && posy >= y3))
+        return [posx, posy]
+    else
+        return null
+}
+
+function getLineInclination(line) {
+    var x1 = line[0][0],
+        x2 = line[1][0],
+        y1 = line[0][1],
+        y2 = line[1][1]
+    return Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI)
+}

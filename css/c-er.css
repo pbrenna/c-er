@@ -59,7 +59,7 @@ body {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    display: none
+    display: none;
 }
 
 #palette div+div {

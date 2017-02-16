@@ -43,6 +43,8 @@
                     <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
                     <div class="tip">To add a participation, select both an entity and a relation (holding SHIFT), then choose "Add participation".
                     </div>
+                    <div class="tip">To add a generalization, select first the parent entity, then (holding SHIFT) all the children.
+                    </div>
                 </div>
             </div>
             <div id="panelEntity" class="panel">
@@ -94,11 +96,18 @@
                     <input type="text" style="float:right" id="participationMultMax"></input>
                 </div>
             </div>
+            <div id="panelGeneralization" class="panel">
+                <div class="innerPanel">
+                    <h1>Edit generalization</h1>
+                    <div class="delete" onclick="erp.deleteSelection()"></div>
+                </div>
+            </div>
             <div id="panelMultipleSelection" class="panel">
                 <div class="innerPanel">
                     <h1>Edit selction</h1>
                     <div class="delete" onclick="erp.deleteSelection()"></div><br/>
                     <button id="addParticipation" onclick="erp.addParticipation()" disabled="true">Add participation</button>
+                    <button id="addGeneralization" onclick="erp.addGeneralization()" disabled="true">Add generalization</button>
                 </div>
             </div>
         </div>
@@ -110,6 +119,7 @@
     <script type="text/javascript" src="js/Concept.js"></script>
     <script type="text/javascript" src="js/Entity.js"></script>
     <script type="text/javascript" src="js/ERProject.js"></script>
+    <script type="text/javascript" src="js/Generalization.js"></script>
     <script type="text/javascript" src="js/Participation.js"></script>
     <script type="text/javascript" src="js/Relation.js"></script>
     <script type="text/javascript" src="js/util.js"></script>

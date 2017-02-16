@@ -35,12 +35,28 @@ function Participation(node, project) {
     this.draw = function(parent) {
         var rel = this.project.wrap(this.node.parentNode).getCenter()
         var entId = this.project.getErAttr(this.node, "entity")
-        var entc = this.project.get(entId).getCenter()
+        var ent = this.project.get(entId)
+        var entc = ent.getCenter()
         var g = svgEl(parent, "g", {
             id: "svg-" + this.getId(),
             stroke: this.project.styles.normalStroke
         })
+
+        /*var line = [
+            [entc[0], entc[1]],
+            [rel[0], rel[1]]
+        ]
+        var ent_inters = ent.lineIntersect(line)
+        var arrowd = "M" + ent_inters[0][0] + "," + ent_inters[0][1] + "l -10,-10 m 10 10 l -10,10"
+        var lineInc = getLineInclination(line)
+        svgEl(parent, "path", {
+            "stroke": "red",
+            "stroke-width": "2",
+            "d": arrowd,
+            "transform": "rotate(" + lineInc + "," + ent_inters[0][0] + "," + ent_inters[0][1] + ")"
+        })*/
         var d = "M " + entc[0] + "," + entc[1] + " L" + rel[0] + "," + rel[1]
+
         var path = svgEl(g, "path", {
             d: d,
             "stroke-width": 2
@@ -49,7 +65,7 @@ function Participation(node, project) {
             d: d,
             "stroke": "#000",
             "stroke-opacity": 0,
-            "stroke-width": 10
+            "stroke-width": 16
         })
         var txt = svgEl(g, "text", {
             x: (entc[0] + rel[0]) / 2 - 20,

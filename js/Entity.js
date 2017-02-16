@@ -5,14 +5,19 @@ function Entity(node, project) {
     this.type = "Entity"
     var p = this.project
     var node = this.node
+    this.getRect = function() {
+        return p.svg.getElementById("svg-" + this.getId() + "-rect")
+    }
 
     //drawing things
-    this.draw = function(parent) {
+    this.draw = function(parent, reserveSlotsBelow, reserveSlotsAbove) {
         var xy = this.getXY()
         var x = xy[0],
             y = xy[1]
         var w = p.styles.entity.defaultW
         var h = p.styles.entity.defaultH
+        reserveSlotsBelow = reserveSlotsBelow || 0
+        reserveSlotsAbove = reserveSlotsAbove || 0
         if (x === null || y === null || !h || !w)
             throw new DOMException("missing x,y coordinates of entity" + this.getId())
         var g = svgEl(parent, "g", {
@@ -20,7 +25,9 @@ function Entity(node, project) {
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
-        var attrs = drawAttrs(g, this.getAttrs(), p.styles.entity, h / 2, false, this.getAttrPos())
+        var reserveSlotsLeft = this.getAttrPos() == "above" ? reserveSlotsAbove : 0
+        var reserveSlotsRight = this.getAttrPos() == "below" ? reserveSlotsBelow : 0
+        var attrs = drawAttrs(g, this.getAttrs(), p.styles.entity, h / 2, false, this.getAttrPos(), reserveSlotsLeft, reserveSlotsRight)
 
         var reqw = attrs.reqWidth + p.styles.entity.corners * 2
         w = max(reqw, w)
@@ -39,6 +46,7 @@ function Entity(node, project) {
         w = max(w, textW + p.styles.entity.padding * 2)
         var rect = svgEl(g, "rect", {
             height: h,
+            id: "svg-" + this.getId() + "-rect",
             width: w,
             fill: "#ffffff",
             'stroke-width': 1,
@@ -52,7 +60,7 @@ function Entity(node, project) {
         var that = this
         g.addEventListener('mousedown', function(ev) {
             mkLastChild(this)
-            that.moveUp()
+                //that.moveUp()
             erp.dragStart(that, ev)
         })
 
@@ -60,7 +68,49 @@ function Entity(node, project) {
             p.selection.clicked(that, ev)
         })
     }
-
+    this.getReservedSlotXY = function(n, pos) {
+        var c = this.getCenter()
+        var nAttr = this.getAttrPos() == pos ? this.getAttrs().length : 0
+        if (pos == "above") {
+            var y = -p.styles.entity.defaultH / 2
+            var reqw = p.styles.entity.attrSpacing * (nAttr - 1 + n)
+            var attrX = -(reqw / 2) + p.styles.entity.corners - p.styles.entity.attrSpacing
+            return [attrX + c[0], y + c[1]]
+        } else {
+            var y = p.styles.entity.defaultH / 2
+            var reqw = p.styles.entity.attrSpacing * (nAttr - 1 + n)
+            var attrX = -(reqw / 2) + p.styles.entity.corners
+            return [attrX + p.styles.entity.attrSpacing * (nAttr - 1) + c[0], y + c[1]]
+        }
+    }
+    this.lineIntersect = function(line) {
+        var r = this.getRect()
+        var bbox = r.getBoundingClientRect()
+        var s = p.zoomedScroll()
+        var topLeft = [
+            bbox.left + s[0],
+            bbox.top + s[1]
+        ]
+        var topRight = [
+            topLeft[0] + bbox.width,
+            topLeft[1]
+        ]
+        var bottomLeft = [
+            topLeft[0],
+            topLeft[1] + bbox.height
+        ]
+        var bottomRight = [
+            topRight[0],
+            bottomLeft[1]
+        ]
+        return intersectCalc(line, [
+            //lines
+            [topLeft, topRight],
+            [topLeft, bottomLeft],
+            [topRight, bottomRight],
+            [bottomLeft, bottomRight]
+        ])
+    }
 
 }
 
