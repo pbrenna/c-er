@@ -1,3 +1,5 @@
+"use strict";
+
 function Participation(node, project) {
     this.node = node
     this.project = project

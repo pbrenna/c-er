@@ -1,3 +1,5 @@
+"use strict";
+
 function Relation(concept) {
     this.concept = concept
     this.type = "Relation"

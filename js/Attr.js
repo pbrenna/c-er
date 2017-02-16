@@ -1,3 +1,5 @@
+"use strict";
+
 function Attr(node, project) {
     this.node = node
     this.project = project

@@ -1,3 +1,5 @@
+"use strict";
+
 function Concept(node, project) {
     this.node = node
     this.project = project

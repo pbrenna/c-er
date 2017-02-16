@@ -1,3 +1,5 @@
+"use strict";
+
 function ERProject(svg) {
     this.svg = svg
     this.states = []
@@ -20,7 +22,7 @@ function ERProject(svg) {
         //    throw new Error("missing View namespace")
         //}
         this.nsMap[this.erPrefix] = this.ns
-        //this.nsMap[this.viewPrefix] = this.vns
+            //this.nsMap[this.viewPrefix] = this.vns
         this.erdoc = erdoc
         this.addState()
         this.applyZoom()
@@ -167,7 +169,7 @@ function ERProject(svg) {
         //this.svgAll.parentNode.removeChild(this.svgAll)
         //var nuovo = svgEl(this.svg, "g", { "id": "svg-all" }, false)
         var ch = this.schema.childNodes
-        for (x in ch) {
+        for (var x = 0; x < ch.length; x++) {
             var wr = this.wrap(ch[x])
             if (wr) {
                 try {
@@ -348,7 +350,7 @@ function ERProject(svg) {
                 updateParticipationPanel();
                 break;
         }
-        for (var p in panels) {
+        for (var p = 0; p < panels.length; p++) {
             panels[p].className = "panel"
         }
         document.getElementById("panel" + name).className = "panel visible"

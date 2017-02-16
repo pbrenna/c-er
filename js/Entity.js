@@ -1,3 +1,5 @@
+"use strict";
+
 function Entity(concept) {
     this.concept = concept
     this.destroy = function() {
