@@ -285,7 +285,7 @@ function ERProject(svg) {
     this.curInsertMode = null
     this.exitInsertMode = function() {
         var buttons = document.getElementsByClassName("insertMode")
-        for (var x in buttons) {
+        for (var x = 0; x < buttons.length; x++) {
             buttons[x].className = "insertMode"
         }
         this.curInsertMode = null
