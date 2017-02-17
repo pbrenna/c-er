@@ -46,8 +46,10 @@
                         </er:entity>
                     </er:parent-concept>
                     <er:children-concepts id="er37">
-                        <er:entity id="er29" v:x="640" v:y="540" er:name="Shorthair"/>
-                        <er:entity id="er30" v:x="800" v:y="540" er:name="Balinese"/>
+                        <er:entity id="er29" v:x="640" v:y="600" er:name="Shorthair" v:attr-pos="above">
+                            <er:attr id="er39" er:name="attribute" er:primary="false"/>
+                        </er:entity>
+                        <er:entity id="er30" v:x="800" v:y="600" er:name="Balinese"/>
                     </er:children-concepts>
                 </er:generalization>
                 <er:entity id="er42" v:x="980" v:y="400" er:name="Mouse"/>
