@@ -485,7 +485,7 @@ function ERProject(svg) {
             var el = this.get(this.selection.s[x])
             if (el.type != "Entity")
                 return false
-            if (x != 0 && el.node.parentNode.localName == "children-concepts")
+            if (x != 0 && !el.isFree)
                 return false
         }
         return true
