@@ -3,6 +3,8 @@
 function Relationship(node, project) {
     Concept.apply(this, [node, project])
     this.type = "Relationship"
+    var p = this.project
+    var node = this.node
     this.addParticipation = function(entity, mult_min, mult_max) {
         var part = new Participation(
             this.project.mkErElement("participation", this.node),
@@ -12,8 +14,14 @@ function Relationship(node, project) {
         part.setMultMax(mult_max)
         return part
     }
-    var p = this.project
-    var node = this.node
+    this.getParticipations = function() {
+        var ret = []
+        var parts = this.node.getElementsByTagNameNS(p.ns, "participation")
+        for (var x = 0; x < parts.length; x++) {
+            ret.push(p.wrap(parts[x]))
+        }
+        return ret
+    }
     this.draw = function(parent) {
         var xy = this.getXY()
         var x = xy[0],
@@ -71,6 +79,12 @@ function Relationship(node, project) {
         g.addEventListener("click", function(ev) {
             p.selection.clicked(that, ev)
         })
+
+        //recursively draw inner participations
+        var parts = this.getParticipations()
+        for (var i in parts) {
+            parts[i].draw(parent)
+        }
     }
     this.calculateWidth = function(text, attrReqW) {
 

@@ -102,12 +102,19 @@
                     <div class="delete" onclick="erp.deleteSelection()"></div>
                 </div>
             </div>
+            <div id="panelIsA" class="panel">
+                <div class="innerPanel">
+                    <h1>Edit is-a</h1>
+                    <div class="delete" onclick="erp.deleteSelection()"></div>
+                </div>
+            </div>
             <div id="panelMultipleSelection" class="panel">
                 <div class="innerPanel">
-                    <h1>Edit selction</h1>
+                    <h1>Edit selection</h1>
                     <div class="delete" onclick="erp.deleteSelection()"></div><br/>
                     <button id="addParticipation" onclick="erp.addParticipation()" disabled="true">Add participation</button>
                     <button id="addGeneralization" onclick="erp.addGeneralization()" disabled="true">Add generalization</button>
+                    <button id="addIsA" onclick="erp.addIsA()" disabled="true">Add is-a</button>
                 </div>
             </div>
         </div>
@@ -120,6 +127,7 @@
     <script type="text/javascript" src="js/Entity.js"></script>
     <script type="text/javascript" src="js/ERProject.js"></script>
     <script type="text/javascript" src="js/Generalization.js"></script>
+    <script type="text/javascript" src="js/IsA.js"></script>
     <script type="text/javascript" src="js/Participation.js"></script>
     <script type="text/javascript" src="js/Relationship.js"></script>
     <script type="text/javascript" src="js/util.js"></script>

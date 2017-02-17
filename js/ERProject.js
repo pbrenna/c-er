@@ -9,7 +9,7 @@ function ERProject(svg) {
     this.vns = "http://pbrenna.github.io/c-er/ns/view"
     this.erPrefix = ""
     this.viewPrefix = ""
-    this.scheduled = {}
+    this.scheduled = []
     this.zoom = 1
     this.grid = 20
     var that = this
@@ -54,6 +54,8 @@ function ERProject(svg) {
                     return new Participation(el, this)
                 case "generalization":
                     return new Generalization(el, this)
+                case "is-a":
+                    return new IsA(el, this)
             }
         } catch (e) {}
         return null
@@ -77,14 +79,8 @@ function ERProject(svg) {
     }
     this.update = function() {
         this.saved = false
-        this.scheduled = {}
-        for (var x in this.scheduled) {
-            switch (x) {
-                case "refClean":
-                    this.refClean();
-                    break;
-            }
-        }
+        if (this.refCleanScheduled)
+            this.refClean()
         try {
             var pre = document.getElementById("erXmlPre")
             var seri = new XMLSerializer()
@@ -96,6 +92,11 @@ function ERProject(svg) {
         this.schema = this.erdoc.getElementsByTagNameNS(this.ns, "schema")[0]
         console.assert(this.schema != null)
         this.draw()
+        for (var x in this.scheduled) {
+            var cb = this.scheduled[x]
+            cb.exec()
+        }
+        this.scheduled = []
         this.resizeSvg()
     }
     this.mkErElement = function(name, parent, attrDict) {
@@ -132,8 +133,8 @@ function ERProject(svg) {
             }
         }
     }
-    this.schedule = function(f) {
-        this.scheduled[f] = true
+    this.scheduleDraw = function(cb) {
+        this.scheduled.push(cb)
     }
 
     this.genId = function() {
@@ -183,11 +184,11 @@ function ERProject(svg) {
                 }
             }
         }
-        var part = this.schema.getElementsByTagNameNS(this.ns, "participation")
+        /*var part = this.schema.getElementsByTagNameNS(this.ns, "participation")
         for (var i = 0; i < part.length; i++) {
             var p = this.wrap(part[i])
             p.draw(this.svgAll)
-        }
+        }*/
         this.selection.restore()
 
     }
@@ -346,13 +347,18 @@ function ERProject(svg) {
             this.selectPanel("MultipleSelection")
             var b1 = document.getElementById("addParticipation")
             var b2 = document.getElementById("addGeneralization")
+            var b3 = document.getElementById("addIsA")
             b1.setAttribute("disabled", "true")
             b2.setAttribute("disabled", "true")
+            b3.setAttribute("disabled", "true")
             if (this.canAddParticipation()) {
                 try { b1.removeAttribute("disabled") } catch (e) {}
             }
             if (this.canAddGeneralization()) {
                 try { b2.removeAttribute("disabled") } catch (e) {}
+            }
+            if (this.canAddIsA()) {
+                try { b3.removeAttribute("disabled") } catch (e) {}
             }
         }
     }
@@ -485,5 +491,17 @@ function ERProject(svg) {
             Math.round(x / this.grid) * this.grid,
             Math.round(y / this.grid) * this.grid
         ]
+    }
+    this.canAddIsA = function() {
+        if (this.selection.s.length != 2)
+            return false
+        var e1 = this.get(this.selection.s[0]),
+            e2 = this.get(this.selection.s[1])
+        return e1.type == "Entity" && e2.type == "Entity"
+    }
+    this.addIsA = function() {
+        if (this.canAddIsA()) {
+            newIsA(this.get(this.selection.s[0]), this.get(this.selection.s[1]))
+        }
     }
 }

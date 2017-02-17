@@ -29,67 +29,71 @@ function Participation(node, project) {
     }
     this.getG = function() {
         return this.project.svg.getElementById('svg-' + this.getId())
-
     }
     var p = this.project
     this.draw = function(parent) {
-        var rel = this.project.wrap(this.node.parentNode).getCenter()
-        var entId = this.project.getErAttr(this.node, "entity")
-        var ent = this.project.get(entId)
-        var entc = ent.getCenter()
-        var g = svgEl(parent, "g", {
-            id: "svg-" + this.getId(),
-            stroke: this.project.styles.normalStroke
-        })
+        //schedule for execution after main drawing pass
+        //so that all entities and relationships have been drawn
+        var cb = new Callback(function() {
+            var rel = this.project.wrap(this.node.parentNode).getCenter()
+            var entId = this.project.getErAttr(this.node, "entity")
+            var ent = this.project.get(entId)
+            var entc = ent.getCenter()
+            var g = svgEl(parent, "g", {
+                id: "svg-" + this.getId(),
+                stroke: this.project.styles.normalStroke
+            })
 
-        /*var line = [
-            [entc[0], entc[1]],
-            [rel[0], rel[1]]
-        ]
-        var ent_inters = ent.lineIntersect(line)
-        var arrowd = "M" + ent_inters[0][0] + "," + ent_inters[0][1] + "l -10,-10 m 10 10 l -10,10"
-        var lineInc = getLineInclination(line)
-        svgEl(parent, "path", {
-            "stroke": "red",
-            "stroke-width": "2",
-            "d": arrowd,
-            "transform": "rotate(" + lineInc + "," + ent_inters[0][0] + "," + ent_inters[0][1] + ")"
-        })*/
-        var d = "M " + entc[0] + "," + entc[1] + " L" + rel[0] + "," + rel[1]
+            /*var line = [
+                [entc[0], entc[1]],
+                [rel[0], rel[1]]
+            ]
+            var ent_inters = ent.lineIntersect(line)
+            var arrowd = "M" + ent_inters[0][0] + "," + ent_inters[0][1] + "l -10,-10 m 10 10 l -10,10"
+            var lineInc = getLineInclination(line)
+            svgEl(parent, "path", {
+                "stroke": "red",
+                "stroke-width": "2",
+                "d": arrowd,
+                "transform": "rotate(" + lineInc + "," + ent_inters[0][0] + "," + ent_inters[0][1] + ")"
+            })*/
+            var d = "M " + entc[0] + "," + entc[1] + " L" + rel[0] + "," + rel[1]
 
-        var path = svgEl(g, "path", {
-            d: d,
-            "stroke-width": 2
-        })
-        var transp = svgEl(g, "path", {
-            d: d,
-            "stroke": "#000",
-            "stroke-opacity": 0,
-            "stroke-width": 16
-        })
-        var txt = svgEl(g, "text", {
-            x: (entc[0] + rel[0]) / 2 - 20,
-            y: (entc[1] + rel[1]) / 2 + 20,
-            "stroke-width": 0,
-            'font-family': this.project.styles.defaultFont
-        })
-        txt.textContent = "(" + this.getMultMin() + ", " + this.getMultMax() + ")"
-        var box = txt.getBoundingClientRect()
-        var bgrect = svgEl(g, "rect", {
-            fill: "white",
-            x: box.left / p.zoom + scroller.scrollLeft / p.zoom,
-            y: box.top / p.zoom + scroller.scrollTop / p.zoom,
-            width: box.width / p.zoom,
-            height: box.height / p.zoom,
-            "stroke-width": 0
-        })
-        mkFirstChild(bgrect)
-        mkFirstChild(path)
-        mkFirstChild(g)
-        var that = this
-        g.addEventListener("mousedown", function(ev) {
-            that.project.selection.clicked(that, ev)
-        })
+            var path = svgEl(g, "path", {
+                d: d,
+                "stroke-width": 2
+            })
+            var transp = svgEl(g, "path", {
+                d: d,
+                "stroke": "#000",
+                "stroke-opacity": 0,
+                "stroke-width": 16
+            })
+            var txt = svgEl(g, "text", {
+                x: (entc[0] + rel[0]) / 2 - 20,
+                y: (entc[1] + rel[1]) / 2 + 20,
+                "stroke-width": 0,
+                'font-family': this.project.styles.defaultFont
+            })
+            txt.textContent = "(" + this.getMultMin() + ", " + this.getMultMax() + ")"
+            var box = txt.getBoundingClientRect()
+            var bgrect = svgEl(g, "rect", {
+                fill: "white",
+                x: box.left / p.zoom + scroller.scrollLeft / p.zoom,
+                y: box.top / p.zoom + scroller.scrollTop / p.zoom,
+                width: box.width / p.zoom,
+                height: box.height / p.zoom,
+                "stroke-width": 0
+            })
+            mkFirstChild(bgrect)
+            mkFirstChild(path)
+            mkFirstChild(g)
+            var that = this
+            g.addEventListener("mousedown", function(ev) {
+                that.project.selection.clicked(that, ev)
+            })
+        }, this, [])
+        p.scheduleDraw(cb)
     }
     this.selectOn = function() {
         this.getG().style.stroke = this.project.styles.selectedStroke

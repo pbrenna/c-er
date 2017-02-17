@@ -1,3 +1,5 @@
+"use strict";
+
 function Generalization(node, project) {
     Concept.apply(this, [node, project])
     this.type = "Generalization"
@@ -12,7 +14,7 @@ function Generalization(node, project) {
         }
         //then copy super's destructor
         killNode(this.node)
-        this.project.schedule("refClean")
+        this.project.refCleanScheduled = true
         this.node = null
     }
     this.setXY = function(x, y) {

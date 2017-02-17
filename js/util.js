@@ -9,6 +9,9 @@ function Callback(func, funcThis, funcArgs) {
     this.func = func
     this.funcThis = funcThis
     this.funcArgs = funcArgs
+    this.exec = function(moreArgs) {
+        this.func.apply(this.funcThis, this.funcArgs.concat(moreArgs))
+    }
 }
 
 function ajaxGet(url, cb, isXML) {

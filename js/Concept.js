@@ -48,7 +48,7 @@ function Concept(node, project) {
             }
         }
         killNode(this.node)
-        this.project.schedule("refClean")
+        this.project.refCleanScheduled = true
         this.node = null
     }
     this.moveUp = function() {
