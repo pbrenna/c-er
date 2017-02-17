@@ -111,6 +111,20 @@ function Entity(node, project) {
             [bottomLeft, bottomRight]
         ])
     }
+    this.isFree = function() {
+        var ancCount = this.countAncestors()
+        return ancCount == 0 || (ancCount == 1 && this.node.parentNode.localName == "parent-concept")
+    }
+    this.countAncestors = function() {
+        var n = this.node
+        var count = 0
+        while (n != p.schema) {
+            n = n.parentNode
+            if (p.wrap(n))
+                count += 1
+        }
+        return count
+    }
 
 }
 

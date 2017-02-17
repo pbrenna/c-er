@@ -75,6 +75,9 @@ function Relation(node, project) {
     this.calculateWidth = function(text, attrReqW) {
 
     }
+    this.isFree = function() {
+        return true
+    }
 }
 
 var relationNameInput = document.getElementById("relationNameInput")

@@ -26,6 +26,12 @@ function Generalization(node, project) {
     this.getRect = function(n, pos) {
         return this.getParent().getRect()
     }
+    this.getAttrs = function() {
+        return this.getParent().getAttrs()
+    }
+    this.getAttrPos = function() {
+        return this.getParent().getAttrPos()
+    }
     this.getPC = function() {
         return this.node.getElementsByTagNameNS(p.ns, "parent-concept")[0]
     }
@@ -90,9 +96,15 @@ function Generalization(node, project) {
         var oldw = 0
         var posx = pCenter[0]
         var posy = pCenter[1] + p.styles.generalization.height
+        var doubleHeight = false
         for (var x in ch) {
             ch[x].setXY(posx, posy)
             ch[x].draw(childrenG, 0, 1) //we reserve a slot above to connect to the arrow
+            if (ch[x].getAttrPos() == "above" && ch[x].getAttrs().length > 0)
+                doubleHeight = true
+        }
+        if (doubleHeight) {
+            posy += p.styles.generalization.belowHorizHeight
         }
         //foreach child, we redraw it translated just enough
         var skip = 1
@@ -105,7 +117,8 @@ function Generalization(node, project) {
             } else {
                 skip -= 1
             }
-            ch[x].setXY(posx, posy)
+            var roundx = p.alignToGrid(posx, posy)[0]
+            ch[x].setXY(roundx, posy)
             killNode(ch[x].getG())
             ch[x].draw(childrenG, 0, 1)
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin

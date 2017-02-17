@@ -68,11 +68,13 @@ function Concept(node, project) {
         g.style.stroke = this.project.styles.normalStroke
     }
     this.moveRelXY = function(x, y) {
-        var xy = this.getXY()
-        var curx = xy[0] + x / this.project.zoom
-        var cury = xy[1] + y / this.project.zoom
-        var g = this.getG()
-        g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
+        if (this.isFree()) {
+            var xy = this.getXY()
+            var curx = xy[0] + x / this.project.zoom
+            var cury = xy[1] + y / this.project.zoom
+            var g = this.getG()
+            g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
+        }
     }
     this.endDragXY = function(x, y) {
         var xy = this.getXY()

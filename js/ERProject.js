@@ -215,7 +215,8 @@ function ERProject(svg) {
         generalization: {
             height: 140,
             margin: 20,
-            horizHeight: 100
+            horizHeight: 100,
+            belowHorizHeight: 60
         },
         entity: {
             padding: 5,
@@ -478,5 +479,11 @@ function ERProject(svg) {
                 return false
         }
         return true
+    }
+    this.alignToGrid = function(x, y) {
+        return [
+            Math.round(x / this.grid) * this.grid,
+            Math.round(y / this.grid) * this.grid
+        ]
     }
 }
