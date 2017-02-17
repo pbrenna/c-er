@@ -69,18 +69,22 @@ function ERProject(svg) {
         if (!dontUpdate)
             this.update()
     }
-    this.patchState = function(statenum) {
+    this.patchState = function(statenum, dontUpdate) {
         if (statenum == this.curState + 1) {
             this.addState()
         } else if (statenum == this.curState) {
             this.states[statenum] = this.erdoc.cloneNode(true)
         }
-        this.update()
+        if (!dontUpdate)
+            this.update()
     }
     this.update = function() {
         this.saved = false
-        if (this.refCleanScheduled)
+        if (this.refCleanScheduled) {
             this.refClean()
+            this.patchState(this.curState, true)
+            this.refCleanScheduled = false
+        }
         try {
             var pre = document.getElementById("erXmlPre")
             var seri = new XMLSerializer()
@@ -111,7 +115,7 @@ function ERProject(svg) {
         return el
     }
     this.refClean = function() {
-        var path = "//*[@" + this.erPrefix + ":ref]"
+        var path = "//@*[starts-with(local-name(), 'ref')]"
         var that = this
         var xpathRes = this.erdoc.evaluate(
             path,
@@ -123,10 +127,10 @@ function ERProject(svg) {
             null)
         for (var i = 0; i < xpathRes.snapshotLength; i++) {
             var el = xpathRes.snapshotItem(i)
-            var ref = el.getAttributeNS(this.ns, "ref")
+            var ref = el.nodeValue
             if (!this.getById(ref)) {
                 try {
-                    killNode(el)
+                    killNode(el.ownerElement)
                 } catch (e) {
                     console.log("Could not remove reference: ", el, e)
                 }

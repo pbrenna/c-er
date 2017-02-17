@@ -24,10 +24,10 @@ function IsA(node, project) {
         this.getG().style.stroke = this.project.styles.normalStroke
     }
     this.getParent = function() {
-        return p.get(p.getErAttr(this.node, "parent"))
+        return p.get(p.getErAttr(this.node, "ref-parent"))
     }
     this.getChild = function() {
-        return p.get(p.getErAttr(this.node, "child"))
+        return p.get(p.getErAttr(this.node, "ref-child"))
     }
     this.draw = function(parent) {
         var cb = new Callback(function() {
@@ -58,7 +58,7 @@ function IsA(node, project) {
                 d: pathd,
                 "stroke-opacity": 0
             })
-            mkLastChild(ch.getG())
+            ch.moveUp()
             var that = this
             g.addEventListener("mousedown", function(ev) {
                 that.project.selection.clicked(that, ev)
@@ -71,8 +71,8 @@ function IsA(node, project) {
 
 function newIsA(e1, e2) {
     var el = erp.mkErElement("is-a", erp.schema, {
-        "parent": e2.getId(),
-        "child": e1.getId()
+        "ref-parent": e2.getId(),
+        "ref-child": e1.getId()
     })
     erp.addState()
     erp.selection.set([el.getAttribute("id")])

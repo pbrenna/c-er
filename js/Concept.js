@@ -52,7 +52,13 @@ function Concept(node, project) {
         this.node = null
     }
     this.moveUp = function() {
-        //mkLastChild(this.node)
+        var el = genTravelUp(this.node.parentNode)
+        if (el == this.project.schema)
+            mkLastChild(this.getG())
+        else {
+            //console.log(this.project.wrap(el))
+            this.project.wrap(el).moveUp()
+        }
     }
     this.getXY = function() {
         var x = parseFloat(this.project.getViewAttr(this.node, "x"))

@@ -6,7 +6,7 @@ function Participation(node, project) {
     this.type = "Participation"
     this.setEntity = function(entity) {
         console.assert(entity instanceof Entity)
-        this.node.setAttributeNS(this.project.ns, "entity", entity.getId())
+        this.node.setAttributeNS(this.project.ns, "ref-entity", entity.getId())
     }
     this.setMultMax = function(mult_max) {
         this.node.setAttributeNS(this.project.ns, "mult-max", mult_max)
@@ -36,7 +36,7 @@ function Participation(node, project) {
         //so that all entities and relationships have been drawn
         var cb = new Callback(function() {
             var rel = this.project.wrap(this.node.parentNode).getCenter()
-            var entId = this.project.getErAttr(this.node, "entity")
+            var entId = this.project.getErAttr(this.node, "ref-entity")
             var ent = this.project.get(entId)
             var entc = ent.getCenter()
             var g = svgEl(parent, "g", {
