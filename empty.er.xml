@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<er:project xmlns:er="http://disco.unimib.it/c-er/er" xmlns:v="http://disco.unimib.it/c-er/view">
-    <er:schema></er:schema>
+<er:project
+    xmlns:er="http://pbrenna.github.io/c-er/ns/er"
+    xmlns:v="http://pbrenna.github.io/c-er/ns/view">
+    <er:schema>
+    </er:schema>
 </er:project>

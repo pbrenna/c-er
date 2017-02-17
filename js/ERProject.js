@@ -5,8 +5,8 @@ function ERProject(svg) {
     this.states = []
     this.curState = -1
     this.nsMap = {}
-    this.ns = "http://disco.unimib.it/c-er/er"
-    this.vns = "http://disco.unimib.it/c-er/view"
+    this.ns = "http://pbrenna.github.io/c-er/ns/er"
+    this.vns = "http://pbrenna.github.io/c-er/ns/view"
     this.erPrefix = ""
     this.viewPrefix = ""
     this.scheduled = {}
@@ -46,8 +46,8 @@ function ERProject(svg) {
             switch (el.localName) {
                 case "entity":
                     return new Entity(el, this)
-                case "relation":
-                    return new Relation(el, this)
+                case "relationship":
+                    return new Relationship(el, this)
                 case "attr":
                     return new Attr(el, this)
                 case "participation":
@@ -232,7 +232,7 @@ function ERProject(svg) {
             attrFontSize: 12,
             attrRotationDeg: -40
         },
-        relation: {
+        relationship: {
             defaultH: 60,
             defaultW: 180,
             corners: 40,
@@ -362,8 +362,8 @@ function ERProject(svg) {
             case "Entity":
                 updateEntityPanel();
                 break;
-            case "Relation":
-                updateRelationPanel();
+            case "Relationship":
+                updateRelationshipPanel();
                 break;
             case "Participation":
                 updateParticipationPanel();
@@ -398,8 +398,8 @@ function ERProject(svg) {
     this.resizeSvg = function() {
         var bbox = this.svgAll.getBoundingClientRect()
         var outf = document.getElementById('outerFixed')
-        var minw = outf.clientWidth - 8
-        var minh = outf.clientHeight - 8
+        var minw = outf.clientWidth - 12
+        var minh = outf.clientHeight - 12
         var w = max((bbox.width + bbox.left) * 1 + scroller.scrollLeft, minw)
         var h = max((bbox.height + bbox.top) * 1 + scroller.scrollTop, minh)
         this.svg.setAttribute("width", w)
@@ -450,7 +450,7 @@ function ERProject(svg) {
         var types = [this.get(this.selection.s[0]).type,
             this.get(this.selection.s[1]).type
         ]
-        return types.indexOf("Entity") >= 0 && types.indexOf("Relation") >= 0
+        return types.indexOf("Entity") >= 0 && types.indexOf("Relationship") >= 0
     }
     this.addParticipation = function() {
         if (this.canAddParticipation()) {

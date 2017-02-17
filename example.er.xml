@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <er:project
-    xmlns:er="http://disco.unimib.it/c-er/er"
-    xmlns:v="http://disco.unimib.it/c-er/view">
+    xmlns:er="http://pbrenna.github.io/c-er/ns/er"
+    xmlns:v="http://pbrenna.github.io/c-er/ns/view">
     <er:schema>
         <er:entity id="er13" v:x="166" v:y="16" v:h="40" v:w="100" er:name="Example of a Conceptual ER Schema"/>
         <er:entity id="er16" v:x="195" v:y="55" v:h="40" v:w="100" er:name="Please note that this program is experimental"/>
         <er:entity id="er17" v:x="225" v:y="95" v:h="40" v:w="100" er:name="Self-relations and other features are not yet supported"/>
         <er:entity id="er18" v:x="980" v:y="100" v:h="40" v:w="100" er:name="Course"/>
-        <er:relation id="er15" v:x="680" v:y="100" v:h="40" v:w="100" er:name="a very long-named relation" v:attr-pos="above">
+        <er:relationship id="er15" v:x="680" v:y="100" v:h="40" v:w="100" er:name="a very long-named relation" v:attr-pos="above">
             <er:participation id="er19" er:entity="er18" er:mult-min="0" er:mult-max="n"/>
             <er:participation id="er20" er:entity="er1" er:mult-min="0" er:mult-max="n"/>
             <er:attr id="er14" er:name="date" er:primary="false"/>
-        </er:relation>
-        <er:relation id="er2" v:x="420" v:y="260" v:h="40" v:w="100" er:name="ownership">
+        </er:relationship>
+        <er:relationship id="er2" v:x="420" v:y="260" v:h="40" v:w="100" er:name="ownership">
             <er:participation id="er4" er:entity="er1" er:mult-min="0" er:mult-max="n"/>
             <er:participation id="er35" er:entity="er3" er:mult-min="1" er:mult-max="1"/>
-        </er:relation>
-        <er:relation id="er21" v:x="980" v:y="260" v:h="40" v:w="100" er:name="exam">
+        </er:relationship>
+        <er:relationship id="er21" v:x="980" v:y="260" v:h="40" v:w="100" er:name="exam">
             <er:attr id="er22" er:name="grade" er:primary="false"/>
             <er:attr id="er9" er:name="date" er:primary="false"/>
             <er:participation id="er11" er:entity="er1" er:mult-min="0" er:mult-max="n"/>
             <er:participation id="er12" er:entity="er18" er:mult-min="0" er:mult-max="n"/>
-        </er:relation>
+        </er:relationship>
         <er:generalization id="er26">
             <er:parent-concept id="er27">
                 <er:entity id="er3" v:x="160" v:y="260" er:name="Pet">
@@ -58,9 +58,9 @@
             <er:attr id="er5" er:name="name" er:primary="false"/>
             <er:attr id="er6" er:name="surname" er:primary="false"/>
         </er:entity>
-        <er:relation id="er43" v:x="980" v:y="540" er:name="Chases">
+        <er:relationship id="er43" v:x="980" v:y="540" er:name="Chases">
             <er:participation id="er44" er:entity="er25" er:mult-min="0" er:mult-max="n"/>
             <er:participation id="er45" er:entity="er42" er:mult-min="0" er:mult-max="n"/>
-        </er:relation>
+        </er:relationship>
     </er:schema>
 </er:project>

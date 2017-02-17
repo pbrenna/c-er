@@ -1,8 +1,8 @@
 "use strict";
 
-function Relation(node, project) {
+function Relationship(node, project) {
     Concept.apply(this, [node, project])
-    this.type = "Relation"
+    this.type = "Relationship"
     this.addParticipation = function(entity, mult_min, mult_max) {
         var part = new Participation(
             this.project.mkErElement("participation", this.node),
@@ -18,19 +18,19 @@ function Relation(node, project) {
         var xy = this.getXY()
         var x = xy[0],
             y = xy[1]
-        var w = p.styles.relation.defaultW
-        var h = p.styles.relation.defaultH
+        var w = p.styles.relationship.defaultW
+        var h = p.styles.relationship.defaultH
         if (x === null || y === null || !h || !w)
-            throw new DOMException("missing x,y coordinates of relation " + this.getId())
+            throw new DOMException("missing x,y coordinates of relationship " + this.getId())
         var g = svgEl(parent, "g", {
             id: 'svg-' + this.getId(),
             transform: "translate(" + x + "," + y + ")",
             stroke: p.styles.normalStroke
         })
-        var attrs = drawAttrs(g, this.getAttrs(), p.styles.relation, 10, true, this.getAttrPos())
-        var reqw = attrs.reqWidth + p.styles.relation.corners * 2
+        var attrs = drawAttrs(g, this.getAttrs(), p.styles.relationship, 10, true, this.getAttrPos())
+        var reqw = attrs.reqWidth + p.styles.relationship.corners * 2
         w = max(w, reqw)
-        var attrX = (-reqw / 2) + p.styles.relation.corners - p.styles.relation.attrSpacing * 0
+        var attrX = (-reqw / 2) + p.styles.relationship.corners - p.styles.relationship.attrSpacing * 0
         var text = svgEl(g, "text", {
             'text-anchor': 'middle',
             x: 0,
@@ -41,7 +41,7 @@ function Relation(node, project) {
         })
         text.textContent = p.getErAttr(node, "name")
         var textW = text.getBoundingClientRect().width / p.zoom
-        var availableW = w - (p.styles.relation.padding * 2)
+        var availableW = w - (p.styles.relationship.padding * 2)
         var textScale = availableW / textW
         if (textScale < 1) {
             text.setAttribute("font-size", p.styles.defaultFontSize * textScale)
@@ -80,17 +80,17 @@ function Relation(node, project) {
     }
 }
 
-var relationNameInput = document.getElementById("relationNameInput")
-relationNameInput.addEventListener("change", function(ev) {
+var relationshipNameInput = document.getElementById("relationshipNameInput")
+relationshipNameInput.addEventListener("change", function(ev) {
     var id = erp.selection.s[0]
     var e = erp.get(id)
     e.setName(this.value)
     erp.addState()
 })
-var relationAttrTable = document.getElementById("relationAttrTable")
-var relationAddAttr = document.getElementById("relationAddAttr")
-var relationAttrPos = document.getElementById("relationAttrPos")
-relationAttrPos.addEventListener("change", function(ev) {
+var relationshipAttrTable = document.getElementById("relationshipAttrTable")
+var relationshipAddAttr = document.getElementById("relationshipAddAttr")
+var relationshipAttrPos = document.getElementById("relationshipAttrPos")
+relationshipAttrPos.addEventListener("change", function(ev) {
     var val = this.value
     var id = erp.selection.s[0]
     var e = erp.get(id)
@@ -99,38 +99,36 @@ relationAttrPos.addEventListener("change", function(ev) {
     updateRelationPanel()
 })
 
-function updateRelationPanel() {
+function updateRelationshipPanel() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
-    relationNameInput.value = e.getName()
-    relationAttrPos.value = e.getAttrPos()
-    clearElement(relationAttrTable)
+    relationshipNameInput.value = e.getName()
+    relationshipAttrPos.value = e.getAttrPos()
+    clearElement(relationshipAttrTable)
     var attrs = e.getAttrs()
     for (var x in attrs) {
         var attr = attrs[x]
-        mkAttrRow(attr, relationAttrTable, updateRelationPanel)
+        mkAttrRow(attr, relationshipAttrTable, updateRelationshipPanel)
             //using function call to capture "attr" in closures
     }
 }
 
-function newRelation(ev) {
-    var name = "Relation"
-    var el = erp.mkErElement("relation", erp.schema)
+function newRelationship(ev) {
+    var name = "Relationship"
+    var el = erp.mkErElement("relationship", erp.schema)
     var pos = erp.getMouseInDocument(ev)
-    var h = erp.styles.relation.defaultH
-    var w = erp.styles.relation.defaultW
-    erp.setViewAttr(el, "x", pos.x - w / 2)
-    erp.setViewAttr(el, "y", pos.y - h / 2)
+    erp.setViewAttr(el, "x", pos.x)
+    erp.setViewAttr(el, "y", pos.y)
     var c = new Concept(el, erp)
     c.setName(name)
     erp.addState()
     erp.selection.set([el.getAttribute("id")])
 }
 
-function relationAddAttribute() {
+function relationshipAddAttribute() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
     e.addAttribute("attribute", false)
     erp.addState()
-    updateRelationPanel()
+    updateRelationshipPanel()
 }

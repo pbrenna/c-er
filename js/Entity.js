@@ -133,10 +133,8 @@ function newEntity(ev) {
     var name = "Entity"
     var el = erp.mkErElement("entity", erp.schema)
     var pos = erp.getMouseInDocument(ev)
-    var h = erp.styles.entity.defaultH
-    var w = erp.styles.entity.defaultW
-    erp.setViewAttr(el, "x", pos.x - w / 2)
-    erp.setViewAttr(el, "y", pos.y - h / 2)
+    erp.setViewAttr(el, "x", pos.x)
+    erp.setViewAttr(el, "y", pos.y)
     var c = new Concept(el, erp)
     c.setName(name)
     erp.addState()

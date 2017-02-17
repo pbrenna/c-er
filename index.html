@@ -38,10 +38,10 @@
             <div id="panelCreation" class="panel visible">
                 <div class="innerPanel">
                     <h1>Add...</h1><br/>
-                    <div class="tip">Choose "entity" or "relation", then click on the drawing area.</div>
+                    <div class="tip">Choose "entity" or "relationship", then click on the drawing area.</div>
                     <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
-                    <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelation)">Relation</button>
-                    <div class="tip">To add a participation, select both an entity and a relation (holding SHIFT), then choose "Add participation".
+                    <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelationship)">Relationship</button>
+                    <div class="tip">To add a participation, select both an entity and a relationship (holding SHIFT), then choose "Add participation".
                     </div>
                     <div class="tip">To add a generalization, select first the parent entity, then (holding SHIFT) all the children.
                     </div>
@@ -65,22 +65,22 @@
                     <button id="entityAddAttr" onclick="entityAddAttribute()" style="width:100%;margin-right: 0;">Add attribute</button>
                 </div>
             </div>
-            <div id="panelRelation" class="panel">
+            <div id="panelRelationship" class="panel">
                 <div class="innerPanel">
-                    <h1>Edit relation</h1>
+                    <h1>Edit relationship</h1>
                     <div class="delete" onclick="erp.deleteSelection()"></div><br/>
                     <div class="tip">Press ENTER after editing the name of the concept or the attributes; use the checkbox to set an attribute as primary.</div>
-                    <label for="relationNameInput">Name:</label>
-                    <input type="text" style="float:right" id="relationNameInput"></input>
-                    <label style="margin: 10px 0px 4px 0px;" for="relationAttrPos">Attributes:</label>
-                    <select style="margin: 4px 0px;float: right" id="relationAttrPos">
+                    <label for="relationshipNameInput">Name:</label>
+                    <input type="text" style="float:right" id="relationshipNameInput"></input>
+                    <label style="margin: 10px 0px 4px 0px;" for="relationshipAttrPos">Attributes:</label>
+                    <select style="margin: 4px 0px;float: right" id="relationshipAttrPos">
                         <option value="above">Above</option>
                         <option value="below">Below</option>
                     </select>
                     <table cellspacing="0" cellpadding="0" style="width:100%">
-                        <tbody id="relationAttrTable" class="attrTable"></tbody>
+                        <tbody id="relationshipAttrTable" class="attrTable"></tbody>
                     </table>
-                    <button id="relationAddAttr" onclick="relationAddAttribute()" style="width:100%;margin-right: 0;">Add attribute</button>
+                    <button id="relationshipAddAttr" onclick="relationshipAddAttribute()" style="width:100%;margin-right: 0;">Add attribute</button>
                 </div>
             </div>
             <div id="panelParticipation" class="panel">
@@ -121,7 +121,7 @@
     <script type="text/javascript" src="js/ERProject.js"></script>
     <script type="text/javascript" src="js/Generalization.js"></script>
     <script type="text/javascript" src="js/Participation.js"></script>
-    <script type="text/javascript" src="js/Relation.js"></script>
+    <script type="text/javascript" src="js/Relationship.js"></script>
     <script type="text/javascript" src="js/util.js"></script>
     <script type="text/javascript" src="js/3rdparty/vkbeautify.js"></script>
     <script type="text/javascript" src="js/3rdparty/download.js"></script>

@@ -113,7 +113,7 @@ function Concept(node, project) {
 
 
 
-//Common between Entity and Relation
+//Common between Entity and Relationship
 function mkAttrRow(attr, tbody, fnRefresh) {
     var name = attr.getName()
     var primary = attr.getIsPrimary()

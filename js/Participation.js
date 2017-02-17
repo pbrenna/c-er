@@ -100,7 +100,7 @@ function Participation(node, project) {
 }
 
 function newParticipation(obj1, obj2) {
-    if (obj1.type == "Relation") {
+    if (obj1.type == "Relationship") {
         var tmp = obj1
         obj1 = obj2
         obj2 = tmp
