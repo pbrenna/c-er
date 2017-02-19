@@ -20,6 +20,13 @@ function Participation(node, project) {
     this.getMultMin = function() {
         return this.node.getAttributeNS(this.project.ns, "mult-min")
     }
+    this.getMandatory = function() {
+        return this.node.hasAttributeNS(this.project.ns, "mandatory") &&
+            this.node.getAttributeNS(this.project.ns, "mandatory") == "true"
+    }
+    this.setMandatory = function(r) {
+        this.project.setErAttr(this.node, "mandatory", r ? "true" : "false")
+    }
     this.destroy = function() {
         killNode(this.node)
         this.node = null
@@ -45,21 +52,16 @@ function Participation(node, project) {
                 'stroke-width': this.project.styles.lines.defaultStrokeWidth
             })
 
-            /*var line = [
-                [entc[0], entc[1]],
-                [rel[0], rel[1]]
-            ]
-            var ent_inters = ent.lineIntersect(line)
-            var arrowd = "M" + ent_inters[0][0] + "," + ent_inters[0][1] + "l -10,-10 m 10 10 l -10,10"
-            var lineInc = getLineInclination(line)
-            svgEl(parent, "path", {
+            //var line = [entc, rel]
+            //var lineInc = getLineInclination(line)
+
+            /*svgEl(parent, "path", {
                 "stroke": "red",
                 "stroke-width": "2",
                 "d": arrowd,
                 "transform": "rotate(" + lineInc + "," + ent_inters[0][0] + "," + ent_inters[0][1] + ")"
             })*/
             var d = "M " + entc[0] + "," + entc[1] + " L" + rel[0] + "," + rel[1]
-
             var path = svgEl(g, "path", {
                 d: d,
             })
@@ -69,6 +71,45 @@ function Participation(node, project) {
                 "stroke-opacity": 0,
                 "stroke-width": 16
             })
+            if (this.getMandatory()) {
+                //must be double
+                //trick: draw a thicker path; then mask the inside
+                //the mask is built overlaying a thin black path over a wide white path 
+                var inW = this.project.styles.lines.defaultStrokeWidth * 2
+                var outW = inW * 2
+                var defs = this.project.svg.getElementById("defs")
+                var maskid = "svg-" + this.getId() + "-mask"
+                var maskx = 0,
+                    masky = 0,
+                    maskw = "100%",
+                    maskh = "100%"
+                var mask = svgEl(defs, "mask", {
+                    id: maskid,
+                    maskUnits: "userSpaceOnUse",
+                    x: maskx,
+                    y: masky,
+                    height: maskh,
+                    width: maskw,
+                    maskContentUnits: "userSpaceOnUse",
+                })
+                svgEl(mask, "path", {
+                    d: d,
+                    stroke: "white",
+                    'stroke-width': outW
+                })
+                svgEl(mask, "path", {
+                    d: d,
+                    stroke: "black",
+                    'stroke-width': inW
+                })
+                path.setAttribute("mask", 'url(#' + maskid + ')')
+                path.setAttribute("stroke-width", outW)
+                    /*svgEl(g, "path", {
+                        d: d,
+                        stroke: 'white',
+                        'stroke-width': this.project.styles.lines.defaultStrokeWidth
+                    })*/
+            }
             var txt = svgEl(g, "text", {
                 x: (entc[0] + rel[0]) / 2 - 20,
                 y: (entc[1] + rel[1]) / 2 + 20,
@@ -120,6 +161,7 @@ function newParticipation(obj1, obj2) {
 }
 var multMax = document.getElementById("participationMultMax")
 var multMin = document.getElementById("participationMultMin")
+var partMandatory = document.getElementById("participationMandatory")
 multMax.addEventListener("change", function(ev) {
     var id = erp.selection.s[0]
     var e = erp.get(id)
@@ -132,6 +174,12 @@ multMin.addEventListener("change", function(ev) {
     e.setMultMin(this.value)
     erp.addState()
 })
+partMandatory.addEventListener("change", function() {
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    e.setMandatory(this.checked)
+    erp.addState()
+})
 
 
 function updateParticipationPanel() {
@@ -139,4 +187,5 @@ function updateParticipationPanel() {
     var e = erp.get(id)
     multMin.value = e.getMultMin()
     multMax.value = e.getMultMax()
+    partMandatory.checked = e.getMandatory()
 }

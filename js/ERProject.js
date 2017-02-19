@@ -162,6 +162,7 @@ function ERProject(svg) {
             this.curState -= 1
             this.erdoc = this.states[this.curState].cloneNode(true)
                 //this.selection.deselectAll()
+            this.selectionChanged()
             this.update()
         }
     }
@@ -170,12 +171,14 @@ function ERProject(svg) {
             this.curState += 1
             this.erdoc = this.states[this.curState].cloneNode(true)
                 //this.selection.deselectAll()
+            this.selectionChanged()
             this.update()
         }
     }
     this.draw = function() {
         this.svgAll = document.getElementById("svg-all")
         clearElement(this.svgAll)
+        clearElement(this.svg.getElementById("defs"))
 
         //
         //this.svgAll.parentNode.removeChild(this.svgAll)

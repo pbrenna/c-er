@@ -14,6 +14,7 @@
     <div id="outerFixed">
         <div id="scroller">
             <svg xmlns="http://www.w3.org/2000/svg" id="drawing-area" height="100%" width="100%">
+                <defs id="defs"></defs>
                 <g id="svg-all" transform="scale(1)"></g>
             </svg>
         </div>
@@ -90,10 +91,12 @@
                     <div class="tip">Press ENTER after editing the multiplicities</div> Multiplicity
                     <br style="clear:both" />
                     <label for="participationMultMin" class="indent">Min: </label>
-                    <input type="text" style="float:right" id="participationMultMin"></input>
+                    <input type="text" style="float:right" id="participationMultMin">
                     <br style="clear:both" />
                     <label for="participationMultMax" class="indent">Max: </label>
-                    <input type="text" style="float:right" id="participationMultMax"></input>
+                    <input type="text" style="float:right" id="participationMultMax">
+                    <br style="clear:both" />
+                    <input type="checkbox" id="participationMandatory" style="vertical-align: middle"> <label style="float:none; display:inline" for="participationMandatory">Mandatory</label>
                 </div>
             </div>
             <div id="panelGeneralization" class="panel">
