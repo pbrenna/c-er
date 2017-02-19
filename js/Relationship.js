@@ -131,8 +131,9 @@ function newRelationship(ev) {
     var name = "Relationship"
     var el = erp.mkErElement("relationship", erp.schema)
     var pos = erp.getMouseInDocument(ev)
-    erp.setViewAttr(el, "x", pos.x)
-    erp.setViewAttr(el, "y", pos.y)
+    var rounded = erp.alignToGrid(pos.x, pos.y)
+    erp.setViewAttr(el, "x", rounded[0])
+    erp.setViewAttr(el, "y", rounded[1])
     var c = new Concept(el, erp)
     c.setName(name)
     erp.addState()

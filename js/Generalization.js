@@ -25,6 +25,7 @@ function Generalization(node, project) {
             }
         }
         //then copy super's destructor
+        this.project.selection.deselectId(this.getId())
         killNode(this.node)
         this.project.refCleanScheduled = true
         this.node = null
@@ -102,6 +103,7 @@ function Generalization(node, project) {
         p.schema.insertBefore(ch.node, p.schema.firstChild)
         var cCenter = ch.getCenter()
         ch.setXY(cCenter[0] + p.grid / 2, cCenter[1] + p.grid / 2)
+        this.project.refCleanScheduled = true
     }
     this.intoParent = function() {
         this.destroy()
@@ -149,13 +151,13 @@ function Generalization(node, project) {
             var roundx = p.alignToGrid(posx, posy)[0]
             var xy = ch[x].getXY()
             ch[x].setXY(roundx, posy)
-                //killNode(ch[x].getG())
-                //ch[x].draw(childrenG, 0, 1)
-            if (ch[x].type == "Entity") {
-                ch[x].updateTranslate(roundx, posy)
-            } else {
-                ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
-            }
+            killNode(ch[x].getG())
+            ch[x].draw(childrenG, 0, 1)
+                /*if (ch[x].type == "Entity") {
+                    ch[x].updateTranslate(roundx, posy)
+                } else {
+                    ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
+                }*/
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin
         }
         //draw lines:
@@ -183,7 +185,6 @@ function Generalization(node, project) {
         var ch = this.getChildren()
         if (ch.length == 0) {
             this.intoParent()
-            console.log("intoParent")
             return
         }
         var pa = this.getParent()
@@ -240,6 +241,7 @@ var gct = document.getElementById("generalizationChildrenTable")
 function updateGeneralizationPanel() {
     clearElement(gct)
     var gen = erp.get(erp.selection.s[0])
+    if (!gen) return
     var ch = gen.getChildren()
     for (var x in ch) {
         var tr = mkEl(gct, "tr")

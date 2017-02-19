@@ -285,8 +285,17 @@ function ERProject(svg) {
     }
     this.selection.restore = function() {
         for (var x in this.s) {
-            that.get(this.s[x]).selectOn()
+            var obj = that.get(this.s[x])
+            if (obj)
+                obj.selectOn()
         }
+    }
+    this.selection.deselectId = function(id) {
+        var pos = this.s.indexOf(id)
+        if (pos >= 0) {
+            this.s.splice(pos, 1)
+        }
+        that.selectionChanged()
     }
     this.selection.deselectAll = function() {
         for (var x in this.s) {
