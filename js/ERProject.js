@@ -121,24 +121,22 @@ function ERProject(svg) {
         }
     }
     this.refClean = function() {
-        var path = "//@*[starts-with(local-name(), 'ref')]"
+        //var path = "//@*[starts-with(local-name(), 'ref')]"
+        //xpath can't be used because of internet explorer :(
         var that = this
-        var xpathRes = this.erdoc.evaluate(
-            path,
-            this.erdoc,
-            function(prefix) {
-                return that.nsMap[prefix];
-            },
-            XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
-            null)
-        for (var i = 0; i < xpathRes.snapshotLength; i++) {
-            var el = xpathRes.snapshotItem(i)
-            var ref = el.nodeValue
-            if (!this.getById(ref)) {
-                try {
-                    killNode(el.ownerElement)
-                } catch (e) {
-                    console.log("Could not remove reference: ", el, e)
+        var all = this.erdoc.getElementsByTagNameNS(this.ns, "*")
+        for (var x = 0; x < all.length; x++) {
+            var el = all[x]
+            var attrs = el.attributes
+            if (attrs) {
+                for (var y = 0; y < attrs.length; y++) {
+                    var a = attrs.item(y)
+                    if (a.localName.indexOf('ref') == 0) {
+                        var refId = attrs[y].value
+                        if (!this.get(refId)) {
+                            killNode(el)
+                        }
+                    }
                 }
             }
         }

@@ -93,20 +93,15 @@ function Concept(node, project) {
         var curx = xy[0] + x / this.project.zoom
         var cury = xy[1] + y / this.project.zoom
 
-        if (x != 0 || y != 0) {
+        var newCenter = this.project.alignToGrid(curx, cury)
+        var curx = newCenter[0]
+        var cury = newCenter[1]
+        if (curx - xy[0] != 0 || cury - xy[1] != 0) {
             this.project.setViewAttr(node, "x", max(curx, 0))
             this.project.setViewAttr(node, "y", max(cury, 0))
-            var center = this.getCenter();
-            var rCenter = [
-                Math.round(center[0] / this.project.grid) * this.project.grid,
-                Math.round(center[1] / this.project.grid) * this.project.grid
-            ]
-            curx -= center[0] - rCenter[0]
-            cury -= center[1] - rCenter[1]
-            this.project.setViewAttr(node, "x", max(curx, 0))
-            this.project.setViewAttr(node, "y", max(cury, 0))
-
             this.project.patchState(this.addStateNumber)
+        } else {
+            this.project.update()
         }
     }
     this.getCenter = function() {
