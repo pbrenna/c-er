@@ -51,13 +51,14 @@ function Concept(node, project) {
         this.project.refCleanScheduled = true
         this.node = null
     }
-    this.moveUp = function() {
+    this.bringUp = function() {
         var el = genTravelUp(this.node.parentNode)
-        if (el == this.project.schema)
+        if (el == this.project.schema) {
             mkLastChild(this.getG())
-        else {
+            mkLastChild(this.node)
+        } else {
             //console.log(this.project.wrap(el))
-            this.project.wrap(el).moveUp()
+            this.project.wrap(el).bringUp()
         }
     }
     this.getXY = function() {
@@ -78,9 +79,12 @@ function Concept(node, project) {
             var xy = this.getXY()
             var curx = xy[0] + x / this.project.zoom
             var cury = xy[1] + y / this.project.zoom
-            var g = this.getG()
-            g.transform.baseVal.getItem(0).setTranslate(max(curx, 0), max(cury, 0))
+            this.updateTranslate(curx, cury)
         }
+    }
+    this.updateTranslate = function(x, y) {
+        var g = this.getG()
+        g.transform.baseVal.getItem(0).setTranslate(max(x, 0), max(y, 0))
     }
     this.endDragXY = function(x, y) {
         var xy = this.getXY()
@@ -114,6 +118,20 @@ function Concept(node, project) {
     }
     this.getAttrPos = function() {
         return this.project.getViewAttr(this.node, "attr-pos") || "below"
+    }
+    this.checkConsistency = function() {
+        //normally empty, specialize if needed
+    }
+    this.moveUp = function() {
+        if (this.node.previousSibling)
+            this.node.parentNode.insertBefore(this.node, this.node.previousSibling)
+    }
+    this.moveDown = function() {
+        if (this.node.nextSibling && this.node.nextSibling.nextSibling) {
+            this.node.parentNode.insertBefore(this.node, this.node.nextSibling.nextSibling)
+        } else {
+            this.node.parentNode.appendChild(this.node)
+        }
     }
 }
 

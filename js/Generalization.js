@@ -2,25 +2,43 @@
 
 function Generalization(node, project) {
     Concept.apply(this, [node, project])
+    this.node = node
     this.type = "Generalization"
     var p = this.project
     this.destroy = function() {
         //destruction frees entities from the generalization
-        var p = this.getParent()
-        this.node.parentNode.appendChild(p.node) //might be another generalization
+        //in general it is good to move them somewhat
+        //to prevent them from being stuck under other entities
+        //that were on the right of the generalization tree;
+        //moving them up (z) would be bad because it would cover
+        //the remaining generalization lines and increase confusion
+        var pa = this.getParent()
+        if (pa) {
+            var pCenter = pa.getCenter()
+            pa.setXY(pCenter[0], pCenter[1] + p.grid)
+            this.node.parentNode.insertBefore(pa.node, this.node) //might be another generalization
+        }
         var ch = this.getChildren()
-        for (var x in ch) {
-            erp.schema.appendChild(ch[x].node)
+        if (ch) {
+            for (var x in ch) {
+                this.setFree(ch[x])
+            }
         }
         //then copy super's destructor
         killNode(this.node)
         this.project.refCleanScheduled = true
         this.node = null
     }
+    this.getName = function() {
+        return this.getParent().getName()
+    }
     this.setXY = function(x, y) {
         //a generalization does not have a position itself:
         //instead, it relies on the position of its parent concept.
         this.getParent().setXY(x, y)
+    }
+    this.getXY = function() {
+        return this.getParent().getXY()
     }
     this.getReservedSlotXY = function(n, pos) {
         return this.getParent().getReservedSlotXY(n, pos)
@@ -64,8 +82,7 @@ function Generalization(node, project) {
             }
             return ret
         } catch (e) {
-            console.log(e)
-            return null
+            return []
         }
     }
     this.setParent = function(pnode) {
@@ -81,17 +98,27 @@ function Generalization(node, project) {
         var cc = this.getCC()
         cc.removeChild(cnode)
     }
+    this.setFree = function(ch) {
+        p.schema.insertBefore(ch.node, p.schema.firstChild)
+        var cCenter = ch.getCenter()
+        ch.setXY(cCenter[0] + p.grid / 2, cCenter[1] + p.grid / 2)
+    }
+    this.intoParent = function() {
+        this.destroy()
+    }
     this.draw = function(parent, reserveSlotsBelow, reserveSlotsAbove) {
+        /*check if children exist, else morph into parent */
+        var ch = this.getChildren()
         var g = svgEl(parent, "g", {
             id: "svg-" + this.getId(),
-            "stroke": p.styles.normalStroke
+            "stroke": p.styles.normalStroke,
+            "transform": "translate(0,0)"
         })
         var pEl = this.getParent()
         reserveSlotsAbove = reserveSlotsAbove || 0
-        pEl.draw(g, 1, reserveSlotsAbove) //we reserve a slot below to connect the arrow
-        var pCenter = pEl.getCenter()
-        var ch = this.getChildren()
+        pEl.draw(g, ch.length != 0, reserveSlotsAbove) //we reserve a slot below to connect the arrow
 
+        var pCenter = pEl.getCenter()
         var childrenG = svgEl(g, "g")
 
         //foreach child, we draw it in place;
@@ -120,9 +147,15 @@ function Generalization(node, project) {
                 skip -= 1
             }
             var roundx = p.alignToGrid(posx, posy)[0]
+            var xy = ch[x].getXY()
             ch[x].setXY(roundx, posy)
-            killNode(ch[x].getG())
-            ch[x].draw(childrenG, 0, 1)
+                //killNode(ch[x].getG())
+                //ch[x].draw(childrenG, 0, 1)
+            if (ch[x].type == "Entity") {
+                ch[x].updateTranslate(roundx, posy)
+            } else {
+                ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
+            }
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin
         }
         //draw lines:
@@ -146,6 +179,19 @@ function Generalization(node, project) {
             p.selection.clicked(that, ev)
         })
     }
+    this.checkConsistency = function() {
+        var ch = this.getChildren()
+        if (ch.length == 0) {
+            this.intoParent()
+            console.log("intoParent")
+            return
+        }
+        var pa = this.getParent()
+        pa.checkConsistency()
+        for (var x in ch) {
+            ch[x].checkConsistency()
+        }
+    }
 }
 
 function genTravelUp(node) {
@@ -163,12 +209,15 @@ function newGeneralization(objs) {
         //this is already a generalization;
         el = up
     } else {
+        var before = erp.schema.lastChild
         if (up != erp.schema) {
             up = objs[0].node.parentNode
+            before = objs[0].node
         }
-        el = erp.mkErElement("generalization", up)
+        el = erp.mkErElement("generalization", up, {}, true)
         var pc = erp.mkErElement("parent-concept", el)
         var cc = erp.mkErElement("children-concepts", el)
+        up.insertBefore(el, before)
     }
     var g = new Generalization(el, erp)
 
@@ -183,5 +232,42 @@ function newGeneralization(objs) {
         }
     }
     erp.addState()
-        //erp.selection.set([el.getAttribute("id")])
+    erp.selection.set([el.getAttribute("id")])
+}
+
+var gct = document.getElementById("generalizationChildrenTable")
+
+function updateGeneralizationPanel() {
+    clearElement(gct)
+    var gen = erp.get(erp.selection.s[0])
+    var ch = gen.getChildren()
+    for (var x in ch) {
+        var tr = mkEl(gct, "tr")
+        var td1 = mkEl(tr, "td", { "font-size": 0 })
+        mkButtons(gen, ch[x], td1)
+        var td2 = mkEl(tr, "td")
+        td2.innerHTML = ch[x].getName()
+    }
+}
+
+function mkButtons(gen, ch, td) {
+
+    var up = mkEl(td, "div", { "class": "upAttr" })
+    up.addEventListener("click", function() {
+        ch.moveUp()
+        erp.addState()
+        updateGeneralizationPanel()
+    })
+    var del = mkEl(td, "div", { "class": "deleteAttr" })
+    del.addEventListener("click", function() {
+        gen.setFree(ch)
+        erp.addState()
+        updateGeneralizationPanel()
+    })
+    var down = mkEl(td, "div", { "class": "downAttr" })
+    down.addEventListener("click", function() {
+        ch.moveDown()
+        erp.addState()
+        updateGeneralizationPanel()
+    })
 }

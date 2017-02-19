@@ -34,7 +34,7 @@ function IsA(node, project) {
             var g = svgEl(parent, "g", {
                 id: "svg-" + this.getId(),
                 stroke: this.project.styles.normalStroke
-            })
+            }, true)
             var par = this.getParent()
             var ch = this.getChild()
             var parCenter = par.getCenter()
@@ -58,13 +58,17 @@ function IsA(node, project) {
                 d: pathd,
                 "stroke-opacity": 0
             })
-            ch.moveUp()
+            var chG = ch.getG()
+            chG.parentNode.insertBefore(g, chG)
             var that = this
             g.addEventListener("mousedown", function(ev) {
                 that.project.selection.clicked(that, ev)
             })
         }, this, [])
         p.scheduleDraw(cb)
+    }
+    this.checkConsistency = function() {
+
     }
 }
 

@@ -82,6 +82,7 @@ function ERProject(svg) {
         this.saved = false
         if (this.refCleanScheduled) {
             this.refClean()
+            this.checkConsistency()
             this.patchState(this.curState, true)
             this.refCleanScheduled = false
         }
@@ -103,7 +104,7 @@ function ERProject(svg) {
         this.scheduled = []
         this.resizeSvg()
     }
-    this.mkErElement = function(name, parent, attrDict) {
+    this.mkErElement = function(name, parent, attrDict, dontAppend) {
         var el = this.erdoc.createElementNS(this.ns, name)
         el.persist = {}
         var id = this.genId()
@@ -111,8 +112,18 @@ function ERProject(svg) {
         for (var attr in attrDict) {
             el.setAttributeNS(this.ns, attr, attrDict[attr])
         }
-        parent.appendChild(el)
+        if (!dontAppend)
+            parent.appendChild(el)
         return el
+    }
+    this.checkConsistency = function() {
+        var ch = this.schema.childNodes
+        for (var x = 0; x < ch.length; x++) {
+            var wr = this.wrap(ch[x])
+            if (wr) {
+                wr.checkConsistency()
+            }
+        }
     }
     this.refClean = function() {
         var path = "//@*[starts-with(local-name(), 'ref')]"
@@ -377,6 +388,9 @@ function ERProject(svg) {
                 break;
             case "Participation":
                 updateParticipationPanel();
+                break;
+            case "Generalization":
+                updateGeneralizationPanel();
                 break;
         }
         for (var p = 0; p < panels.length; p++) {

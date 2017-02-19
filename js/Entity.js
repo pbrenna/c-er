@@ -60,7 +60,8 @@ function Entity(node, project) {
         var that = this
         g.addEventListener('mousedown', function(ev) {
             mkLastChild(this)
-                //that.moveUp()
+                //if (that.isFree())
+            that.bringUp()
             erp.dragStart(that, ev)
         })
 

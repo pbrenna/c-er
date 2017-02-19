@@ -189,7 +189,7 @@ svg {
     padding: 0px;
 }
 
-td {
+.attrTable td {
     white-space: nowrap;
     font-size: 0
 }
@@ -246,6 +246,7 @@ label {
 
 td {
     padding: 0px 0px 4px 0px;
+    min-height: 20px;
 }
 
 #viewControls {

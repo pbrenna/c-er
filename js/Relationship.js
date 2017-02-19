@@ -72,7 +72,7 @@ function Relationship(node, project) {
         var that = this
         g.addEventListener('mousedown', function(ev) {
             mkLastChild(this)
-            that.moveUp()
+            that.bringUp()
             erp.dragStart(that, ev)
         })
 
