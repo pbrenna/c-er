@@ -246,30 +246,36 @@ function updateGeneralizationPanel() {
     for (var x in ch) {
         var tr = mkEl(gct, "tr")
         var td1 = mkEl(tr, "td", { "font-size": 0 })
-        mkButtons(gen, ch[x], td1)
         var td2 = mkEl(tr, "td")
-        td2.innerHTML = ch[x].getName()
+        mkButtons(gen, ch[x], td1, td2)
     }
 }
 
-function mkButtons(gen, ch, td) {
+function mkButtons(gen, ch, td1, td2) {
 
-    var up = mkEl(td, "div", { "class": "upAttr" })
+    var up = mkEl(td1, "div", { "class": "upAttr" })
     up.addEventListener("click", function() {
         ch.moveUp()
         erp.addState()
         updateGeneralizationPanel()
     })
-    var del = mkEl(td, "div", { "class": "deleteAttr" })
+    var del = mkEl(td1, "div", { "class": "deleteAttr" })
     del.addEventListener("click", function() {
         gen.setFree(ch)
         erp.addState()
         updateGeneralizationPanel()
     })
-    var down = mkEl(td, "div", { "class": "downAttr" })
+    var down = mkEl(td1, "div", { "class": "downAttr" })
     down.addEventListener("click", function() {
+        console.log("down")
         ch.moveDown()
         erp.addState()
         updateGeneralizationPanel()
     })
+    td2.innerHTML = "Entity: "
+    var link = mkEl(td2, "a", { href: "#", onclick: "return false" })
+    link.addEventListener("click", function() {
+        erp.selection.set([ch.getId()])
+    })
+    link.innerHTML = ch.getName()
 }

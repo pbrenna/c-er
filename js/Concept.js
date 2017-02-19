@@ -123,12 +123,12 @@ function Concept(node, project) {
         //normally empty, specialize if needed
     }
     this.moveUp = function() {
-        if (this.node.previousSibling)
-            this.node.parentNode.insertBefore(this.node, this.node.previousSibling)
+        if (this.node.previousElementSibling)
+            this.node.parentNode.insertBefore(this.node, this.node.previousElementSibling)
     }
     this.moveDown = function() {
-        if (this.node.nextSibling && this.node.nextSibling.nextSibling) {
-            this.node.parentNode.insertBefore(this.node, this.node.nextSibling.nextSibling)
+        if (this.node.nextElementSibling && this.node.nextElementSibling.nextElementSibling) {
+            this.node.parentNode.insertBefore(this.node, this.node.nextElementSibling.nextElementSibling)
         } else {
             this.node.parentNode.appendChild(this.node)
         }

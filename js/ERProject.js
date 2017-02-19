@@ -224,7 +224,7 @@ function ERProject(svg) {
         return el.setAttributeNS(this.ns, name, val)
     }
     this.styles = {
-        selectedStroke: "#d00",
+        selectedStroke: "#187c5a",
         normalStroke: "#000",
         defaultFont: "Arial,sans-serif",
         defaultFontSize: "14",
@@ -490,6 +490,16 @@ function ERProject(svg) {
             newParticipation(this.get(this.selection.s[0]), this.get(this.selection.s[1]))
         }
     }
+
+    this.zoomedScroll = function() {
+        return [scroller.scrollLeft / this.zoom, scroller.scrollTop / this.zoom]
+    }
+    this.alignToGrid = function(x, y) {
+        return [
+            Math.round(x / this.grid) * this.grid,
+            Math.round(y / this.grid) * this.grid
+        ]
+    }
     this.addGeneralization = function() {
         if (this.canAddGeneralization()) {
             var objs = []
@@ -498,10 +508,6 @@ function ERProject(svg) {
             }
             newGeneralization(objs)
         }
-    }
-
-    this.zoomedScroll = function() {
-        return [scroller.scrollLeft / this.zoom, scroller.scrollTop / this.zoom]
     }
     this.canAddGeneralization = function() {
         for (var x in this.selection.s) {
@@ -512,12 +518,6 @@ function ERProject(svg) {
                 return false
         }
         return true
-    }
-    this.alignToGrid = function(x, y) {
-        return [
-            Math.round(x / this.grid) * this.grid,
-            Math.round(y / this.grid) * this.grid
-        ]
     }
     this.canAddIsA = function() {
         if (this.selection.s.length != 2)
