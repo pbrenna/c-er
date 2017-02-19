@@ -161,7 +161,7 @@ function ERProject(svg) {
         if (this.curState > 0) {
             this.curState -= 1
             this.erdoc = this.states[this.curState].cloneNode(true)
-            this.selection.deselectAll()
+                //this.selection.deselectAll()
             this.update()
         }
     }
@@ -169,7 +169,7 @@ function ERProject(svg) {
         if (this.curState < this.states.length - 1) {
             this.curState += 1
             this.erdoc = this.states[this.curState].cloneNode(true)
-            this.selection.deselectAll()
+                //this.selection.deselectAll()
             this.update()
         }
     }
