@@ -186,11 +186,21 @@ function Generalization(node, project) {
         var path = p.svg.getElementById("svg-" + this.getId() + "genpath")
         path.style.stroke = p.styles.selectedStroke
         path.style.strokeWidth = p.styles.lines.selectedStrokeWidth
+        this.getParent().selectOn()
+        var ch = this.getChildren()
+        for (var x in ch) {
+            ch[x].selectOn()
+        }
     }
     this.selectOff = function() {
         var path = p.svg.getElementById("svg-" + this.getId() + "genpath")
         path.style.stroke = p.styles.normalStroke
         path.style.strokeWidth = p.styles.lines.defaultStrokeWidth
+        this.getParent().selectOff()
+        var ch = this.getChildren()
+        for (var x in ch) {
+            ch[x].selectOff()
+        }
     }
     this.checkConsistency = function() {
         var ch = this.getChildren()
@@ -283,7 +293,7 @@ function mkButtons(gen, ch, td1, td2) {
         erp.addState()
         updateGeneralizationPanel()
     })
-    td2.innerHTML = "Entity: "
+    td2.innerHTML = ch.type + ": "
     var link = mkEl(td2, "a", { href: "#", onclick: "return false" })
     link.addEventListener("click", function() {
         erp.selection.set([ch.getId()])

@@ -256,7 +256,7 @@ function ERProject(svg) {
         },
         relationship: {
             defaultH: 60,
-            defaultW: 180,
+            defaultW: 160,
             corners: 40,
             padding: 20,
             attrSpacing: 25,

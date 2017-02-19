@@ -283,3 +283,12 @@ td {
 .indent {
     padding-left: 10px;
 }
+
+.panel a {
+    color: #187c5a;
+    text-decoration: none;
+}
+
+.panel a:hover {
+    text-decoration: underline
+}
