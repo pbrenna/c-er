@@ -33,7 +33,8 @@ function Relationship(node, project) {
         var g = svgEl(parent, "g", {
             id: 'svg-' + this.getId(),
             transform: "translate(" + x + "," + y + ")",
-            stroke: p.styles.normalStroke
+            stroke: p.styles.normalStroke,
+            'stroke-width': p.styles.relationship.defaultStrokeWidth
         })
         var attrs = drawAttrs(g, this.getAttrs(), p.styles.relationship, 10, true, this.getAttrPos())
         var reqw = attrs.reqWidth + p.styles.relationship.corners * 2
@@ -45,7 +46,7 @@ function Relationship(node, project) {
             y: 5,
             'stroke-width': 0,
             'font-family': p.styles.defaultFont,
-            'font-size': p.styles.defaultFontSize
+            'font-size': p.styles.defaultFontSize,
         })
         text.textContent = p.getErAttr(node, "name")
         var textW = text.getBoundingClientRect().width / p.zoom
@@ -62,7 +63,6 @@ function Relationship(node, project) {
                 " l" + (w / 2) + "," + (-h / 2) +
                 " l" + (-w / 2) + "," + (-h / 2) + " Z",
             fill: "#ffffff",
-            'stroke-width': 1,
         })
         attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, 0)
         mkFirstChild(polygon)

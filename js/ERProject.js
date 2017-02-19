@@ -97,11 +97,6 @@ function ERProject(svg) {
         this.schema = this.erdoc.getElementsByTagNameNS(this.ns, "schema")[0]
         console.assert(this.schema != null)
         this.draw()
-        for (var x in this.scheduled) {
-            var cb = this.scheduled[x]
-            cb.exec()
-        }
-        this.scheduled = []
         this.resizeSvg()
     }
     this.mkErElement = function(name, parent, attrDict, dontAppend) {
@@ -204,6 +199,11 @@ function ERProject(svg) {
             var p = this.wrap(part[i])
             p.draw(this.svgAll)
         }*/
+        for (var x in this.scheduled) {
+            var cb = this.scheduled[x]
+            cb.exec()
+        }
+        this.scheduled = []
         this.selection.restore()
 
     }
@@ -225,19 +225,25 @@ function ERProject(svg) {
     }
     this.styles = {
         selectedStroke: "#187c5a",
-        normalStroke: "#000",
+        normalStroke: "#555",
         defaultFont: "Arial,sans-serif",
         defaultFontSize: "14",
+        defaultStrokeWidth: 1,
+        selectedStrokeWidth: 3,
         generalization: {
             height: 140,
             margin: 20,
             horizHeight: 100,
-            belowHorizHeight: 60
+            belowHorizHeight: 60,
+        },
+        lines: {
+            defaultStrokeWidth: 2,
+            selectedStrokeWidth: 3.5
         },
         entity: {
             padding: 5,
-            defaultH: 40,
-            defaultW: 140,
+            defaultH: 41,
+            defaultW: 139,
             corners: 25,
             attrSpacing: 25,
             attrLineH: 15,
@@ -352,12 +358,14 @@ function ERProject(svg) {
         dragging = []
         for (var x in this.selection.s) {
             var obj = this.get(this.selection.s[x])
-            obj.addStateNumber = this.curState + 1
-            obj.startX = ev.clientX
-            obj.startY = ev.clientY
-            obj.dragX = true
-            obj.dragY = true
-            dragging.push(obj)
+            if (obj.moveRelXY) {
+                obj.addStateNumber = this.curState + 1
+                obj.startX = ev.clientX
+                obj.startY = ev.clientY
+                obj.dragX = true
+                obj.dragY = true
+                dragging.push(obj)
+            }
         }
     }
     this.selectionChanged = function() {

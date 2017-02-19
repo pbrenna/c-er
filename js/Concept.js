@@ -69,10 +69,12 @@ function Concept(node, project) {
     this.selectOn = function() {
         var g = this.getG()
         g.style.stroke = this.project.styles.selectedStroke
+        g.style.strokeWidth = this.project.styles.selectedStrokeWidth
     }
     this.selectOff = function() {
         var g = this.getG()
         g.style.stroke = this.project.styles.normalStroke
+        g.style.strokeWidth = this.project.styles.defaultStrokeWidth
     }
     this.moveRelXY = function(x, y) {
         if (this.isFree()) {
@@ -213,18 +215,18 @@ function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position, 
     reserveSlotsRight = reserveSlotsRight || 0
     var posx = spacing * reserveSlotsLeft
     for (var i = 0; i < n; i++) {
+        var rposx = Math.round(posx)
         var att = attrs[i]
         var path = svgEl(g, "path", {
-            "d": "M" + posx + ",0 l0," + lineh
+            "d": "M" + rposx + ",0 l0," + lineh
         })
         var circle = svgEl(g, "circle", {
             cy: circley,
-            cx: posx,
+            cx: Math.round(rposx),
             r: rad,
-            'stroke-width': '1',
             fill: att.getIsPrimary() ? style.primaryFill : 'none'
         })
-        var textx = posx - attrDist
+        var textx = rposx - attrDist
         var text = svgEl(g, "text", {
             x: textx,
             y: texty,
@@ -234,7 +236,7 @@ function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position, 
             "dominant-baseline": "middle",
             "stroke-width": "0",
             'text-anchor': textAnchor,
-            'transform': "rotate(" + style.attrRotationDeg + "," + posx + "," + texty + ")"
+            'transform': "rotate(" + style.attrRotationDeg + "," + rposx + "," + texty + ")"
         })
         text.textContent = att.getName()
         posx += spacing

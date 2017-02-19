@@ -23,7 +23,8 @@ function Entity(node, project) {
         var g = svgEl(parent, "g", {
             id: 'svg-' + this.getId(),
             transform: "translate(" + x + "," + y + ")",
-            stroke: p.styles.normalStroke
+            stroke: p.styles.normalStroke,
+            'stroke-width': p.styles.entity.defaultStrokeWidth
         })
         var reserveSlotsLeft = this.getAttrPos() == "above" ? reserveSlotsAbove : 0
         var reserveSlotsRight = this.getAttrPos() == "below" ? reserveSlotsBelow : 0
@@ -32,7 +33,7 @@ function Entity(node, project) {
         var reqw = attrs.reqWidth + p.styles.entity.corners * 2
         w = max(reqw, w)
         var attrX = -(reqw / 2) + p.styles.entity.corners
-        attrs.g.transform.baseVal.getItem(0).setTranslate(attrX, 0)
+        attrs.g.transform.baseVal.getItem(0).setTranslate(Math.round(attrX) - 0.5, 0)
         var text = svgEl(g, "text", {
             'text-anchor': 'middle',
             x: 0,
@@ -49,7 +50,6 @@ function Entity(node, project) {
             id: "svg-" + this.getId() + "-rect",
             width: w,
             fill: "#ffffff",
-            'stroke-width': 1,
             x: -w / 2,
             y: -h / 2
         })

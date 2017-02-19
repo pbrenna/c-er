@@ -15,13 +15,17 @@ function IsA(node, project) {
         return this.project.getElId(this.node)
     }
     this.selectOn = function() {
-        this.getG().style.stroke = this.project.styles.selectedStroke
+        var g = this.getG()
+        g.style.stroke = this.project.styles.selectedStroke
+        g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
     }
     this.getG = function() {
         return this.project.svg.getElementById('svg-' + this.getId())
     }
     this.selectOff = function() {
-        this.getG().style.stroke = this.project.styles.normalStroke
+        var g = this.getG()
+        g.style.stroke = this.project.styles.normalStroke
+        g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
     }
     this.getParent = function() {
         return p.get(p.getErAttr(this.node, "ref-parent"))
@@ -33,7 +37,8 @@ function IsA(node, project) {
         var cb = new Callback(function() {
             var g = svgEl(parent, "g", {
                 id: "svg-" + this.getId(),
-                stroke: this.project.styles.normalStroke
+                stroke: this.project.styles.normalStroke,
+                "stroke-width": this.project.styles.lines.defaultStrokeWidth
             }, true)
             var par = this.getParent()
             var ch = this.getChild()
@@ -44,13 +49,11 @@ function IsA(node, project) {
             var arrowd = "M" + line_inters[0][0] + "," + line_inters[0][1] + "l -8,-5 m 8 5 l -8,5 m8,-5"
             var lineInc = getLineInclination(line)
             svgEl(g, "path", {
-                "stroke-width": "2",
                 "d": arrowd,
                 "transform": "rotate(" + lineInc + "," + line_inters[0][0] + "," + line_inters[0][1] + ")"
             })
             var pathd = "M" + line_inters[0][0] + "," + line_inters[0][1] + "L" + chCenter[0] + "," + chCenter[1]
             svgEl(g, "path", {
-                "stroke-width": 2,
                 d: pathd
             })
             svgEl(g, "path", {

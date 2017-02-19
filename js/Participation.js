@@ -41,7 +41,8 @@ function Participation(node, project) {
             var entc = ent.getCenter()
             var g = svgEl(parent, "g", {
                 id: "svg-" + this.getId(),
-                stroke: this.project.styles.normalStroke
+                stroke: this.project.styles.normalStroke,
+                'stroke-width': this.project.styles.lines.defaultStrokeWidth
             })
 
             /*var line = [
@@ -61,7 +62,6 @@ function Participation(node, project) {
 
             var path = svgEl(g, "path", {
                 d: d,
-                "stroke-width": 2
             })
             var transp = svgEl(g, "path", {
                 d: d,
@@ -96,10 +96,14 @@ function Participation(node, project) {
         p.scheduleDraw(cb)
     }
     this.selectOn = function() {
-        this.getG().style.stroke = this.project.styles.selectedStroke
+        var g = this.getG()
+        g.style.stroke = this.project.styles.selectedStroke
+        g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
     }
     this.selectOff = function() {
-        this.getG().style.stroke = this.project.styles.normalStroke
+        var g = this.getG()
+        g.style.stroke = this.project.styles.normalStroke
+        g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
     }
 }
 

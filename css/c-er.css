@@ -128,12 +128,19 @@ button {
     border: 1px solid #aaa;
     padding: 5px;
     margin: 0px 5px 10px 0px;
+    color: #000;
 }
 
 button.on,
 button:active {
-    background: #555;
+    background: #187c5a;
     color: #fff;
+}
+
+button[disabled],
+button[disabled]:active {
+    background: #ddd;
+    color: #aaa;
 }
 
 svg {
@@ -167,7 +174,7 @@ svg {
     height: 19px;
     width: 19px;
     float: right;
-    background-image: url(../img/delete.png);
+    background-image: url(../img/delete.svg);
     cursor: pointer;
 }
 
@@ -190,10 +197,17 @@ svg {
     cursor: pointer;
 }
 
-.upAttr:hover,
+.upAttr:hover {
+    background-image: url(../img/up_hover.svg)
+}
+
 .deleteAttr:hover,
+.delete:hover {
+    background-image: url(../img/delete_hover.svg)
+}
+
 .downAttr:hover {
-    background-color: #ddf;
+    background-image: url(../img/down_hover.svg)
 }
 
 .attrTable td {
@@ -202,15 +216,15 @@ svg {
 }
 
 .deleteAttr {
-    background-image: url(../img/delete.png);
+    background-image: url(../img/delete.svg);
 }
 
 .upAttr {
-    background-image: url(../img/up.png);
+    background-image: url(../img/up.svg);
 }
 
 .downAttr {
-    background-image: url(../img/down.png);
+    background-image: url(../img/down.svg);
 }
 
 .tip {

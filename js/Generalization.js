@@ -163,23 +163,34 @@ function Generalization(node, project) {
         //draw lines:
         //draw arrow
         var xy = pEl.getReservedSlotXY(1, "below")
+        xy[0] = Math.round(xy[0]) //apply hinting
         var d = "M" + xy[0] + "," + xy[1] + "l-5,8 m 5,-8 l5,8"
             //descend to horizontal line level
         var genNode = [xy[0], pCenter[1] + p.styles.generalization.horizHeight]
-        d += "M" + xy[0] + "," + xy[1] + " L" + genNode[0] + "," + genNode[1] + " "
+        d += "M" + xy[0] + "," + xy[1] + " V" + genNode[1] + " "
         for (var x in ch) {
             var chxy = ch[x].getReservedSlotXY(1, "above")
             d += "M" + genNode[0] + "," + genNode[1]
-            d += "L" + chxy[0] + "," + genNode[1]
-            d += "L" + chxy[0] + "," + chxy[1]
+            d += "H" + Math.round(chxy[0]) + " "
+            d += "V" + chxy[1] + " "
         }
         var pathg = svgEl(g, "g")
-        svgEl(pathg, "path", { d: d, "stroke-width": 2, "fill": "none" })
+        svgEl(pathg, "path", { d: d, "stroke-width": p.styles.lines.defaultStrokeWidth, "id": "svg-" + this.getId() + "genpath", "fill": "none" })
         svgEl(pathg, "path", { d: d, "stroke-width": 16, "stroke-opacity": 0, "fill": "none" })
         var that = this
         pathg.addEventListener("click", function(ev) {
             p.selection.clicked(that, ev)
         })
+    }
+    this.selectOn = function() {
+        var path = p.svg.getElementById("svg-" + this.getId() + "genpath")
+        path.style.stroke = p.styles.selectedStroke
+        path.style.strokeWidth = p.styles.lines.selectedStrokeWidth
+    }
+    this.selectOff = function() {
+        var path = p.svg.getElementById("svg-" + this.getId() + "genpath")
+        path.style.stroke = p.styles.normalStroke
+        path.style.strokeWidth = p.styles.lines.defaultStrokeWidth
     }
     this.checkConsistency = function() {
         var ch = this.getChildren()

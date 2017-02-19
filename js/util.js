@@ -59,7 +59,7 @@ document.addEventListener("mouseup", function(ev) {
                 } else if (d.dragY) {
                     d.endDragY(ev.clientY - d.startX)
                 }
-            } catch (e) {}
+            } catch (e) { console.log(e) }
         }
         dragging = []
     }
