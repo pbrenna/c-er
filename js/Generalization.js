@@ -100,10 +100,12 @@ function Generalization(node, project) {
         cc.removeChild(cnode)
     }
     this.setFree = function(ch) {
-        p.schema.insertBefore(ch.node, p.schema.firstChild)
+        p.schema.appendChild(ch.node)
         var cCenter = ch.getCenter()
         ch.setXY(cCenter[0] + p.grid / 2, cCenter[1] + p.grid / 2)
         this.project.refCleanScheduled = true
+            //select the freed node
+        p.selection.set([ch.getId()])
     }
     this.intoParent = function() {
         this.destroy()
@@ -262,7 +264,7 @@ var gct = document.getElementById("generalizationChildrenTable")
 function updateGeneralizationPanel() {
     clearElement(gct)
     var gen = erp.get(erp.selection.s[0])
-    if (!gen) return
+    if (gen.type != "Generalization") return
     var ch = gen.getChildren()
     for (var x in ch) {
         var tr = mkEl(gct, "tr")
