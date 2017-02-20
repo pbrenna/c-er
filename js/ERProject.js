@@ -268,6 +268,9 @@ function ERProject(svg) {
             attrDist: 10,
             attrFontSize: 12,
             attrRotationDeg: -40
+        },
+        participation: {
+            fontSize: 14
         }
     }
     this.selection = {}

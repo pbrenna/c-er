@@ -61,8 +61,8 @@
             <er:attr id="er6" er:name="surname" er:primary="false"/>
         </er:entity>
         <er:relationship id="er43" v:x="980" v:y="540" er:name="Chases">
-            <er:participation id="er44" er:ref-entity="er25" er:mult-min="0" er:mult-max="n"/>
-            <er:participation id="er45" er:ref-entity="er42" er:mult-min="0" er:mult-max="n"/>
+            <er:participation id="er44" er:ref-entity="er25" er:mult-min="0" er:mult-max="n" er:role="chaser"/>
+            <er:participation id="er45" er:ref-entity="er42" er:mult-min="0" er:mult-max="n" er:role="chased"/>
         </er:relationship>
         <er:entity id="er40" v:x="400" v:y="120" er:name="Animal"/>
         <er:is-a id="er46" er:ref-parent="er40" er:ref-child="er3"/>

@@ -129,9 +129,14 @@ function Participation(node, project) {
                 'text-anchor': anchor,
                 'dominant-baseline': baseline,
                 "stroke-width": 0,
+                'font-size': this.project.styles.participation.fontSize,
                 'font-family': this.project.styles.defaultFont
             })
-            txt.textContent = "(" + this.getMultMin() + ", " + this.getMultMax() + ")"
+            var r
+            if (r = this.getRole()) {
+                txt.textContent = this.getRole() + ", "
+            }
+            txt.textContent += this.getMultMin() + ":" + this.getMultMax()
                 /* var box = txt.getBoundingClientRect()
                  var bgrect = svgEl(g, "rect", {
                      fill: "white",
@@ -161,6 +166,12 @@ function Participation(node, project) {
         g.style.stroke = this.project.styles.normalStroke
         g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
     }
+    this.getRole = function() {
+        return p.getErAttr(this.node, "role") || ""
+    }
+    this.setRole = function(role) {
+        p.setErAttr(this.node, "role", role)
+    }
 }
 
 function newParticipation(obj1, obj2) {
@@ -174,9 +185,16 @@ function newParticipation(obj1, obj2) {
     erp.addState()
     erp.selection.set([id])
 }
+var partRole = document.getElementById("participationRole")
 var multMax = document.getElementById("participationMultMax")
 var multMin = document.getElementById("participationMultMin")
 var partMandatory = document.getElementById("participationMandatory")
+partRole.addEventListener("change", function() {
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    e.setRole(this.value)
+    erp.addState()
+})
 multMax.addEventListener("change", function(ev) {
     var id = erp.selection.s[0]
     var e = erp.get(id)
@@ -200,6 +218,7 @@ partMandatory.addEventListener("change", function() {
 function updateParticipationPanel() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
+    partRole.value = e.getRole()
     multMin.value = e.getMultMin()
     multMax.value = e.getMultMax()
     partMandatory.checked = e.getMandatory()

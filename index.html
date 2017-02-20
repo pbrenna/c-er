@@ -88,13 +88,16 @@
                 <div class="innerPanel">
                     <h1>Edit participation</h1>
                     <div class="delete" onclick="erp.deleteSelection()"></div>
-                    <div class="tip">Press ENTER after editing the multiplicities</div> Multiplicity
-                    <br style="clear:both" />
-                    <label for="participationMultMin" class="indent">Min: </label>
-                    <input type="text" style="float:right" id="participationMultMin">
-                    <br style="clear:both" />
-                    <label for="participationMultMax" class="indent">Max: </label>
-                    <input type="text" style="float:right" id="participationMultMax">
+                    <div class="tip">Press ENTER after editing the multiplicities</div>
+                    <label for="participationRole">Role:</label>
+                    <input type="text" style="float:right" id="participationRole"></input>
+                    <div style="clear:both;padding-top:4px;"> Multiplicies:
+                        <div style="float:right">
+                            <input type="text" style="float:none; width:74px" id="participationMultMin">
+                            <span style="display:inline-block;width: 20px;text-align:center"> - </span>
+                            <input type="text" style="float:none; width:74px" id="participationMultMax">
+                        </div>
+                    </div>
                     <br style="clear:both" />
                     <input type="checkbox" id="participationMandatory" style="vertical-align: middle"> <label style="float:none; display:inline" for="participationMandatory">Mandatory</label>
                 </div>
