@@ -52,8 +52,9 @@ function Participation(node, project) {
                 'stroke-width': this.project.styles.lines.defaultStrokeWidth
             })
 
-            //var line = [entc, rel]
-            //var lineInc = getLineInclination(line)
+            var line = [rel, entc]
+            var lineInc = getLineInclination(line)
+            var line_inters = ent.lineIntersect(line)
 
             /*svgEl(parent, "path", {
                 "stroke": "red",
@@ -110,23 +111,37 @@ function Participation(node, project) {
                         'stroke-width': this.project.styles.lines.defaultStrokeWidth
                     })*/
             }
+            if (lineInc < 0) lineInc += 360
+            var baseline = lineInc >= 180 ? "auto" : "hanging"
+            var anchor = (lineInc + 90) % 360 >= 180 ? "end" : "start"
+            var tinc = lineInc % 180
+            if (tinc >= 90) tinc -= 180
+            if (lineInc == 90) {
+                tinc = 90;
+                anchor = "start"
+            }
+            var dy = lineInc >= 180 ? -7 : 2
+            var dx = anchor == "end" ? -5 : 5
             var txt = svgEl(g, "text", {
-                x: (entc[0] + rel[0]) / 2 - 20,
-                y: (entc[1] + rel[1]) / 2 + 20,
+                x: line_inters[0][0] + dx,
+                y: line_inters[0][1] + dy,
+                'transform': 'rotate(' + tinc + ',' + line_inters[0][0] + ',' + (line_inters[0][1]) + ')',
+                'text-anchor': anchor,
+                'dominant-baseline': baseline,
                 "stroke-width": 0,
                 'font-family': this.project.styles.defaultFont
             })
             txt.textContent = "(" + this.getMultMin() + ", " + this.getMultMax() + ")"
-            var box = txt.getBoundingClientRect()
-            var bgrect = svgEl(g, "rect", {
-                fill: "white",
-                x: box.left / p.zoom + scroller.scrollLeft / p.zoom,
-                y: box.top / p.zoom + scroller.scrollTop / p.zoom,
-                width: box.width / p.zoom,
-                height: box.height / p.zoom,
-                "stroke-width": 0
-            })
-            mkFirstChild(bgrect)
+                /* var box = txt.getBoundingClientRect()
+                 var bgrect = svgEl(g, "rect", {
+                     fill: "white",
+                     x: box.left / p.zoom + scroller.scrollLeft / p.zoom,
+                     y: box.top / p.zoom + scroller.scrollTop / p.zoom,
+                     width: box.width / p.zoom,
+                     height: box.height / p.zoom,
+                     "stroke-width": 0
+                 })
+                 mkFirstChild(bgrect)*/
             mkFirstChild(path)
             mkFirstChild(g)
             var that = this
