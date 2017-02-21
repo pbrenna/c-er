@@ -110,6 +110,21 @@ function Generalization(node, project) {
     this.intoParent = function() {
         this.destroy()
     }
+    this.oldUpdateTranslate = this.updateTranslate
+    this.updateTranslate = function(x, y) {
+        var old = this.getXY()
+        var dx = x
+        this.oldUpdateTranslate(x, y)
+        var pa = this.getParent()
+        var pxy = pa.getXY()
+        pa.setXY(pxy[0] + dx, pxy[1])
+        var ch = this.getChildren()
+        console.log(old[0], x)
+        for (var x in ch) {
+            var cxy = ch[x].getXY()
+            ch[x].setXY(cxy[0] + dx, cxy[1])
+        }
+    }
     this.draw = function(parent, reserveSlotsBelow, reserveSlotsAbove) {
         /*check if children exist, else morph into parent */
         var ch = this.getChildren()
@@ -153,13 +168,14 @@ function Generalization(node, project) {
             var roundx = p.alignToGrid(posx, posy)[0]
             var xy = ch[x].getXY()
             ch[x].setXY(roundx, posy)
-            killNode(ch[x].getG())
-            ch[x].draw(childrenG, 0, 1)
-                /*if (ch[x].type == "Entity") {
-                    ch[x].updateTranslate(roundx, posy)
-                } else {
-                    ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
-                }*/
+                /*killNode(ch[x].getG())
+                ch[x].draw(childrenG, 0, 1)*/
+            if (ch[x].type == "Entity") {
+                ch[x].updateTranslate(roundx, posy)
+                    //ch[x].setXY(roundx + xy[0], posy)
+            } else {
+                ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
+            }
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin
         }
         //draw lines:
@@ -173,7 +189,7 @@ function Generalization(node, project) {
         for (var x in ch) {
             var chxy = ch[x].getReservedSlotXY(1, "above")
             d += "M" + genNode[0] + "," + genNode[1]
-            d += "H" + Math.round(chxy[0]) + " "
+            d += "H" + (Math.round(chxy[0])) + " "
             d += "V" + chxy[1] + " "
         }
         var pathg = svgEl(g, "g")
