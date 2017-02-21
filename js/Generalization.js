@@ -110,15 +110,19 @@ function Generalization(node, project) {
     this.intoParent = function() {
         this.destroy()
     }
-    this.oldUpdateTranslate = this.updateTranslate
-    this.updateTranslate = function(x, y) {
-        var old = this.getXY()
-        var dx = x
-        this.oldUpdateTranslate(x, y)
+    this.transRight = function(dx) {
+        var pa = this.getParent()
+        var pxy = pa.getXY()
+        pa.setXY(pxy[0] + dx, pxy[1])
         var ch = this.getChildren()
         for (var x in ch) {
-            var cxy = ch[x].getXY()
-            ch[x].setXY(cxy[0] + dx, cxy[1])
+            if (ch[x].type == "Entity") {
+                var cxy = ch[x].getXY()
+                ch[x].setXY(cxy[0] + dx, cxy[1])
+            } else {
+                ch[x].transRight(dx)
+                    //console.log("nope", pxy[0], x, old[0])
+            }
         }
     }
     this.draw = function(parent, reserveSlotsBelow, reserveSlotsAbove) {
@@ -152,6 +156,7 @@ function Generalization(node, project) {
         }
         //foreach child, we redraw it translated just enough
         var skip = 1
+        var initialPosx = posx
         for (var x in ch) {
             var bbox = ch[x].getG().getBoundingClientRect()
             var rbbox = ch[x].getRect().getBoundingClientRect()
@@ -163,14 +168,19 @@ function Generalization(node, project) {
             }
             var roundx = p.alignToGrid(posx, posy)[0]
             var xy = ch[x].getXY()
-            ch[x].setXY(roundx, posy)
+                /*code for redraw*/
                 /*killNode(ch[x].getG())
                 ch[x].draw(childrenG, 0, 1)*/
+
+            /*code for incremental translation: faster but buggier*/
+
             if (ch[x].type == "Entity") {
                 ch[x].updateTranslate(roundx, posy)
                     //ch[x].setXY(roundx + xy[0], posy)
+                ch[x].setXY(roundx, posy)
             } else {
                 ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
+                ch[x].transRight(roundx - xy[0])
             }
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin
         }
