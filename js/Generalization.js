@@ -111,17 +111,19 @@ function Generalization(node, project) {
         this.destroy()
     }
     this.transRight = function(dx) {
-        var pa = this.getParent()
-        var pxy = pa.getXY()
-        pa.setXY(pxy[0] + dx, pxy[1])
-        var ch = this.getChildren()
-        for (var x in ch) {
-            if (ch[x].type == "Entity") {
-                var cxy = ch[x].getXY()
-                ch[x].setXY(cxy[0] + dx, cxy[1])
-            } else {
-                ch[x].transRight(dx)
-                    //console.log("nope", pxy[0], x, old[0])
+        if (dx != 0) {
+            var pa = this.getParent()
+            var pxy = pa.getXY()
+            pa.setXY(pxy[0] + dx, pxy[1])
+            var ch = this.getChildren()
+            for (var x in ch) {
+                if (ch[x].type == "Entity") {
+                    var cxy = ch[x].getXY()
+                    ch[x].setXY(cxy[0] + dx, cxy[1])
+                } else {
+                    ch[x].transRight(dx)
+                        //console.log("nope", pxy[0], x, old[0])
+                }
             }
         }
     }
