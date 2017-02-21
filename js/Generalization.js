@@ -115,11 +115,7 @@ function Generalization(node, project) {
         var old = this.getXY()
         var dx = x
         this.oldUpdateTranslate(x, y)
-        var pa = this.getParent()
-        var pxy = pa.getXY()
-        pa.setXY(pxy[0] + dx, pxy[1])
         var ch = this.getChildren()
-        console.log(old[0], x)
         for (var x in ch) {
             var cxy = ch[x].getXY()
             ch[x].setXY(cxy[0] + dx, cxy[1])
@@ -306,7 +302,6 @@ function mkButtons(gen, ch, td1, td2) {
     })
     var down = mkEl(td1, "div", { "class": "downAttr" })
     down.addEventListener("click", function() {
-        console.log("down")
         ch.moveDown()
         erp.addState()
         updateGeneralizationPanel()
