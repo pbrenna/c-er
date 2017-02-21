@@ -110,6 +110,21 @@ function Generalization(node, project) {
     this.intoParent = function() {
         this.destroy()
     }
+    this.transRight = function(dx) {
+        var pa = this.getParent()
+        var pxy = pa.getXY()
+        pa.setXY(pxy[0] + dx, pxy[1])
+        var ch = this.getChildren()
+        for (var x in ch) {
+            if (ch[x].type == "Entity") {
+                var cxy = ch[x].getXY()
+                ch[x].setXY(cxy[0] + dx, cxy[1])
+            } else {
+                ch[x].transRight(dx)
+                    //console.log("nope", pxy[0], x, old[0])
+            }
+        }
+    }
     this.draw = function(parent, reserveSlotsBelow, reserveSlotsAbove) {
         /*check if children exist, else morph into parent */
         var ch = this.getChildren()
@@ -141,6 +156,7 @@ function Generalization(node, project) {
         }
         //foreach child, we redraw it translated just enough
         var skip = 1
+        var initialPosx = posx
         for (var x in ch) {
             var bbox = ch[x].getG().getBoundingClientRect()
             var rbbox = ch[x].getRect().getBoundingClientRect()
@@ -152,14 +168,20 @@ function Generalization(node, project) {
             }
             var roundx = p.alignToGrid(posx, posy)[0]
             var xy = ch[x].getXY()
-            ch[x].setXY(roundx, posy)
-            killNode(ch[x].getG())
-            ch[x].draw(childrenG, 0, 1)
-                /*if (ch[x].type == "Entity") {
-                    ch[x].updateTranslate(roundx, posy)
-                } else {
-                    ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
-                }*/
+                /*code for redraw*/
+                /*killNode(ch[x].getG())
+                ch[x].draw(childrenG, 0, 1)*/
+
+            /*code for incremental translation: faster but buggier*/
+
+            if (ch[x].type == "Entity") {
+                ch[x].updateTranslate(roundx, posy)
+                    //ch[x].setXY(roundx + xy[0], posy)
+                ch[x].setXY(roundx, posy)
+            } else {
+                ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
+                ch[x].transRight(roundx - xy[0])
+            }
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin
         }
         //draw lines:
@@ -173,7 +195,7 @@ function Generalization(node, project) {
         for (var x in ch) {
             var chxy = ch[x].getReservedSlotXY(1, "above")
             d += "M" + genNode[0] + "," + genNode[1]
-            d += "H" + Math.round(chxy[0]) + " "
+            d += "H" + (Math.round(chxy[0])) + " "
             d += "V" + chxy[1] + " "
         }
         var pathg = svgEl(g, "g")
@@ -290,7 +312,6 @@ function mkButtons(gen, ch, td1, td2) {
     })
     var down = mkEl(td1, "div", { "class": "downAttr" })
     down.addEventListener("click", function() {
-        console.log("down")
         ch.moveDown()
         erp.addState()
         updateGeneralizationPanel()
