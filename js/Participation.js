@@ -79,6 +79,8 @@ function Participation(node, project) {
                         "d": arrowd,
                         "transform": "rotate(" + lineInc + "," + ent_inters[0][0] + "," + ent_inters[0][1] + ")"
                     })*/
+                if (line_inters.length < 1)
+                    return;
                 var d = "M " + entc[0] + "," + entc[1] + " L" + rel[0] + "," + rel[1]
                 var path = svgEl(pathG, "path", {
                     d: d,
