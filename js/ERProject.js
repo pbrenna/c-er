@@ -475,12 +475,11 @@ function ERProject(svg) {
         svg2.setAttribute("width", bbox.width)
         this.zoom = oldzoom
         this.applyZoom()
-        console.log(bbox)
         svgallNew.transform.baseVal.getItem(0).setTranslate(-bbox.left - scroller.scrollLeft, -bbox.top - scroller.scrollTop)
         var xml = new XMLSerializer().serializeToString(svg2)
         canvas.width = bbox.width
         canvas.height = bbox.height
-        img.src = "data:image/svg+xml;base64," + btoa(xml)
+        img.src = "data:image/svg+xml;base64," + b64EncodeUnicode(xml)
         var ctx = canvas.getContext('2d')
         img.onload = function() {
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);

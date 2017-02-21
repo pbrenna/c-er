@@ -194,3 +194,9 @@ function getLineInclination(line) {
         y2 = line[1][1]
     return Math.atan2((y1 - y2), (x1 - x2)) * (180 / Math.PI)
 }
+//http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+function b64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+    }));
+}
