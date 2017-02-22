@@ -232,7 +232,7 @@ function ERProject(svg) {
         selectedStroke: "#187c5a",
         normalStroke: "#555",
         defaultFont: "Arial,sans-serif",
-        defaultFontSize: "14",
+        defaultFontSize: 16,
         defaultStrokeWidth: 1,
         selectedStrokeWidth: 3,
         generalization: {
@@ -256,7 +256,7 @@ function ERProject(svg) {
             primaryFill: "#000",
             attrOffset: 4,
             attrDist: 10,
-            attrFontSize: 12,
+            attrFontSize: 14,
             attrRotationDeg: -40
         },
         relationship: {
@@ -270,7 +270,7 @@ function ERProject(svg) {
             primaryFill: "#000",
             attrOffset: 4,
             attrDist: 10,
-            attrFontSize: 12,
+            attrFontSize: 14,
             attrRotationDeg: -40
         },
         participation: {
