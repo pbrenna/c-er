@@ -496,9 +496,13 @@ function ERProject(svg) {
             ctx.fillStyle = "#f6f7f8";
             ctx.fill();
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-            canvas.toBlob(function(blob) {
-                download(blob, that.pname + ".er.png", "image/png")
-            }, "image/png", 1)
+            if (canvas.toBlob) {
+                canvas.toBlob(function(blob) {
+                    download(blob, that.pname + ".er.png", "image/png")
+                }, "image/png", 1)
+            } else {
+                window.open(canvas.toDataURL("image/png"), "_blank")
+            }
         }
     }
     this.canAddParticipation = function() {
