@@ -491,7 +491,11 @@ function ERProject(svg) {
             return
         }
         img.onload = function() {
-            ctx.drawImage(img, 0, 0, max(1, canvas.width), max(1, canvas.height))
+            ctx.beginPath();
+            ctx.rect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#f6f7f8";
+            ctx.fill();
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
             canvas.toBlob(function(blob) {
                 download(blob, that.pname + ".er.png", "image/png")
             }, "image/png", 1)
