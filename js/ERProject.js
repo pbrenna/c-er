@@ -500,9 +500,22 @@ function ERProject(svg) {
                 canvas.toBlob(function(blob) {
                     download(blob, that.pname + ".er.png", "image/png")
                 }, "image/png", 1)
-            } else if (canvas.msToBlob) {
-                var blob = canvas.msToBlob();
-                window.navigator.msSaveBlob(blob, that.pname + '.er.png');
+            } else {
+                try {
+                    var blob = canvas.msToBlob()
+                    window.navigator.msSaveBlob(blob, that.pname + '.er.png')
+                } catch (e){
+                    var w = window.open()
+                    var d = w.document
+                    d.body.style.fontFamily = "sans-serif"
+                    var el = d.createElement("span")
+                    var c = img.cloneNode()
+                    c.style.display = "block"
+                    d.adoptNode(c)
+                    el.innerHTML = "Right click on the image and select 'save as PNG'.<br/><br/>"
+                    d.body.appendChild(el)
+                    d.body.appendChild(c)
+                }
             }
         }
     }
