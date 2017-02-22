@@ -195,18 +195,22 @@ function Participation(node, project) {
         p.scheduleDraw(cb)
     }
     this.selectOn = function() {
-        var sp = this.getSpanner()
-        sp.style.fill = this.project.styles.selectedStroke
-        var g = this.getPathG()
-        g.style.stroke = this.project.styles.selectedStroke
-        g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
+        try { //participation might not be drawn if entity and relationship overlap
+            var sp = this.getSpanner()
+            sp.style.fill = this.project.styles.selectedStroke
+            var g = this.getPathG()
+            g.style.stroke = this.project.styles.selectedStroke
+            g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
+        } catch (e) {}
     }
     this.selectOff = function() {
-        var sp = this.getSpanner()
-        sp.style.fill = ""
-        var g = this.getPathG()
-        g.style.stroke = this.project.styles.normalStroke
-        g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
+        try { //participation might not be drawn if entity and relationship overlap
+            var sp = this.getSpanner()
+            sp.style.fill = ""
+            var g = this.getPathG()
+            g.style.stroke = this.project.styles.normalStroke
+            g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
+        } catch (e) {}
     }
     this.getRole = function() {
         return p.getErAttr(this.node, "role") || ""

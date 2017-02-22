@@ -111,10 +111,6 @@ function Entity(node, project) {
             [topRight, bottomRight],
             [bottomLeft, bottomRight]
         ])
-        if (res.length < 1) {
-            console.log(line)
-            console.log(topLeft, topRight, bottomLeft, bottomRight)
-        }
         return res
     }
     this.isFree = function() {

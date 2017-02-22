@@ -175,13 +175,15 @@
 
         var up = document.getElementById("upload")
         up.addEventListener("change", function() {
+            var name = baseName(up.files[0].name)
+            console.log("opening:", name)
             erp = new ERProject(svg)
             var r = new FileReader()
             r.addEventListener("load", function(ev) {
                 var parser = new DOMParser()
                 try {
                     var doc = parser.parseFromString(ev.target.result, "text/xml")
-                    erp.load(doc)
+                    erp.load(name, doc)
                 } catch (e) {
                     alert("Could not read file: " + e)
                     console.log(e)
@@ -191,9 +193,18 @@
         })
 
         function newFile(name) {
+            var ptitle
+            if (!name) {
+                ptitle = prompt("Project name: ", "ER project")
+                if (!ptitle) {
+                    return
+                }
+            } else {
+                ptitle = "project"
+            }
             name = name || "empty.er.xml"
             erp = new ERProject(svg)
-            var cb = new Callback(erp.load, erp, [])
+            var cb = new Callback(erp.load, erp, [ptitle])
             ajaxGet(name, cb, true)
         }
 

@@ -15,17 +15,21 @@ function IsA(node, project) {
         return this.project.getElId(this.node)
     }
     this.selectOn = function() {
-        var g = this.getG()
-        g.style.stroke = this.project.styles.selectedStroke
-        g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
+        try { //isa might not be drawn if the entities overlap
+            var g = this.getG()
+            g.style.stroke = this.project.styles.selectedStroke
+            g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
+        } catch (e) {}
     }
     this.getG = function() {
         return this.project.svg.getElementById('svg-' + this.getId())
     }
     this.selectOff = function() {
-        var g = this.getG()
-        g.style.stroke = this.project.styles.normalStroke
-        g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
+        try { //isa might not be drawn if the entities overlap
+            var g = this.getG()
+            g.style.stroke = this.project.styles.normalStroke
+            g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
+        } catch (e) {}
     }
     this.getParent = function() {
         return p.get(p.getErAttr(this.node, "ref-parent"))
@@ -46,6 +50,8 @@ function IsA(node, project) {
             var chCenter = ch.getCenter()
             var line = [parCenter, chCenter]
             var line_inters = par.lineIntersect(line)
+            if (line_inters.length < 1)
+                return
             var arrowd = "M" + line_inters[0][0] + "," + line_inters[0][1] + "l -8,-5 m 8 5 l -8,5 m8,-5"
             var lineInc = getLineInclination(line)
             svgEl(g, "path", {

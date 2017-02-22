@@ -18,9 +18,7 @@ function ajaxGet(url, cb, isXML) {
     var xhttp = new XMLHttpRequest()
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            var a = cb.funcArgs
-            a.push(isXML ? this.responseXML : this.responseText)
-            cb.func.apply(cb.funcThis, a)
+            cb.exec(isXML ? this.responseXML : this.responseText)
         }
     };
     xhttp.open("GET", url, true)
@@ -199,4 +197,12 @@ function b64EncodeUnicode(str) {
     return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
         return String.fromCharCode('0x' + p1);
     }));
+}
+
+function baseName(s) {
+    var lastSlash = max(s.lastIndexOf("/"), s.lastIndexOf("\\"))
+    var nameStart = lastSlash + 1 //if lastSlash == -1, everithing is fine
+    var name = s.substring(nameStart)
+    name = name.replace(".er.xml", "").replace(".xml", "")
+    return name
 }

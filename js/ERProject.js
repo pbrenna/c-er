@@ -12,8 +12,11 @@ function ERProject(svg) {
     this.scheduled = []
     this.grid = 20
     this.zoom = 1
+    this.pname = "project"
     var that = this
-    this.load = function(erdoc) {
+    this.load = function(prname, erdoc) {
+        if (prname)
+            this.pname = prname
         this.erPrefix = erdoc.lookupPrefix(this.ns, "er")
         if (!this.erPrefix) {
             throw new Error("missing ER namespace")
@@ -454,12 +457,12 @@ function ERProject(svg) {
     this.saveFile = function() {
         var xml = vkbeautify.xml(new XMLSerializer().serializeToString(this.erdoc))
         this.saved = true
-        download(xml, "project.er.xml", "text/xml")
+        download(xml, this.pname + ".er.xml", "text/xml")
     }
     this.saveSVG = function() {
         this.selection.deselectAll()
         var xml = new XMLSerializer().serializeToString(this.svg)
-        download(xml, "project.er.svg", "image/svg+xml")
+        download(xml, this.pname + ".er.svg", "image/svg+xml")
     }
     this.saveImg = function() {
         var canvas = document.getElementById("canvas")
@@ -482,10 +485,15 @@ function ERProject(svg) {
         canvas.height = bbox.height
         img.src = "data:image/svg+xml;base64," + b64EncodeUnicode(xml)
         var ctx = canvas.getContext('2d')
+        var that = this
+        if (bbox.width < 1 || bbox.height < 1) {
+            alert("Nothing to draw")
+            return
+        }
         img.onload = function() {
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, max(1, canvas.width), max(1, canvas.height))
             canvas.toBlob(function(blob) {
-                download(blob, "project.er.png", "image/png")
+                download(blob, that.pname + ".er.png", "image/png")
             }, "image/png", 1)
         }
     }
