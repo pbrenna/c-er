@@ -89,28 +89,33 @@ function Entity(node, project) {
         var bbox = r.getBoundingClientRect()
         var s = p.zoomedScroll()
         var topLeft = [
-            bbox.left + s[0],
-            bbox.top + s[1]
+            bbox.left / p.zoom + s[0],
+            bbox.top / p.zoom + s[1]
         ]
         var topRight = [
-            topLeft[0] + bbox.width,
+            topLeft[0] + bbox.width / p.zoom,
             topLeft[1]
         ]
         var bottomLeft = [
             topLeft[0],
-            topLeft[1] + bbox.height
+            topLeft[1] + bbox.height / p.zoom
         ]
         var bottomRight = [
             topRight[0],
             bottomLeft[1]
         ]
-        return intersectCalc(line, [
+        var res = intersectCalc(line, [
             //lines
             [topLeft, topRight],
             [topLeft, bottomLeft],
             [topRight, bottomRight],
             [bottomLeft, bottomRight]
         ])
+        if (res.length < 1) {
+            console.log(line)
+            console.log(topLeft, topRight, bottomLeft, bottomRight)
+        }
+        return res
     }
     this.isFree = function() {
         var ancCount = this.countAncestors()

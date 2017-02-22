@@ -10,8 +10,8 @@ function ERProject(svg) {
     this.erPrefix = ""
     this.viewPrefix = ""
     this.scheduled = []
-    this.zoom = 1
     this.grid = 20
+    this.zoom = 1
     var that = this
     this.load = function(erdoc) {
         this.erPrefix = erdoc.lookupPrefix(this.ns, "er")
@@ -25,8 +25,10 @@ function ERProject(svg) {
         this.nsMap[this.erPrefix] = this.ns
             //this.nsMap[this.viewPrefix] = this.vns
         this.erdoc = erdoc
-        this.addState()
+        this.zoom = 1
+        this.svgAll = document.getElementById("svg-all")
         this.applyZoom()
+        this.addState()
         this.selectPanel("Creation")
         this.saved = true
     }
@@ -176,7 +178,6 @@ function ERProject(svg) {
         }
     }
     this.draw = function() {
-        this.svgAll = document.getElementById("svg-all")
         clearElement(this.svgAll)
         clearElement(this.svg.getElementById("defs"))
 
@@ -353,7 +354,7 @@ function ERProject(svg) {
         }
     }
     this.getMouseInDocument = function(ev) {
-        return { x: ev.layerX, y: ev.layerY }
+        return { x: ev.layerX / this.zoom, y: ev.layerY / this.zoom }
     }
     this.dragStart = function(obj, ev) {
         if (!this.selection.selected(obj)) {

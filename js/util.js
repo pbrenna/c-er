@@ -178,10 +178,10 @@ function intersect2lines(l1, l2) {
 
     var posx = numx / den,
         posy = numy / den
-    if ((posx <= x1 && posx >= x2 || posx <= x2 && posx >= x1) &&
-        (posy <= y1 && posy >= y2 || posy <= y2 && posy >= y1) &&
-        (posx <= x3 && posx >= x4 || posx <= x4 && posx >= x3) &&
-        (posy <= y3 && posy >= y4 || posy <= y4 && posy >= y3))
+    if ((posx <= x1 + 1 && posx >= x2 - 1 || posx <= x2 + 1 && posx >= x1 - 1) &&
+        (posy <= y1 + 1 && posy >= y2 - 1 || posy <= y2 + 1 && posy >= y1 - 1) &&
+        (posx <= x3 + 1 && posx >= x4 - 1 || posx <= x4 + 1 && posx >= x3 - 1) &&
+        (posy <= y3 + 1 && posy >= y4 - 1 || posy <= y4 + 1 && posy >= y3 - 1))
         return [posx, posy]
     else
         return null
