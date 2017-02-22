@@ -131,15 +131,16 @@ function Participation(node, project) {
                         })*/
                 }
                 if (lineInc < 0) lineInc += 360
-                var baseline = lineInc >= 180 ? "auto" : "hanging"
+                    //var baseline = lineInc >= 180 ? "auto" : "hanging"
                 var anchor = (lineInc + 90) % 360 >= 180 ? "end" : "start"
+                var xPos = lineInc >= 180 ? "above" : "below"
                 var tinc = lineInc % 180
                 if (tinc >= 90) tinc -= 180
                 if (lineInc == 90) {
                     tinc = 90;
                     anchor = "start"
                 }
-                var dy = lineInc >= 180 ? -7 : 2
+                var dy = lineInc >= 180 ? -7 : 18
                 var dx = anchor == "end" ? -5 : 5
                     //by giving the text an id which depends on the ids of 
                     //the entity and the relationship, we can recognise multiple
@@ -150,7 +151,8 @@ function Participation(node, project) {
                     y: line_inters[0][1] + dy,
                     'transform': 'rotate(' + tinc + ',' + line_inters[0][0] + ',' + (line_inters[0][1]) + ')',
                     'text-anchor': anchor,
-                    'dominant-baseline': baseline,
+                    'x-pos': xPos,
+                    //'dominant-baseline': baseline,
                     "stroke-width": 0,
                     'font-size': this.project.styles.participation.fontSize,
                     'font-family': this.project.styles.defaultFont
@@ -164,7 +166,7 @@ function Participation(node, project) {
                 dy: isFirst ? 0 : "16",
                 x: txtx
             })
-            if (txt.getAttribute('dominant-baseline') == "auto" && !isFirst)
+            if (txt.getAttribute("x-pos") == "above" && !isFirst)
                 txt.setAttribute("y", parseInt(txty) - 16)
             var r
             if (r = this.getRole()) {

@@ -500,8 +500,9 @@ function ERProject(svg) {
                 canvas.toBlob(function(blob) {
                     download(blob, that.pname + ".er.png", "image/png")
                 }, "image/png", 1)
-            } else {
-                window.open(canvas.toDataURL("image/png"), "_blank")
+            } else if (canvas.msToBlob) {
+                var blob = canvas.msToBlob();
+                window.navigator.msSaveBlob(blob, that.pname + '.er.png');
             }
         }
     }
