@@ -504,18 +504,18 @@ function ERProject(svg) {
                 try {
                     var blob = canvas.msToBlob()
                     window.navigator.msSaveBlob(blob, that.pname + '.er.png')
-                } catch (e){
+                } catch (e) {
                     var w = window.open()
-					if(!w){
-						alert("Please save your project, allow popup windows and reopen it")
-						return
-					}
+                    if (!w) {
+                        alert("Please save your project, allow popup windows and reopen it")
+                        return
+                    }
                     var d = w.document
                     d.body.style.fontFamily = "sans-serif"
                     var el = d.createElement("span")
-					var i = d.createElement("img")
-					i.src = img.src
-					i.crossOrigin = 'Anonymous'
+                    var i = d.createElement("img")
+                    i.src = img.src
+                    i.crossOrigin = 'Anonymous'
                     el.innerHTML = "Right click on the image and select 'save as PNG'.<br/><br/>"
                     d.body.appendChild(el)
                     d.body.appendChild(i)

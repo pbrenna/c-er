@@ -153,7 +153,7 @@ function Participation(node, project) {
                     'text-anchor': anchor,
                     'x-pos': xPos,
                     //'dominant-baseline': baseline,
-					'text-rendering': 'geometricPrecision',
+                    'text-rendering': 'geometricPrecision',
                     "stroke-width": 0,
                     'font-size': this.project.styles.participation.fontSize,
                     'font-family': this.project.styles.defaultFont
