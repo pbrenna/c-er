@@ -231,7 +231,7 @@ function drawAttrs(parent, attrs, style, additionalSpace, mustBeEven, position, 
             "dominant-baseline": "middle",
             "stroke-width": "0",
             'text-anchor': textAnchor,
-			'text-rendering': 'geometricPrecision',
+            'text-rendering': 'geometricPrecision',
             'transform': "rotate(" + style.attrRotationDeg + "," + rposx + "," + texty + ")"
         })
         text.textContent = att.getName()

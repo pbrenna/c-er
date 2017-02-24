@@ -70,15 +70,14 @@ function Relationship(node, project) {
         preventBrowserDrag(g)
 
         var that = this
-        g.addEventListener('mousedown', function(ev) {
+        var startFunc = function(ev) {
             mkLastChild(this)
             that.bringUp()
-            erp.dragStart(that, ev)
-        })
+            p.dragStart(that, ev)
+        }
+        g.addEventListener('mousedown', startFunc)
+        g.addEventListener('touchstart', startFunc)
 
-        g.addEventListener("click", function(ev) {
-            p.selection.clicked(that, ev)
-        })
 
         //recursively draw inner participations
         var parts = this.getParticipations()

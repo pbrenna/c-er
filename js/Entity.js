@@ -58,16 +58,13 @@ function Entity(node, project) {
         preventBrowserDrag(g)
 
         var that = this
-        g.addEventListener('mousedown', function(ev) {
+        var startFunc = function(ev) {
             mkLastChild(this)
-                //if (that.isFree())
             that.bringUp()
-            erp.dragStart(that, ev)
-        })
-
-        g.addEventListener("click", function(ev) {
-            p.selection.clicked(that, ev)
-        })
+            p.dragStart(that, ev)
+        }
+        g.addEventListener('mousedown', startFunc)
+        g.addEventListener('touchstart', startFunc)
     }
     this.getReservedSlotXY = function(n, pos) {
         var c = this.getCenter()
@@ -111,6 +108,8 @@ function Entity(node, project) {
             [topRight, bottomRight],
             [bottomLeft, bottomRight]
         ])
+        if (res.length < 1)
+            console.log("no inters :(")
         return res
     }
     this.isFree = function() {

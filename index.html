@@ -6,6 +6,7 @@
 <head>
     <title>Conceptual Er Designer</title>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale0.7, user-scalable=0" />
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
     <link href="css/c-er.css" rel="stylesheet" />
 </head>
@@ -153,21 +154,20 @@
             var target = ev.target || ev.srcElement
             if (target == palette) {
                 dragging.push(palette)
-                palette.dragX = true
-                palette.dragY = false
                 palette.startX = ev.clientX
+                palette.startY = 0 //don't need that
             }
         })
         palette.curWidth = 300
-        palette.moveRelX = function(x) {
+        palette.moveRelXY = function(x, _) {
             var neww = this.curWidth - x
             if (neww > 290) {
                 outerFixed.style.width = "calc(100% - " + neww + "px)"
                 this.style.width = neww + "px"
             }
         }
-        palette.endDragX = function(x) {
-            this.curWidth = palette.clientWidth;
+        palette.endDragXY = function(x, _) {
+            this.curWidth = palette.clientWidth
             erp.resizeSvg()
         }
 

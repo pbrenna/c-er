@@ -29,38 +29,44 @@ function ajaxGet(url, cb, isXML) {
 
 //drag
 var dragging = null
-document.addEventListener("mousemove", function(ev) {
+
+function moveFunc(cx, cy) {
     if (dragging != null) {
         for (var x in dragging) {
             try {
                 var d = dragging[x]
-                if (d.dragX && d.dragY) {
-                    d.moveRelXY(ev.clientX - d.startX, ev.clientY - d.startY)
-                } else if (d.dragX) {
-                    d.moveRelX(ev.clientX - d.startX)
-                } else if (d.dragY) {
-                    d.moveRelY(ev.clientY - d.startY)
-                }
+                d.moveRelXY(cx - d.startX, cy - d.startY)
             } catch (e) { console.log(e) }
         }
     }
+}
+document.addEventListener("mousemove", function(ev) {
+    moveFunc(ev.clientX, ev.clientY)
 })
-document.addEventListener("mouseup", function(ev) {
+document.addEventListener("touchmove", function(ev) {
+    var t = ev.touches[0]
+    moveFunc(t.clientX, t.clientY)
+    if (dragging.length > 0)
+        ev.preventDefault()
+})
+
+function endFunc(cx, cy) {
     if (dragging != null) {
         for (var x in dragging) {
             try {
                 var d = dragging[x]
-                if (d.dragX && d.dragY) {
-                    d.endDragXY(ev.clientX - d.startX, ev.clientY - d.startY)
-                } else if (d.dragX) {
-                    d.endDragX(ev.clientX - d.startX)
-                } else if (d.dragY) {
-                    d.endDragY(ev.clientY - d.startX)
-                }
+                d.endDragXY(cx - d.startX, cy - d.startY)
             } catch (e) { console.log(e) }
         }
         dragging = []
     }
+}
+document.addEventListener("mouseup", function(ev) {
+    endFunc(ev.clientX, ev.clientY)
+})
+document.addEventListener("touchend", function(ev) {
+    var t = ev.changedTouches[0]
+    endFunc(t.clientX, t.clientY)
 })
 
 function showDialog(d) {
@@ -142,7 +148,6 @@ function max(a, b) {
 }
 var scroller = document.getElementById('scroller')
 window.addEventListener("beforeunload", function(ev) {
-    console.log("beforeunload")
     if (!erp.saved) {
         ev.returnValue = "Are you sure? The diagram wasn't saved!"
         return ev.returnValue

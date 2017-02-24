@@ -281,11 +281,10 @@ function ERProject(svg) {
 
     this.selection.s = [] //selected elements
     this.selection.clicked = function(obj, ev) {
-        var ind = -1;
-        if (!ev.shiftKey) {
+        if (!ev.shiftKey && !ev.touches) {
             this.deselectAll()
         }
-        if (this.s.indexOf(obj.getId()) < 0) {
+        if (!this.selected(obj)) {
             this.s.push(obj.getId())
             obj.selectOn()
             that.selectionChanged()
@@ -364,14 +363,15 @@ function ERProject(svg) {
             this.selection.clicked(obj, ev)
         }
         dragging = []
+        var cx = ev.clientX || ev.touches[0].clientX
+        var cy = ev.clientY || ev.touches[0].clientY
         for (var x in this.selection.s) {
             var obj = this.get(this.selection.s[x])
             if (obj.moveRelXY) {
                 obj.addStateNumber = this.curState + 1
-                obj.startX = ev.clientX
-                obj.startY = ev.clientY
-                obj.dragX = true
-                obj.dragY = true
+                obj.startX = cx
+                obj.startY = cy
+                obj.actuallyMoved = false
                 dragging.push(obj)
             }
         }
@@ -525,7 +525,6 @@ function ERProject(svg) {
                     c.id = "closeDialog"
                     c.innerHTML = "Close"
                     c.addEventListener("click", function(ev) {
-                        console.log("click")
                         ev.preventDefault()
                         document.getElementById("dim").style.display = 'none'
                         document.body.removeChild(d)
