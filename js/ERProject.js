@@ -505,20 +505,31 @@ function ERProject(svg) {
                     var blob = canvas.msToBlob()
                     window.navigator.msSaveBlob(blob, that.pname + '.er.png')
                 } catch (e) {
-                    var w = window.open()
-                    if (!w) {
-                        alert("Please save your project, allow popup windows and reopen it")
-                        return
-                    }
-                    var d = w.document
-                    d.body.style.fontFamily = "sans-serif"
-                    var el = d.createElement("span")
-                    var i = d.createElement("img")
+                    var d = document.createElement("div")
+                    d.className = "popupWindow"
+                    var el = document.createElement("span")
+                    var i = document.createElement("img")
                     i.src = img.src
                     i.crossOrigin = 'Anonymous'
+                    i.style.maxWidth = "100%"
+                    i.style.maxHeight = "80%"
                     el.innerHTML = "Right click on the image and select 'save as PNG'.<br/><br/>"
-                    d.body.appendChild(el)
-                    d.body.appendChild(i)
+                    d.appendChild(el)
+                    d.appendChild(i)
+                    document.getElementById("dim").style.display = 'block'
+                    var c = document.createElement("a")
+                    c.href = "#"
+                    c.id = "closeDialog"
+                    c.innerHTML = "Close"
+                    c.addEventListener("click", function(ev) {
+                        console.log("click")
+                        ev.preventDefault()
+                        document.getElementById("dim").style.display = 'none'
+                        document.body.removeChild(d)
+                    })
+                    d.appendChild(c)
+                    document.body.appendChild(d)
+
                 }
             }
         }

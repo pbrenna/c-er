@@ -114,8 +114,6 @@ body {
     position: absolute;
     right: 10px;
     top: 10px;
-    width: 20px;
-    cursor: pointer;
 }
 
 .dialog h1 {
@@ -284,11 +282,32 @@ td {
     padding-left: 10px;
 }
 
-.panel a {
+a {
     color: #187c5a;
     text-decoration: none;
 }
 
-.panel a:hover {
+a:hover {
     text-decoration: underline
+}
+
+.popupWindow {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    bottom: 20px;
+    right: 20px;
+    padding: 1vh 1vw;
+    background: #fff;
+}
+
+#dim {
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #000;
+    opacity: 0.5;
 }
