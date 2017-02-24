@@ -36,18 +36,22 @@ function moveFunc(cx, cy) {
             try {
                 var d = dragging[x]
                 d.moveRelXY(cx - d.startX, cy - d.startY)
+                console.log(cx - d.startX)
             } catch (e) { console.log(e) }
         }
     }
 }
 document.addEventListener("mousemove", function(ev) {
+    console.log(ev.clientX, ev.clientY)
     moveFunc(ev.clientX, ev.clientY)
+        //ev.preventDefault()
 })
 document.addEventListener("touchmove", function(ev) {
     var t = ev.touches[0]
     moveFunc(t.clientX, t.clientY)
-    if (dragging.length > 0)
+    if (dragging.length > 0) {
         ev.preventDefault()
+    }
 })
 
 function endFunc(cx, cy) {
@@ -147,6 +151,11 @@ function max(a, b) {
     return a > b ? a : b
 }
 var scroller = document.getElementById('scroller')
+scroller.addEventListener("scroll", function(ev) {
+    if (dragging && dragging.length > 0) {
+        ev.preventDefault()
+    }
+})
 window.addEventListener("beforeunload", function(ev) {
     if (!erp.saved) {
         ev.returnValue = "Are you sure? The diagram wasn't saved!"
