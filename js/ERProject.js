@@ -469,17 +469,20 @@ function ERProject(svg) {
         var img = new Image()
         this.selection.deselectAll()
         img.crossOrigin = 'anonymous'
-        var oldzoom = this.zoom
-        this.zoom = 1
-        this.applyZoom()
+            /*var oldzoom = this.zoom
+            this.zoom = 1
+            this.applyZoom()*/
         var svg2 = this.svg.cloneNode(true)
         var svgallNew = svg2.getElementById('svg-all')
         var bbox = this.svgAll.getBoundingClientRect()
         svg2.setAttribute("height", bbox.height)
         svg2.setAttribute("width", bbox.width)
-        this.zoom = oldzoom
-        this.applyZoom()
-        svgallNew.transform.baseVal.getItem(0).setTranslate(-bbox.left - scroller.scrollLeft, -bbox.top - scroller.scrollTop)
+            /*this.zoom = oldzoom
+            this.applyZoom()*/
+        var tr = svg2.createSVGTransform()
+        var scr = this.zoomedScroll()
+        tr.setTranslate(-bbox.left / this.zoom - scr[0], -bbox.top / this.zoom - scr[1])
+        svgallNew.transform.baseVal.appendItem(tr)
         var xml = new XMLSerializer().serializeToString(svg2)
         canvas.width = bbox.width
         canvas.height = bbox.height
