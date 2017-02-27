@@ -161,7 +161,7 @@ function newEntity(ev) {
     var rounded = erp.alignToGrid(pos.x, pos.y)
     erp.setViewAttr(el, "x", rounded[0])
     erp.setViewAttr(el, "y", rounded[1])
-    var c = new Concept(el, erp)
+    var c = new Entity(el, erp)
     c.setName(name)
     erp.addState()
     erp.selection.set([el.getAttribute("id")])

@@ -168,17 +168,21 @@ function Generalization(node, project) {
         var oldw = 0
         var posx = pCenter[0]
         var posy = pCenter[1] + p.styles.generalization.height
-        var doubleHeight = false
+        var belowHorizHeight = 0
         for (var x in ch) {
             ch[x].setXY(posx, posy)
             ch[x].draw(childrenG, 0, 1) //we reserve a slot above to connect to the arrow
-            if (ch[x].getAttrPos() == "above" && ch[x].getAttrs().length > 0)
-                doubleHeight = true
+            if (ch[x].getAttrPos() == "above" && ch[x].getAttrs().length > 0) {
+                var zs = p.zoomedScroll()
+                var bbox = ch[x].getG().getBoundingClientRect()
+                var rbbox = ch[x].getRect().getBoundingClientRect()
+                var curx = bbox.top / p.zoom + zs[0]
+                var currx = rbbox.top / p.zoom + zs[0]
+                belowHorizHeight = max(belowHorizHeight, currx - curx)
+            }
         }
-        if (doubleHeight) {
-            posy += p.styles.generalization.belowHorizHeight
-        }
-        //foreach child, we redraw it translated just enough
+        posy += belowHorizHeight
+            //foreach child, we redraw it translated just enough
         var skip = 1
         var initialPosx = posx
         for (var x in ch) {
@@ -204,6 +208,7 @@ function Generalization(node, project) {
                 ch[x].setXY(roundx, posy)
             } else {
                 ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
+                ch[x].setXY(xy[0], posy)
                 ch[x].transRight(roundx - xy[0])
             }
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin

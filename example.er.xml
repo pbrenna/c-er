@@ -30,6 +30,8 @@
             <er:participation id="er20" er:ref-entity="er1" er:mult-min="0" er:mult-max="n"/>
             <er:attr id="er14" er:name="date" er:primary="false"/>
         </er:relationship>
+        <er:note id="er16" v:x="200" v:y="40">Example of a Conceptual ER Schema
+Please note that this program is experimental.</er:note>
         <er:generalization id="er26">
             <er:parent-concept id="er27">
                 <er:entity id="er3" v:x="160" v:y="260" er:name="Pet">
@@ -39,7 +41,9 @@
             <er:children-concepts id="er28">
                 <er:generalization id="er32">
                     <er:parent-concept id="er33">
-                        <er:entity id="er24" v:x="160" v:y="400" er:name="Dog"/>
+                        <er:entity id="er24" v:x="160" v:y="460" er:name="Dog" v:attr-pos="above">
+                            <er:attr id="er13" er:name="attribute" er:primary="false"/>
+                        </er:entity>
                     </er:parent-concept>
                     <er:children-concepts id="er34">
                         <er:entity id="er8" v:x="160" v:y="540" er:name="Pug"/>
@@ -49,7 +53,7 @@
                 </er:generalization>
                 <er:generalization id="er31">
                     <er:parent-concept id="er36">
-                        <er:entity id="er25" v:x="640" v:y="400" er:name="Cat">
+                        <er:entity id="er25" v:x="1120" v:y="460" er:name="Cat">
                             <er:attr id="er41" er:name="elapsed lives" er:primary="false"/>
                         </er:entity>
                     </er:parent-concept>
@@ -60,10 +64,8 @@
                         <er:entity id="er30" v:x="800" v:y="600" er:name="Balinese"/>
                     </er:children-concepts>
                 </er:generalization>
-                <er:entity id="er42" v:x="980" v:y="400" er:name="Mouse"/>
+                <er:entity id="er42" v:x="980" v:y="460" er:name="Mouse"/>
             </er:children-concepts>
         </er:generalization>
-        <er:note id="er16" v:x="200" v:y="40">Example of a Conceptual ER Schema
-Please note that this program is experimental.</er:note>
     </er:schema>
 </er:project>
