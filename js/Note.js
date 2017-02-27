@@ -23,6 +23,8 @@
 function Note(node, project) {
 
     ERObject.apply(this, [node, project])
+    Selectable.apply(this)
+    Draggable.apply(this)
     var n = node
     var p = project
     this.type = "Note"
@@ -94,47 +96,12 @@ function Note(node, project) {
     this.getContent = function() {
         return n.textContent.split("\t").join("")
     }
-    this.selectOn = function() {
-        var g = this.getG()
-        g.style.stroke = this.project.styles.selectedStroke
-        g.style.strokeWidth = this.project.styles.selectedStrokeWidth
-    }
-    this.selectOff = function() {
-        var g = this.getG()
-        g.style.stroke = this.project.styles.normalStroke
-        g.style.strokeWidth = this.project.styles.defaultStrokeWidth
-    }
     this.destroy = function() {
         killNode(n)
         this.node = n = null
     }
     this.bringUp = function() {
         mkLastChild(n)
-    }
-    this.moveRelXY = function(dx, dy) {
-        var xy = this.getXY()
-        var curx = xy[0] + dx / this.project.zoom
-        var cury = xy[1] + dy / this.project.zoom
-        this.updateTranslate(curx, cury)
-    }
-    this.endDragXY = function(dx, dy) {
-        var xy = this.getXY()
-        var curx = xy[0] + dx / this.project.zoom
-        var cury = xy[1] + dy / this.project.zoom
-
-        var newCenter = this.project.alignToGrid(curx, cury)
-        var curx = newCenter[0]
-        var cury = newCenter[1]
-        if (curx - xy[0] != 0 || cury - xy[1] != 0) {
-            this.project.setViewAttr(node, "x", max(curx, 0))
-            this.project.setViewAttr(node, "y", max(cury, 0))
-            this.project.patchState(this.addStateNumber)
-        } else {
-            this.project.update()
-        }
-    }
-    this.updateTranslate = function(x, y) {
-        this.getG().transform.baseVal.getItem(0).setTranslate(x, y)
     }
     this.checkConsistency = function() {}
 }

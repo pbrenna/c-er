@@ -23,6 +23,8 @@
 function Entity(node, project) {
     ERObject.apply(this, [node, project])
     Concept.apply(this)
+    Selectable.apply(this)
+    Draggable.apply(this)
     this.type = "Entity"
     var p = this.project
     var node = this.node

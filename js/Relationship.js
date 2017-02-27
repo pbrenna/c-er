@@ -23,6 +23,8 @@
 function Relationship(node, project) {
     ERObject.apply(this, [node, project])
     Concept.apply(this)
+    Selectable.apply(this)
+    Draggable.apply(this)
     this.type = "Relationship"
     var p = this.project
     var node = this.node
@@ -108,9 +110,6 @@ function Relationship(node, project) {
     }
     this.calculateWidth = function(text, attrReqW) {
 
-    }
-    this.isFree = function() {
-        return true
     }
 }
 

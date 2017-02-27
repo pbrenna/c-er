@@ -78,44 +78,6 @@ function Concept() {
         var y = parseFloat(this.project.getViewAttr(this.node, "y"))
         return [x, y]
     }
-    this.selectOn = function() {
-        var g = this.getG()
-        g.style.stroke = this.project.styles.selectedStroke
-        g.style.strokeWidth = this.project.styles.selectedStrokeWidth
-    }
-    this.selectOff = function() {
-        var g = this.getG()
-        g.style.stroke = this.project.styles.normalStroke
-        g.style.strokeWidth = this.project.styles.defaultStrokeWidth
-    }
-    this.moveRelXY = function(x, y) {
-        if (this.isFree()) {
-            var xy = this.getXY()
-            var curx = xy[0] + x / this.project.zoom
-            var cury = xy[1] + y / this.project.zoom
-            this.updateTranslate(curx, cury)
-        }
-    }
-    this.updateTranslate = function(x, y) {
-        var g = this.getG()
-        g.transform.baseVal.getItem(0).setTranslate(max(x, 0), max(y, 0))
-    }
-    this.endDragXY = function(x, y) {
-        var xy = this.getXY()
-        var curx = xy[0] + x / this.project.zoom
-        var cury = xy[1] + y / this.project.zoom
-
-        var newCenter = this.project.alignToGrid(curx, cury)
-        var curx = newCenter[0]
-        var cury = newCenter[1]
-        if (curx - xy[0] != 0 || cury - xy[1] != 0) {
-            this.project.setViewAttr(this.node, "x", max(curx, 0))
-            this.project.setViewAttr(this.node, "y", max(cury, 0))
-            this.project.patchState(this.addStateNumber)
-        } else {
-            this.project.update()
-        }
-    }
     this.getCenter = function() {
         return this.getXY()
     }

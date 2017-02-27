@@ -22,6 +22,10 @@
 
 function IsA(node, project) {
     ERObject.apply(this, [node, project])
+    Selectable.apply(this, [
+        this.project.styles.lines.defaultStrokeWidth,
+        this.project.styles.lines.selectedStrokeWidth
+    ])
     this.type = "IsA"
     var p = project
     var n = node
@@ -29,20 +33,6 @@ function IsA(node, project) {
         killNode(this.node)
         this.project.refCleanScheduled = true
         this.node = null
-    }
-    this.selectOn = function() {
-        try { //isa might not be drawn if the entities overlap
-            var g = this.getG()
-            g.style.stroke = this.project.styles.selectedStroke
-            g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
-        } catch (e) {}
-    }
-    this.selectOff = function() {
-        try { //isa might not be drawn if the entities overlap
-            var g = this.getG()
-            g.style.stroke = this.project.styles.normalStroke
-            g.style.strokeWidth = this.project.styles.lines.defaultStrokeWidth
-        } catch (e) {}
     }
     this.getParent = function() {
         return p.get(p.getErAttr(this.node, "ref-parent"))
