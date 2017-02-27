@@ -3,10 +3,6 @@
     xmlns:er="http://pbrenna.github.io/c-er/ns/er"
     xmlns:v="http://pbrenna.github.io/c-er/ns/view">
     <er:schema>
-        <er:relationship id="er43" v:x="980" v:y="540" er:name="Chases">
-            <er:participation id="er44" er:ref-entity="er25" er:mult-min="0" er:mult-max="n" er:role="chaser"/>
-            <er:participation id="er45" er:ref-entity="er42" er:mult-min="0" er:mult-max="n" er:role="chased"/>
-        </er:relationship>
         <er:is-a id="er46" er:ref-parent="er40" er:ref-child="er3"/>
         <er:relationship id="er21" v:x="980" v:y="260" v:h="40" v:w="100" er:name="exam">
             <er:attr id="er22" er:name="grade" er:primary="false"/>
@@ -41,7 +37,7 @@ Please note that this program is experimental.</er:note>
             <er:children-concepts id="er28">
                 <er:generalization id="er32">
                     <er:parent-concept id="er33">
-                        <er:entity id="er24" v:x="160" v:y="460" er:name="Dog" v:attr-pos="above">
+                        <er:entity id="er24" v:x="160" v:y="400" er:name="Dog" v:attr-pos="below">
                             <er:attr id="er13" er:name="attribute" er:primary="false"/>
                         </er:entity>
                     </er:parent-concept>
@@ -53,7 +49,7 @@ Please note that this program is experimental.</er:note>
                 </er:generalization>
                 <er:generalization id="er31">
                     <er:parent-concept id="er36">
-                        <er:entity id="er25" v:x="1120" v:y="460" er:name="Cat">
+                        <er:entity id="er25" v:x="640" v:y="400" er:name="Cat">
                             <er:attr id="er41" er:name="elapsed lives" er:primary="false"/>
                         </er:entity>
                     </er:parent-concept>
@@ -64,8 +60,12 @@ Please note that this program is experimental.</er:note>
                         <er:entity id="er30" v:x="800" v:y="600" er:name="Balinese"/>
                     </er:children-concepts>
                 </er:generalization>
-                <er:entity id="er42" v:x="980" v:y="460" er:name="Mouse"/>
+                <er:entity id="er42" v:x="1000" v:y="400" er:name="Mouse"/>
             </er:children-concepts>
         </er:generalization>
+        <er:relationship id="er43" v:x="1000" v:y="560" er:name="Chases">
+            <er:participation id="er44" er:ref-entity="er25" er:mult-min="0" er:mult-max="n" er:role="chaser"/>
+            <er:participation id="er45" er:ref-entity="er42" er:mult-min="0" er:mult-max="n" er:role="chased"/>
+        </er:relationship>
     </er:schema>
 </er:project>
