@@ -146,7 +146,6 @@ function Participation(node, project) {
                     //the entity and the relationship, we can recognise multiple
                     //participations and treat them differently
                 if (this.getExternalId()) {
-                    console.log(lineInc)
                     var extidx = line_inters[0][0]
                     var extidy = line_inters[0][1]
                     var extLine = svgEl(pathG, "path", {

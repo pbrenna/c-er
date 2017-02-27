@@ -24,7 +24,6 @@
             <er:participation id="er4" er:ref-entity="er1" er:mult-min="0" er:mult-max="n"/>
             <er:participation id="er35" er:ref-entity="er3" er:mult-min="1" er:mult-max="1"/>
         </er:relationship>
-        <er:entity id="er13" v:x="360" v:y="40" v:h="40" v:w="100" er:name="Example of a Conceptual ER Schema; please note that this program is experimental."/>
         <er:entity id="er18" v:x="980" v:y="140" v:h="40" v:w="100" er:name="Course"/>
         <er:relationship id="er15" v:x="640" v:y="140" v:h="40" v:w="100" er:name="enrolled" v:attr-pos="above">
             <er:participation id="er19" er:ref-entity="er18" er:mult-min="0" er:mult-max="n"/>
@@ -64,5 +63,7 @@
                 <er:entity id="er42" v:x="980" v:y="400" er:name="Mouse"/>
             </er:children-concepts>
         </er:generalization>
+        <er:note id="er16" v:x="200" v:y="40">Example of a Conceptual ER Schema
+Please note that this program is experimental.</er:note>
     </er:schema>
 </er:project>

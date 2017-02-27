@@ -43,6 +43,7 @@
                     <div class="tip">Choose "entity" or "relationship", then click on the drawing area.</div>
                     <button class="insertMode" onclick="erp.toggleInsertMode(this,newEntity)">Entity</button>
                     <button class="insertMode" onclick="erp.toggleInsertMode(this,newRelationship)">Relationship</button>
+                    <button class="insertMode" onclick="erp.toggleInsertMode(this,newNote)">Note</button>
                     <div class="tip">To add a participation, select both an entity and a relationship (holding SHIFT), then choose "Add participation".
                     </div>
                     <div class="tip">To add a generalization, select first the parent entity, then (holding SHIFT) all the children.
@@ -101,7 +102,7 @@
                     </div>
                     <br style="clear:both" />
                     <input type="checkbox" id="participationMandatory" style="vertical-align: middle;display:none;"> <label style="float:none; display:inline;display:none;" for="participationMandatory">Mandatory</label>
-                    <input type="checkbox" id="participationExternalId" style="vertical-align: middle"> <label style="float:none; display:inline" for="participationExternalId">External identifier</label>
+                    <input type="checkbox" id="participationExternalId" style="vertical-align: middle"> <label style="float:none; display:inline-block; width: 200px; vertical-align:middle" for="participationExternalId">External identifier (simplified syntax)</label>
                 </div>
             </div>
             <div id="panelGeneralization" class="panel">
@@ -117,6 +118,14 @@
                 <div class="innerPanel">
                     <h1>Edit is-a</h1>
                     <div class="delete" onclick="erp.deleteSelection()"></div>
+                </div>
+            </div>
+            <div id="panelNote" class="panel">
+                <div class="innerPanel">
+                    <h1>Edit note</h1>
+                    <div class="delete" onclick="erp.deleteSelection()"></div><br/>
+                    <textarea id="noteContent" style="width: 100%; height: 200px;" autocomplete="off"></textarea>
+                    <button>OK</button>
                 </div>
             </div>
             <div id="panelMultipleSelection" class="panel">
@@ -139,6 +148,7 @@
     <script type="text/javascript" src="js/ERProject.js"></script>
     <script type="text/javascript" src="js/Generalization.js"></script>
     <script type="text/javascript" src="js/IsA.js"></script>
+    <script type="text/javascript" src="js/Note.js"></script>
     <script type="text/javascript" src="js/Participation.js"></script>
     <script type="text/javascript" src="js/Relationship.js"></script>
     <script type="text/javascript" src="js/util.js"></script>

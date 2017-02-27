@@ -36,7 +36,6 @@ function moveFunc(cx, cy) {
             try {
                 var d = dragging[x]
                 d.moveRelXY(cx - d.startX, cy - d.startY)
-                console.log(cx - d.startX)
             } catch (e) { console.log(e) }
         }
     }

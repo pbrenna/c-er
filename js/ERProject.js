@@ -61,6 +61,8 @@ function ERProject(svg) {
                     return new Generalization(el, this)
                 case "is-a":
                     return new IsA(el, this)
+                case "note":
+                    return new Note(el, this)
             }
         } catch (e) {}
         return null
@@ -275,6 +277,10 @@ function ERProject(svg) {
         },
         participation: {
             fontSize: 14
+        },
+        note: {
+            padding: 5,
+            fontSize: 16
         }
     }
     this.selection = {}
@@ -416,6 +422,9 @@ function ERProject(svg) {
                 break;
             case "Generalization":
                 updateGeneralizationPanel();
+                break;
+            case "Note":
+                updateNotePanel();
                 break;
         }
         for (var p = 0; p < panels.length; p++) {

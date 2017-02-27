@@ -313,3 +313,8 @@ a:hover {
     background: #000;
     opacity: 0.5;
 }
+
+#noteContent {
+    white-space: pre;
+    overflow: auto;
+}
