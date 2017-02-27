@@ -21,7 +21,8 @@
 
 
 function Entity(node, project) {
-    Concept.apply(this, [node, project])
+    ERObject.apply(this, [node, project])
+    Concept.apply(this)
     this.type = "Entity"
     var p = this.project
     var node = this.node

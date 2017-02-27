@@ -21,16 +21,15 @@
 
 
 function Note(node, project) {
-    var n = this.node = node
-    var p = this.project = project
+
+    ERObject.apply(this, [node, project])
+    var n = node
+    var p = project
     this.type = "Note"
     this.getXY = this.getCenter = function() {
         var x = parseInt(p.getViewAttr(n, "x")),
             y = parseInt(p.getViewAttr(n, "y"))
         return [x, y]
-    }
-    this.getG = function() {
-        return this.project.svg.getElementById('svg-' + this.getId())
     }
     this.draw = function(parent) {
         var cnt = this.getContent()
@@ -94,9 +93,6 @@ function Note(node, project) {
     }
     this.getContent = function() {
         return n.textContent.split("\t").join("")
-    }
-    this.getId = function() {
-        return this.project.getElId(this.node)
     }
     this.selectOn = function() {
         var g = this.getG()

@@ -20,21 +20,13 @@
  */
 
 
-function Concept(node, project) {
-    this.node = node
-    this.project = project
+function Concept() {
     this.setName = function(name) {
         this.node.setAttributeNS(this.project.ns, "name", name)
     }
     this.setXY = function(x, y) {
         this.project.setViewAttr(this.node, "x", x)
         this.project.setViewAttr(this.node, "y", y)
-    }
-    this.getG = function() {
-        return this.project.svg.getElementById('svg-' + this.getId())
-    }
-    this.getId = function() {
-        return this.node.getAttribute("id")
     }
     this.getName = function() {
         return this.node.getAttributeNS(this.project.ns, "name")
@@ -117,8 +109,8 @@ function Concept(node, project) {
         var curx = newCenter[0]
         var cury = newCenter[1]
         if (curx - xy[0] != 0 || cury - xy[1] != 0) {
-            this.project.setViewAttr(node, "x", max(curx, 0))
-            this.project.setViewAttr(node, "y", max(cury, 0))
+            this.project.setViewAttr(this.node, "x", max(curx, 0))
+            this.project.setViewAttr(this.node, "y", max(cury, 0))
             this.project.patchState(this.addStateNumber)
         } else {
             this.project.update()

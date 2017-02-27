@@ -21,8 +21,7 @@
 
 
 function Participation(node, project) {
-    this.node = node
-    this.project = project
+    ERObject.apply(this, [node, project])
     this.type = "Participation"
     this.setEntity = function(entity) {
         console.assert(entity instanceof Entity)
@@ -50,12 +49,6 @@ function Participation(node, project) {
     this.destroy = function() {
         killNode(this.node)
         this.node = null
-    }
-    this.getId = function() {
-        return this.project.getElId(this.node)
-    }
-    this.getG = function() {
-        return this.project.svg.getElementById('svg-' + this.getId())
     }
     this.getSpanner = function() {
         return this.project.svg.getElementById('svg-' + this.getId() + '-spanner')

@@ -21,8 +21,7 @@
 
 
 function IsA(node, project) {
-    this.node = node
-    this.project = project
+    ERObject.apply(this, [node, project])
     this.type = "IsA"
     var p = project
     var n = node
@@ -31,18 +30,12 @@ function IsA(node, project) {
         this.project.refCleanScheduled = true
         this.node = null
     }
-    this.getId = function() {
-        return this.project.getElId(this.node)
-    }
     this.selectOn = function() {
         try { //isa might not be drawn if the entities overlap
             var g = this.getG()
             g.style.stroke = this.project.styles.selectedStroke
             g.style.strokeWidth = this.project.styles.lines.selectedStrokeWidth
         } catch (e) {}
-    }
-    this.getG = function() {
-        return this.project.svg.getElementById('svg-' + this.getId())
     }
     this.selectOff = function() {
         try { //isa might not be drawn if the entities overlap

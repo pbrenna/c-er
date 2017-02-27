@@ -21,7 +21,8 @@
 
 
 function Relationship(node, project) {
-    Concept.apply(this, [node, project])
+    ERObject.apply(this, [node, project])
+    Concept.apply(this)
     this.type = "Relationship"
     var p = this.project
     var node = this.node

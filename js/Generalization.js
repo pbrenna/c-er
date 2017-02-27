@@ -21,8 +21,8 @@
 
 
 function Generalization(node, project) {
-    Concept.apply(this, [node, project])
-    this.node = node
+    ERObject.apply(this, [node, project])
+    Concept.apply(this)
     this.type = "Generalization"
     var p = this.project
     this.destroy = function() {
