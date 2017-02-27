@@ -1,6 +1,8 @@
+"use strict";
+
 function Note(node, project) {
-    this.node = n = node
-    this.project = p = project
+    var n = this.node = node
+    var p = this.project = project
     this.type = "Note"
     this.getXY = this.getCenter = function() {
         var x = parseInt(p.getViewAttr(n, "x")),
