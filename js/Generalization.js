@@ -178,7 +178,7 @@ function Generalization(node, project) {
                 var rbbox = ch[x].getRect().getBoundingClientRect()
                 var curx = bbox.top / p.zoom + zs[0]
                 var currx = rbbox.top / p.zoom + zs[0]
-                belowHorizHeight = max(belowHorizHeight, currx - curx)
+                belowHorizHeight = max(belowHorizHeight, currx - curx - 10)
             }
         }
         posy += belowHorizHeight
@@ -194,7 +194,9 @@ function Generalization(node, project) {
             } else {
                 skip -= 1
             }
-            var roundx = p.alignToGrid(posx, posy)[0]
+            var rounded = p.alignToGrid(posx, posy)
+            var roundx = rounded[0]
+            var roundy = rounded[1]
             var xy = ch[x].getXY()
                 /*code for redraw*/
                 /*killNode(ch[x].getG())
@@ -203,12 +205,12 @@ function Generalization(node, project) {
             /*code for incremental translation: faster but buggier*/
 
             if (ch[x].type == "Entity") {
-                ch[x].updateTranslate(roundx, posy)
-                    //ch[x].setXY(roundx + xy[0], posy)
-                ch[x].setXY(roundx, posy)
+                ch[x].updateTranslate(roundx, roundy)
+                    //ch[x].setXY(roundx + xy[0], roundy)
+                ch[x].setXY(roundx, roundy)
             } else {
-                ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
-                ch[x].setXY(xy[0], posy)
+                ch[x].updateTranslate(roundx - xy[0], roundy - xy[1])
+                ch[x].setXY(xy[0], roundy)
                 ch[x].transRight(roundx - xy[0])
             }
             posx += (bbox.width / p.zoom - (w / 2)) + p.styles.generalization.margin
