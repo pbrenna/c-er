@@ -25,6 +25,7 @@ function Entity(node, project) {
     Concept.apply(this)
     Selectable.apply(this)
     Draggable.apply(this)
+    Movable.apply(this)
     this.type = "Entity"
     var p = this.project
     var node = this.node

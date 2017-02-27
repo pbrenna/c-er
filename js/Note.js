@@ -25,6 +25,7 @@ function Note(node, project) {
     ERObject.apply(this, [node, project])
     Selectable.apply(this)
     Draggable.apply(this)
+    SimpleDestroyable.apply(this)
     var n = node
     var p = project
     this.type = "Note"
@@ -95,10 +96,6 @@ function Note(node, project) {
     }
     this.getContent = function() {
         return n.textContent.split("\t").join("")
-    }
-    this.destroy = function() {
-        killNode(n)
-        this.node = n = null
     }
     this.bringUp = function() {
         mkLastChild(n)

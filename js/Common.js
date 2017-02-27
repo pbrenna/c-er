@@ -61,3 +61,24 @@ function Draggable() {
         g.transform.baseVal.getItem(0).setTranslate(max(x, 0), max(y, 0))
     }
 }
+
+function SimpleDestroyable(refClean) {
+    this.destroy = function() {
+        killNode(this.node)
+        this.node = null
+    }
+}
+
+function Movable() {
+    this.moveUp = function() {
+        if (this.node.previousElementSibling)
+            this.node.parentNode.insertBefore(this.node, this.node.previousElementSibling)
+    }
+    this.moveDown = function() {
+        if (this.node.nextElementSibling && this.node.nextElementSibling.nextElementSibling) {
+            this.node.parentNode.insertBefore(this.node, this.node.nextElementSibling.nextElementSibling)
+        } else {
+            this.node.parentNode.appendChild(this.node)
+        }
+    }
+}

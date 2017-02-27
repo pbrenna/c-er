@@ -25,6 +25,7 @@ function Relationship(node, project) {
     Concept.apply(this)
     Selectable.apply(this)
     Draggable.apply(this)
+    Movable.apply(this)
     this.type = "Relationship"
     var p = this.project
     var node = this.node

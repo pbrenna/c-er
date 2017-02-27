@@ -24,6 +24,8 @@
 function Attr(node, project) {
     this.node = node
     this.project = project
+    SimpleDestroyable.apply(this)
+    Movable.apply(this)
     this.getName = function() {
         return this.node.getAttributeNS(this.project.ns, "name")
     }
@@ -37,20 +39,5 @@ function Attr(node, project) {
     this.setIsPrimary = function(toggle) {
         var newVal = toggle ? "true" : "false"
         this.node.setAttributeNS(this.project.ns, "primary", newVal)
-    }
-    this.destroy = function() {
-        killNode(this.node)
-        this.node = null
-    }
-    this.moveUp = function() {
-        if (this.node.previousElementSibling)
-            this.node.parentNode.insertBefore(this.node, this.node.previousElementSibling)
-    }
-    this.moveDown = function() {
-        if (this.node.nextElementSibling && this.node.nextElementSibling.nextElementSibling) {
-            this.node.parentNode.insertBefore(this.node, this.node.nextElementSibling.nextElementSibling)
-        } else {
-            this.node.parentNode.appendChild(this.node)
-        }
     }
 }

@@ -24,6 +24,7 @@ function Generalization(node, project) {
     ERObject.apply(this, [node, project])
     Concept.apply(this)
     Draggable.apply(this) //will only use "updateTranslate"
+    Movable.apply(this)
     this.type = "Generalization"
     var p = this.project
     this.destroy = function() {
@@ -198,12 +199,10 @@ function Generalization(node, project) {
             /*code for incremental translation: faster but buggier*/
 
             if (ch[x].type == "Entity") {
-                console.log(ch[x])
                 ch[x].updateTranslate(roundx, posy)
                     //ch[x].setXY(roundx + xy[0], posy)
                 ch[x].setXY(roundx, posy)
             } else {
-                console.log(ch[x])
                 ch[x].updateTranslate(roundx - xy[0], posy - xy[1])
                 ch[x].transRight(roundx - xy[0])
             }

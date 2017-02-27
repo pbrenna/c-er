@@ -26,14 +26,10 @@ function IsA(node, project) {
         this.project.styles.lines.defaultStrokeWidth,
         this.project.styles.lines.selectedStrokeWidth
     ])
+    SimpleDestroyable.apply(this, [true])
     this.type = "IsA"
     var p = project
     var n = node
-    this.destroy = function() {
-        killNode(this.node)
-        this.project.refCleanScheduled = true
-        this.node = null
-    }
     this.getParent = function() {
         return p.get(p.getErAttr(this.node, "ref-parent"))
     }

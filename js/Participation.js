@@ -22,6 +22,7 @@
 
 function Participation(node, project) {
     ERObject.apply(this, [node, project])
+    SimpleDestroyable.apply(this)
     this.type = "Participation"
     this.setEntity = function(entity) {
         console.assert(entity instanceof Entity)
@@ -45,10 +46,6 @@ function Participation(node, project) {
     }
     this.setMandatory = function(r) {
         this.project.setErAttr(this.node, "mandatory", r ? "true" : "false")
-    }
-    this.destroy = function() {
-        killNode(this.node)
-        this.node = null
     }
     this.getSpanner = function() {
         return this.project.svg.getElementById('svg-' + this.getId() + '-spanner')
