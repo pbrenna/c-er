@@ -42,9 +42,7 @@ function moveFunc(cx, cy) {
     }
 }
 document.addEventListener("mousemove", function(ev) {
-    console.log(ev.clientX, ev.clientY)
     moveFunc(ev.clientX, ev.clientY)
-        //ev.preventDefault()
 })
 document.addEventListener("touchmove", function(ev) {
     var t = ev.touches[0]

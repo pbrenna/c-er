@@ -145,6 +145,17 @@ function Participation(node, project) {
                     //by giving the text an id which depends on the ids of 
                     //the entity and the relationship, we can recognise multiple
                     //participations and treat them differently
+                if (this.getExternalId()) {
+                    console.log(lineInc)
+                    var extidx = line_inters[0][0]
+                    var extidy = line_inters[0][1]
+                    var extLine = svgEl(pathG, "path", {
+                        d: "M" + (extidx + Math.abs(dx * 3)) + "," + extidy + " l0,-10 l0,20",
+                        "transform": "rotate(" + lineInc + "," + (extidx) + "," + extidy + ")"
+                    })
+                    dx *= 4
+                        //draw line
+                }
                 txt = svgEl(g, "text", {
                     id: "svg-part-" + ent.getId() + "-" + relObj.getId(),
                     x: line_inters[0][0] + dx,
@@ -221,6 +232,12 @@ function Participation(node, project) {
     this.setRole = function(role) {
         p.setErAttr(this.node, "role", role)
     }
+    this.getExternalId = function() {
+        return p.getErAttr(this.node, "external-id") == "true"
+    }
+    this.setExternalId = function(val) {
+        p.setErAttr(this.node, "external-id", val ? "true" : "false")
+    }
 }
 
 function newParticipation(obj1, obj2) {
@@ -238,6 +255,7 @@ var partRole = document.getElementById("participationRole")
 var multMax = document.getElementById("participationMultMax")
 var multMin = document.getElementById("participationMultMin")
 var partMandatory = document.getElementById("participationMandatory")
+var partExtId = document.getElementById("participationExternalId")
 partRole.addEventListener("change", function() {
     var id = erp.selection.s[0]
     var e = erp.get(id)
@@ -262,6 +280,12 @@ partMandatory.addEventListener("change", function() {
     e.setMandatory(this.checked)
     erp.addState()
 })
+partExtId.addEventListener("change", function() {
+    var id = erp.selection.s[0]
+    var e = erp.get(id)
+    e.setExternalId(this.checked)
+    erp.addState()
+})
 
 
 function updateParticipationPanel() {
@@ -271,4 +295,5 @@ function updateParticipationPanel() {
     multMin.value = e.getMultMin()
     multMax.value = e.getMultMax()
     partMandatory.checked = e.getMandatory()
+    partExtId.checked = e.getExternalId()
 }
