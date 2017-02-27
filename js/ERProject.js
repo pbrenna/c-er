@@ -348,6 +348,9 @@ function ERProject(svg) {
     this.selection.selected = function(obj) {
         return this.s.indexOf(obj.getId()) >= 0
     }
+    this.selection.getFirst = function() {
+        return that.get(this.s[0])
+    }
     this.svg.addEventListener("click", function(ev) {
         var target = ev.target || ev.srcElement
         if (target == svg) {

@@ -266,40 +266,34 @@ var multMin = document.getElementById("participationMultMin")
 var partMandatory = document.getElementById("participationMandatory")
 var partExtId = document.getElementById("participationExternalId")
 partRole.addEventListener("change", function() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setRole(this.value)
     erp.addState()
 })
 multMax.addEventListener("change", function(ev) {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setMultMax(this.value)
     erp.addState()
 })
 multMin.addEventListener("change", function(ev) {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setMultMin(this.value)
     erp.addState()
 })
 partMandatory.addEventListener("change", function() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setMandatory(this.checked)
     erp.addState()
 })
 partExtId.addEventListener("change", function() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setExternalId(this.checked)
     erp.addState()
 })
 
 
 function updateParticipationPanel() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     partRole.value = e.getRole()
     multMin.value = e.getMultMin()
     multMax.value = e.getMultMax()

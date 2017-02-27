@@ -309,7 +309,7 @@ var gct = document.getElementById("generalizationChildrenTable")
 
 function updateGeneralizationPanel() {
     clearElement(gct)
-    var gen = erp.get(erp.selection.s[0])
+    var gen = erp.selection.getFirst()
     if (gen.type != "Generalization") return
     var ch = gen.getChildren()
     for (var x in ch) {

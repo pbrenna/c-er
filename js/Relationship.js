@@ -109,15 +109,11 @@ function Relationship(node, project) {
             parts[i].draw(parent)
         }
     }
-    this.calculateWidth = function(text, attrReqW) {
-
-    }
 }
 
 var relationshipNameInput = document.getElementById("relationshipNameInput")
 relationshipNameInput.addEventListener("change", function(ev) {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setName(this.value)
     erp.addState()
 })
@@ -126,16 +122,14 @@ var relationshipAddAttr = document.getElementById("relationshipAddAttr")
 var relationshipAttrPos = document.getElementById("relationshipAttrPos")
 relationshipAttrPos.addEventListener("change", function(ev) {
     var val = this.value
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setAttrPos(val)
     erp.addState()
-    updateRelationPanel()
+    updateRelationshipPanel()
 })
 
 function updateRelationshipPanel() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     relationshipNameInput.value = e.getName()
     relationshipAttrPos.value = e.getAttrPos()
     clearElement(relationshipAttrTable)
@@ -161,8 +155,7 @@ function newRelationship(ev) {
 }
 
 function relationshipAddAttribute() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.addAttribute("attribute", false)
     erp.addState()
     updateRelationshipPanel()

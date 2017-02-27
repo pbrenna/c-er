@@ -169,8 +169,7 @@ function newEntity(ev) {
 
 var entityNameInput = document.getElementById("entityNameInput")
 entityNameInput.addEventListener("change", function(ev) {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setName(this.value)
     erp.addState()
 })
@@ -180,16 +179,14 @@ var entityAddAttr = document.getElementById("entityAddAttr")
 var entityAttrPos = document.getElementById("entityAttrPos")
 entityAttrPos.addEventListener("change", function(ev) {
     var val = this.value
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.setAttrPos(val)
     erp.addState()
     updateEntityPanel()
 })
 
 function updateEntityPanel() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     entityNameInput.value = e.getName()
     entityAttrPos.value = e.getAttrPos()
     clearElement(entityAttrTable)
@@ -203,8 +200,7 @@ function updateEntityPanel() {
 
 
 function entityAddAttribute() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     e.addAttribute("attribute", false)
     erp.addState()
     updateEntityPanel()

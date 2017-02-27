@@ -125,7 +125,6 @@ function newNote(ev) {
 }
 
 function updateNotePanel() {
-    var id = erp.selection.s[0]
-    var e = erp.get(id)
+    var e = erp.selection.getFirst()
     noteContent.value = e.getContent()
 }
