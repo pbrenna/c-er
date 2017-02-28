@@ -66,6 +66,7 @@ function Note(node, project) {
             pathh = Math.round(reqh + p.styles.note.padding * 2),
             pathw = Math.round(reqw + p.styles.note.padding * 2),
             corner = 10
+        pathw = max(pathw, 20), pathh = max(pathh, 20)
         var path = svgEl(g, "path", {
             d: "M" + pathx + "," + pathy + "h" + (pathw - corner) +
                 "l" + corner + "," + corner +
