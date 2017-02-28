@@ -112,7 +112,7 @@ noteContent.addEventListener("change", function(ev) {
 })
 
 function newNote(ev) {
-    var content = "Note bla bla"
+    var content = "Note"
     var el = erp.mkErElement("note", erp.schema)
     var pos = erp.getMouseInDocument(ev)
     var rounded = erp.alignToGrid(pos.x, pos.y)
