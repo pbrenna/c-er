@@ -46,7 +46,8 @@ function Note(node, project) {
             x: 0,
             y: 0,
             stroke: 'none',
-            fontSize: p.styles.note.fontSize
+            'font-family': p.styles.defaultFont,
+            'font-size': p.styles.note.fontSize
         })
         var spl = cnt.split("\n")
         for (var x in spl) {

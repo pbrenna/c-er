@@ -275,7 +275,7 @@ function ERProject(svg) {
             attrSpacing: 25,
             attrLineH: 15,
             attrCircRad: 4,
-            primaryFill: "#000",
+            primaryFill: "#555",
             attrOffset: 4,
             attrDist: 10,
             attrFontSize: 14,
@@ -289,7 +289,7 @@ function ERProject(svg) {
             attrSpacing: 25,
             attrLineH: 30,
             attrCircRad: 4,
-            primaryFill: "#000",
+            primaryFill: "#555",
             attrOffset: 4,
             attrDist: 10,
             attrFontSize: 14,
@@ -300,7 +300,7 @@ function ERProject(svg) {
         },
         note: {
             padding: 5,
-            fontSize: 16
+            fontSize: 14
         }
     }
     this.selection = {}
