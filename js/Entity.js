@@ -35,6 +35,7 @@ function Entity(node, project) {
 
     //drawing things
     this.draw = function(parent, reserveSlotsBelow, reserveSlotsAbove) {
+        console.log("draw entity")
         var xy = this.getXY()
         var x = xy[0],
             y = xy[1]

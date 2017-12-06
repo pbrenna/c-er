@@ -38,6 +38,7 @@ function IsA(node, project) {
     }
     this.draw = function(parent) {
         var cb = new Callback(function() {
+            console.log("draw is-a")
             var g = svgEl(parent, "g", {
                 id: "svg-" + this.getId(),
                 stroke: this.project.styles.normalStroke,

@@ -212,6 +212,7 @@ function ERProject(svg) {
         var ch = this.schema.childNodes
         for (var x = 0; x < ch.length; x++) {
             var wr = this.wrap(ch[x])
+            console.log("oggetto strano:", ch[x])
             if (wr) {
                 try {
                     wr.draw(this.svgAll)
@@ -219,6 +220,7 @@ function ERProject(svg) {
                     alert("Could not draw object: " + e)
                     console.log(e)
                 }
+            } else {
             }
         }
         /*var part = this.schema.getElementsByTagNameNS(this.ns, "participation")
@@ -528,7 +530,7 @@ function ERProject(svg) {
         img.onload = function() {
             ctx.beginPath();
             ctx.rect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#f6f7f8";
+            ctx.fillStyle = "#ffffff";
             ctx.fill();
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
             if (canvas.toBlob) {
